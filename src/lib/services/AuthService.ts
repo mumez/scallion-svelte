@@ -32,6 +32,7 @@ class AuthService {
         console.log('logout :>> ');
         userService.clear();
         this.isAuthenticated = false;
+        //this.authByPopup();
     }
 
     public async authByPopup(): Promise<User | null> {

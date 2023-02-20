@@ -1,32 +1,37 @@
-// import firebase from 'firebase/app';
-// import config from '../configs/firebase';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
+import { browser } from '$app/environment';
 import appConfig from '../configs';
-import User from '/models/User';
+import type User from '../models/User';
 
-export const firebaseApp = initializeApp(appConfig.firebase);
-export const analytics = getAnalytics(firebaseApp);
-export const auth = getAuth();
-export const googleProvider = new GoogleAuthProvider();
+//typeof window !== 'undefined'
+
+let _firebaseApp;
+let _analytics;
+if (browser) {
+    _firebaseApp = initializeApp(appConfig.firebase);
+    _analytics = getAnalytics(_firebaseApp);
+}
+export const firebaseApp = _firebaseApp;
+export const analytics = _analytics;
 
 export const authByPopup = () => {
-    return signInWithPopup(auth, googleProvider);
+    return signInWithPopup(getAuth(), new GoogleAuthProvider());
 };
 export const authByEmailAndPassword = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
+    return signInWithEmailAndPassword(getAuth(), email, password);
 };
 export const currentUser = () => {
-    return auth.currentUser;
+    return getAuth().currentUser;
 };
 export const listenAuthStateChanged = (callbackWithUser: (user: User | null, token: string | null) => void) => {
-    return onAuthStateChanged(auth, async (fsUser) => {
-        const user = {
-            uid: fsUser?.uid,
-            email: fsUser?.email,
-            displayName: fsUser?.displayName,
+    return onAuthStateChanged(getAuth(), async (fsUser) => {
+        const user: User = {
+            uid: fsUser?.uid ?? '',
+            email: fsUser?.email ?? null,
+            displayName: fsUser?.displayName ?? null,
         };
         const token = await fsUser?.getIdToken();
         callbackWithUser(user ?? null, token ?? null);

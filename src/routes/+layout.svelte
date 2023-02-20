@@ -4,9 +4,18 @@
 	import '../app.postcss';
 	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
 	import { modalStore } from '@skeletonlabs/skeleton';
-	import LoginForm from '$lib/components/LoginForm.svelte';
-	
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
+	import { onMount } from 'svelte';
+
+	import LoginForm from '$lib/components/LoginForm.svelte';
+	import AuthService from '$lib/services/AuthService';
+
+	onMount(() => {
+		AuthService.tryAutoLogin(() => {
+			console.log('auto logged in');
+		});
+   		console.log('-isAuthenticated-?', AuthService.isAuthenticated);
+  	});
 
 	function triggerAlert(): void {
 		const modalComponent: ModalComponent = {
