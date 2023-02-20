@@ -4,7 +4,7 @@
 	import '../app.postcss';
 	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
 	import { modalStore } from '@skeletonlabs/skeleton';
-	import LoginForm from '../components/LoginForm.svelte';
+	import LoginForm from '$lib/components/LoginForm.svelte';
 	
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 
