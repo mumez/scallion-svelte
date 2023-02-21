@@ -6,16 +6,28 @@
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
 	import LoginForm from '$lib/components/LoginForm.svelte';
 	import AuthService from '$lib/services/AuthService';
 
+	let isAuthenticated = true;
+
 	onMount(() => {
-		AuthService.tryAutoLogin(() => {
-			console.log('auto logged in');
+		AuthService.tryAutoLogin((result) => {
+			isAuthenticated = result;
+			console.log('auto logged in', isAuthenticated, $page.params);
 		});
-   		console.log('-isAuthenticated-?', AuthService.isAuthenticated);
+   		console.log('-isAuthenticated-?', isAuthenticated);
   	});
+
+	function isRoot(){
+		return $page.route.id == '/';
+	}
+	
+	function tryLogin(){
+		AuthService.authByPopup();
+	}
 
 	function triggerAlert(): void {
 		const modalComponent: ModalComponent = {
@@ -35,25 +47,20 @@
 <Modal />
 <AppShell>
 	<svelte:fragment slot="header">
+		{#if isRoot()}
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<h1>Scallion</h1>
+				<h1>Swikis on this Site</h1>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<button class="btn btn-sm" on:click={triggerAlert}>Login</button>
+				{#if !isAuthenticated}
+					<button class="btn btn-sm" on:click={tryLogin}>Login</button>
+				{/if}
 				<a class="btn btn-sm" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
 			</svelte:fragment>
 		</AppBar>
-	</svelte:fragment>
-	<svelte:fragment slot="sidebarRight">
-		<AppShell slotSidebarRight="bg-surface-500/5 w-56 p-4">
-			<nav class="list-nav">
-				<ul>
-					<li><a href="/">Home</a></li>
-					<li><a href="/login">Login</a></li>
-				</ul>
-			</nav>
-		</AppShell>
+		{/if}
 	</svelte:fragment>
 	<slot />
+	<svelte:fragment slot="footer">Footer</svelte:fragment>
 </AppShell>

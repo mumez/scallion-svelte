@@ -26,14 +26,14 @@ export const authByEmailAndPassword = (email: string, password: string) => {
 export const currentUser = () => {
     return getAuth().currentUser;
 };
-export const listenAuthStateChanged = (callbackWithUser: (user: User | null, token: string | null) => void) => {
+export const listenAuthStateChanged = (callbackWithUser: (user: User, token?: string) => void) => {
     return onAuthStateChanged(getAuth(), async (fsUser) => {
         const user: User = {
             uid: fsUser?.uid ?? '',
-            email: fsUser?.email ?? null,
-            displayName: fsUser?.displayName ?? null,
+            email: fsUser?.email,
+            displayName: fsUser?.displayName,
         };
         const token = await fsUser?.getIdToken();
-        callbackWithUser(user ?? null, token ?? null);
+        callbackWithUser(user, token);
     });
 };

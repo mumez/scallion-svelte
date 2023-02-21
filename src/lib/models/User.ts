@@ -1,7 +1,5 @@
-interface User {
+export interface User {
     uid: string;
-    email: string | null;
-    displayName: string | null;
+    email?: string;
+    displayName?: string;
 }
-
-export default User;

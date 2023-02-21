@@ -10,14 +10,14 @@ class AuthService {
 
     isAuthenticated = false;
 
-    public tryAutoLogin(successFunc: () => void) {
+    public tryAutoLogin(resultFunc: (isAuthenticated: boolean) => void) {
         listenAuthStateChanged(async (user, token) => {
             if (user && token) {
                 this.onAutoLogin(user, token);
-                successFunc();
             } else {
                 this.onLogout();
             }
+            resultFunc(this.isAuthenticated);
         });
     }
 
