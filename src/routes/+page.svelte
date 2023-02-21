@@ -15,9 +15,9 @@
 
 <div class="container mx-auto p-8 space-y-8">
 	<ul>
-		{#each wikiBooks as book, idx}
+		{#each wikiBooks as wiki, idx}
 			<li>
-				<a href="wikis/hoge/auau">{book.title}<span>{book.name}</span></a><span>({book.pageCount})</span>
+				<a href="wikis/{wiki.name}/">{wiki.title}<span>{wiki.name}</span></a><span>({wiki.pageCount})</span>
 			</li>
 		{/each}
 	</ul>
