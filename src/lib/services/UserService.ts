@@ -8,6 +8,7 @@ class UserService extends BaseService {
     protected _token?: string;
 
     public setIdToken(idToken: string) {
+        console.log('JWT: ', idToken);
         this._token = idToken;
         this.storeToken(idToken);
     }

@@ -1,11 +1,10 @@
-import firebaseConfig from './firebase';
-import webDavConfig from './webDav';
-
-export const firebase = firebaseConfig;
-export const webDav = webDavConfig;
+import firebase from './firebase';
+import wikiApi from './wikiApi';
+import webDav from './webDav';
 
 const config = {
     firebase,
+    wikiApi,
     webDav,
 };
 

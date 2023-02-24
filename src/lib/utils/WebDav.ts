@@ -1,5 +1,6 @@
 import ky from 'ky';
 
+import WebApiAccessor from './WebApiAccessor'
 import WebDavEntry from './WebDavEntry';
 
 const ns = 'DAV:';
@@ -37,21 +38,10 @@ function checkIsDirectory(domElem: Element): boolean {
     return (elem.getElementsByTagNameNS(ns, 'collection')?.length ?? 0) > 0;
 }
 
-export class WebDav {
-    protected headers: object = {};
-    protected ky: typeof ky;
+export class WebDav extends WebApiAccessor {
 
     constructor(headers: {jwt: string} = {jwt: ''}) {
-        this.headers = headers;
-        this.ky = ky.extend({
-            hooks: {
-                beforeRequest: [
-                    (request) => {
-                        request.headers.set('Authorization', `Bearer ${headers.jwt}`);
-                    },
-                ],
-            },
-        });
+        super(headers);
     }
 
     public async propfind(url: string, depth: number = 1, headers: object = {api: true}): Promise<WebDavEntry[]> {
@@ -80,31 +70,6 @@ export class WebDav {
             headers: {
                 Destination: toUrl,
             },
-            mode: 'cors',
-        });
-        return (resp.ok && resp.status === 201);
-    }
-
-    public async get(url: string): Promise<any> {
-        const resp = await this.ky(url, {
-            method: 'GET',
-            mode: 'cors',
-        });
-        return resp.json();
-    }
-
-    public async put(url: string, file: File): Promise<boolean> {
-        const resp = await this.ky(url, {
-            method: 'PUT',
-            body: file,
-            mode: 'cors',
-        });
-        return (resp.ok && resp.status === 201);
-    }
-
-    public async delete(url: string): Promise<boolean> {
-        const resp = await this.ky(url, {
-            method: 'DELETE',
             mode: 'cors',
         });
         return (resp.ok && resp.status === 201);
