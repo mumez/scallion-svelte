@@ -19,16 +19,16 @@ export class WebApiAccessor {
         });
     }
 
-    public async get(url: string): Promise<any> {
-        const resp = await this.ky(url, {
+    public async get(url: string): Promise<unknown> {
+        const resp = await this.ky(this.targetUrlFor(url), {
             method: 'GET',
             mode: 'cors',
         });
         return resp.json();
     }
 
-    public async post(url: string, body: body): Promise<boolean> {
-        const resp = await this.ky(url, {
+    public async post(url: string, body: BodyInit): Promise<boolean> {
+        const resp = await this.ky(this.targetUrlFor(url), {
             method: 'PUT',
             body: body,
             mode: 'cors',
@@ -36,8 +36,8 @@ export class WebApiAccessor {
         return (resp.ok && resp.status === 201);
     }
 
-    public async put(url: string, body: body): Promise<boolean> {
-        const resp = await this.ky(url, {
+    public async put(url: string, body: BodyInit): Promise<boolean> {
+        const resp = await this.ky(this.targetUrlFor(url), {
             method: 'PUT',
             body: body,
             mode: 'cors',
@@ -46,11 +46,15 @@ export class WebApiAccessor {
     }
 
     public async delete(url: string): Promise<boolean> {
-        const resp = await this.ky(url, {
+        const resp = await this.ky(this.targetUrlFor(url), {
             method: 'DELETE',
             mode: 'cors',
         });
         return (resp.ok && resp.status === 201);
+    }
+
+    private targetUrlFor(urlPart: string) {
+        return this.baseUrl + urlPart;
     }
 
 }

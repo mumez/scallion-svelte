@@ -5,10 +5,11 @@ import type { WikiBook } from '$lib/models/WikiBook';
 
 class WikiBookService extends BaseService {
     public async listBooks(): Promise<WikiBook[]> {
-        this.apiAccessor
-        return await this.getFromMockStorage(this.descriptionsServiceName());
+        const resp = await this.apiAccessor.get('wikis').catch(e => { return []; });
+        console.log('resp :>> ', resp);
+        const books = Object.values(resp as object) as WikiBook[];
+        return books.sort((a, b) => (a.name < b.name) ? 1 : -1);
     }
-
 }
 
-export default WikiBookService;
+export default new WikiBookService();

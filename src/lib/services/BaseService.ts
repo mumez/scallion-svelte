@@ -1,7 +1,7 @@
 import MockStorage from '../utils/MockStorage';
 import appConfig from '../configs';
 
-import UserService from './UserService';
+import CoreUtils from '../utils/CoreUtils';
 import WebApiAccessor from '../utils/WebApiAccessor';
 
 class BaseService {
@@ -13,12 +13,20 @@ class BaseService {
         return item ? JSON.parse(item) : '';
     }
 
+    public storeJwt(jwt: string) {
+        CoreUtils.putToSessionStorage('_jwt', jwt);
+    }
+
+    public loadJwt(): string {
+        return CoreUtils.getFromSessionStorage('_jwt');
+    }
+
     get apiAccessor() {
-        const jwt = UserService.loadToken();
-        return new WebApiAccessor({ jwt });
+        const jwt = this.loadJwt();
+        return new WebApiAccessor({ jwt }, this.apiBaseUrl);
     }
     get apiBaseUrl() {
-        return appConfig.wikiApi.rootUri;
+        return appConfig.wikiApi.baseUrl;
     }
 
     public serviceName(): string {

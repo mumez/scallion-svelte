@@ -1,6 +1,6 @@
 import BaseService from './BaseService';
 import CoreUtils from '../utils/CoreUtils';
-import type User from '../models/User';
+import type { User } from '../models/User';
 
 class UserService extends BaseService {
 
@@ -10,7 +10,7 @@ class UserService extends BaseService {
     public setIdToken(idToken: string) {
         console.log('JWT: ', idToken);
         this._token = idToken;
-        this.storeToken(idToken);
+        this.storeJwt(idToken);
     }
     public setUser(user: User) {
         this._user = user;
@@ -21,16 +21,8 @@ class UserService extends BaseService {
         this._token = undefined;
     }
 
-    public storeToken(jwt: string) {
-        CoreUtils.putToSessionStorage('_jwt', jwt);
-    }
-
     public storeUser(user: User) {
         CoreUtils.putToSessionStorage('_user', user);
-    }
-
-    public loadToken(): string {
-        return CoreUtils.getFromSessionStorage('_jwt');
     }
 
     public loadUser(): User | undefined {

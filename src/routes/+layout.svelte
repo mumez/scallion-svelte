@@ -10,7 +10,7 @@
 	
 	import LoginForm from '$lib/components/LoginForm.svelte';
 	import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
-	import AuthService from '$lib/services/AuthService';
+	import authService from '$lib/services/AuthService';
 	import pageTitle from '$lib/stores/pageTitle';
 
 	let isAuthenticated = true;
@@ -18,7 +18,7 @@
 	$pageTitle = 'Swikis on this Site';
 
 	onMount(() => {
-		AuthService.tryAutoLogin((result) => {
+		authService.tryAutoLogin((result) => {
 			isAuthenticated = result;
 			console.log('auto logged in', isAuthenticated, $page.params);
 		});
@@ -26,7 +26,7 @@
 	});
 
 	function tryLogin() {
-		AuthService.authByPopup();
+		authService.authByPopup();
 	}
 
 	function triggerAlert(): void {
