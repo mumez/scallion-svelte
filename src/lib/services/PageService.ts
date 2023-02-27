@@ -1,5 +1,5 @@
 import BaseApiService from './BaseApiService';
-import type PageContent from '$lib/models/PageContent';
+import type { PageContent } from '$lib/models/PageContent';
 
 
 class PageService extends BaseApiService {
@@ -12,19 +12,17 @@ class PageService extends BaseApiService {
         this.pageName = pageName;
     }
 
-    public async saveContent(textContent: string): Promise<PageContent> {
-        const versions = await this.allVersions();
-        const newVersion: PageContent = {
-            updatedAt: new Date().getTime(),
-            updatedBy: userService.email,
-            versionNumber: versions.length + 1,
-            content: textContent,
-        };
-        return newVersion;
+    public async putContent(pageContent: PageContent, token = ''): Promise<PageContent> {
+        const url = this.targetUrl();
+        const acc = this.apiAccessor;
+        acc.setJwt(token);
+        const resp = await acc.put(url, JSON.stringify(pageContent)).catch(e => { return {}; });
+        console.log('-resp----', url, resp);
+        return resp as PageContent;
     }
 
     public async getContent(): Promise<PageContent> {
-        const url = `${this.serviceName()}?wiki=${this.wikiName}&name=test1`;
+        const url = this.targetUrl();
         const resp = await this.apiAccessor.get(url).catch(e => { return {}; });
         console.log('-resp----', url, resp);
         return resp as PageContent;
@@ -39,7 +37,10 @@ class PageService extends BaseApiService {
         return this.pageName;
     }
     getWikiName() {
-        return this.pageNumber;
+        return this.wikiName;
+    }
+    targetUrl() {
+        return `${this.serviceName()}?wiki=${this.wikiName}&name=${this.pageName}`;
     }
 
 }

@@ -1,4 +1,4 @@
-interface PageContent {
+export interface PageContent {
     id: string;
     bookId: string;
     name: string;
@@ -8,5 +8,3 @@ interface PageContent {
     content: string;
     isLocked: boolean;
 }
-
-export default PageContent;

@@ -4,4 +4,5 @@ export interface WikiBook {
     title: string;
     count: number;
     ownedBy: string;
+    initialPageName?: string;
 }
