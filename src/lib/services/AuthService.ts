@@ -1,6 +1,6 @@
 
 import { authByPopup, authByEmailAndPassword, listenAuthStateChanged } from '../plugins/firebase';
-import type User from '../models/User';
+import type { User } from '../models/User';
 
 import userService from './UserService';
 import type { UserCredential } from 'firebase/auth';
@@ -32,7 +32,6 @@ class AuthService {
         console.log('logout :>> ');
         userService.clear();
         this.isAuthenticated = false;
-        //this.authByPopup();
     }
 
     public async authByPopup(): Promise<User | null> {
@@ -57,8 +56,8 @@ class AuthService {
         userService.setIdToken(await userOrNone.getIdToken());
         const user: User = {
             uid: userOrNone.uid,
-            email: userOrNone.email,
-            displayName: userOrNone.displayName
+            email: userOrNone.email ?? undefined,
+            displayName: userOrNone.displayName ?? undefined
         };
         userService.setUser(user);
         this.isAuthenticated = true;

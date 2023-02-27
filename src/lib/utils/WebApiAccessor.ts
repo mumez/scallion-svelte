@@ -1,26 +1,22 @@
 import ky from 'ky';
 
 export class WebApiAccessor {
-    protected headers: object = {};
     protected ky: typeof ky;
-    protected baseUrl = '';
 
-    constructor(headers: { jwt: string } = { jwt: '' }, baseUrl = '') {
-        this.headers = headers;
-        this.baseUrl = baseUrl;
+    constructor(baseUrl = '') {
+        this.ky = ky.create({ prefixUrl: baseUrl });
+    }
+
+    public setJwt(jwt: string) {
         this.ky = ky.extend({
-            hooks: {
-                beforeRequest: [
-                    (request) => {
-                        request.headers.set('Authorization', `Bearer ${headers.jwt}`);
-                    },
-                ],
-            },
+            headers: {
+                authorization: `Bearer ${jwt}`
+            }
         });
     }
 
     public async get(url: string): Promise<unknown> {
-        const resp = await this.ky(this.targetUrlFor(url), {
+        const resp = await this.ky(url, {
             method: 'GET',
             mode: 'cors',
         });
@@ -28,7 +24,7 @@ export class WebApiAccessor {
     }
 
     public async post(url: string, body: BodyInit): Promise<boolean> {
-        const resp = await this.ky(this.targetUrlFor(url), {
+        const resp = await this.ky(url, {
             method: 'PUT',
             body: body,
             mode: 'cors',
@@ -37,7 +33,7 @@ export class WebApiAccessor {
     }
 
     public async put(url: string, body: BodyInit): Promise<boolean> {
-        const resp = await this.ky(this.targetUrlFor(url), {
+        const resp = await this.ky(url, {
             method: 'PUT',
             body: body,
             mode: 'cors',
@@ -46,15 +42,11 @@ export class WebApiAccessor {
     }
 
     public async delete(url: string): Promise<boolean> {
-        const resp = await this.ky(this.targetUrlFor(url), {
+        const resp = await this.ky(url, {
             method: 'DELETE',
             mode: 'cors',
         });
         return (resp.ok && resp.status === 201);
-    }
-
-    private targetUrlFor(urlPart: string) {
-        return this.baseUrl + urlPart;
     }
 
 }

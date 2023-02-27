@@ -40,9 +40,6 @@ function checkIsDirectory(domElem: Element): boolean {
 
 export class WebDav extends WebApiAccessor {
 
-    constructor(headers: {jwt: string} = {jwt: ''}) {
-        super(headers);
-    }
 
     public async propfind(url: string, depth: number = 1, headers: object = {api: true}): Promise<WebDavEntry[]> {
         const resp = await this.ky(url, {
