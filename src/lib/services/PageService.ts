@@ -24,9 +24,9 @@ class PageService extends BaseApiService {
     }
 
     public async getContent(): Promise<PageContent> {
-        const url = `${this.serviceName()}/wiki=${this.wikiName}&page=${this.pageName}`;
+        const url = `${this.serviceName()}?wiki=${this.wikiName}&name=test1`;
         const resp = await this.apiAccessor.get(url).catch(e => { return {}; });
-        console.log('-resp----', resp);
+        console.log('-resp----', url, resp);
         return resp as PageContent;
     }
 
