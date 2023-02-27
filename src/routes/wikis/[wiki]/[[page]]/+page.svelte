@@ -1,17 +1,21 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	//import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	
-	import pageTitle from '$lib/stores/pageTitle';
+	//import pageTitle from '$lib/stores/pageTitle';
 
-	onMount(() => {
-		console.log('-mounted-?');
-		$pageTitle = 'hoge';
-	});
+	import type { PageData } from './$types';
+	export let data: PageData;
+	
+	// onMount(() => {
+	// 	console.log('-mounted-?');
+	// 	$pageTitle = 'hoge';
+	// });
 
 	$: wikiName = $page.params['wiki'];
 	$: pageName = $page.params['page'] ?? 'index';
-	
+	$: pageContent = data.page ?? {};
+
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -19,7 +23,7 @@
 	<p>{pageName}</p>
 	<hr />
 	<section class="card p-4">
-		<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+		<p>{pageContent.content}</p>
 	</section>
 	<hr />
 	<section class="flex space-x-2">

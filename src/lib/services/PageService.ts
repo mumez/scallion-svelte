@@ -1,25 +1,15 @@
-import BaseService from './BaseService';
-import PageContent from '@/models/PageContent';
+import BaseApiService from './BaseApiService';
+import type PageContent from '$lib/models/PageContent';
 
-import UserService from '@/services/UserService';
-const userService = new UserService();
 
-const defaults: PageContent[] = [
-    { updatedAt: 1652938507239, updatedBy: '', versionNumber: 2, content: 'latest' },
-    { updatedAt: 1652938484058, updatedBy: '', versionNumber: 1, content: 'back 1' },
-];
+class PageService extends BaseApiService {
+    protected wikiName = '';
+    protected pageName = '';
 
-class PageService extends BaseService {
-    protected _pageNumber: string = '';
-    protected _wikiName: string = '';
-
-    public async allVersions(): Promise<PageContent[]> {
-        return await this.getFromMockStorage(this.pageFullKey());
-    }
-
-    public async latestVersion(): Promise<PageContent> {
-        const versions = await this.allVersions();
-        return versions[0];
+    constructor(wikiName: string, pageName: string) {
+        super();
+        this.wikiName = wikiName;
+        this.pageName = pageName;
     }
 
     public async saveContent(textContent: string): Promise<PageContent> {
@@ -30,44 +20,28 @@ class PageService extends BaseService {
             versionNumber: versions.length + 1,
             content: textContent,
         };
-        versions.unshift(newVersion);
-        await this.putToMockStorage(this.pageFullKey(), versions);
         return newVersion;
     }
 
-    public pageFullKey(): string {
-        return `${this.serviceName()}:versions:${this._wikiName}:${this._pageNumber}`;
+    public async getContent(): Promise<PageContent> {
+        const url = `${this.serviceName()}/wiki=${this.wikiName}&page=${this.pageName}`;
+        const resp = await this.apiAccessor.get(url).catch(e => { return {}; });
+        console.log('-resp----', resp);
+        return resp as PageContent;
     }
 
-    public serviceName(): string {
+    public override serviceName(): string {
         return 'page';
     }
 
     // accessing
-    get pageNumber() {
-        return this._pageNumber;
+    getPageName() {
+        return this.pageName;
     }
-    set pageNumber(pageNumber) {
-        this._pageNumber = pageNumber;
-    }
-    get wikiName() {
-        return this._pageNumber;
-    }
-    set wikiName(wikiName) {
-        this._wikiName = wikiName;
+    getWikiName() {
+        return this.pageNumber;
     }
 
-    // populating
-    public async populateDefaults() {
-        await this.putToMockStorage(this.pageFullKey(), defaults);
-    }
-
-    public async populateDefaultsIfEmpty() {
-        const populated = await this.allVersions();
-        if (!populated) {
-            await this.populateDefaults();
-        }
-    }
 }
 
 export default PageService;
