@@ -19,17 +19,15 @@
 	wikiPage.setPageContent(pageContent);
 
 	let editingContent = pageContent.content;
-	//setInterval(() => {editingContent = new Date().toString()},1000)
 
 	$: buttonLabel = $wikiPage.isEditing ? 'Save' : 'Edit';
-	
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
-			<textarea bind:value={editingContent}/>
-			<MarkdownViewer markdown="{editingContent}"></MarkdownViewer>
+			<textarea class="textarea" rows="10" bind:value={editingContent} />
+			<MarkdownViewer markdown={editingContent} />
 		</div>
 	{:else}
 		<section class="border-solid border-2 p-4">{pageContent.content}</section>
@@ -37,6 +35,8 @@
 	{/if}
 	<hr />
 	<section class="flex space-x-2">
-		<button class="btn variant-filled-primary" on:click={wikiPage.toggleEditing}>{buttonLabel}</button>
+		<button class="btn variant-filled-primary" on:click={wikiPage.toggleEditing}
+			>{buttonLabel}</button
+		>
 	</section>
 </div>

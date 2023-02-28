@@ -11,6 +11,7 @@ const config = {
 
 	plugins: [
 		// Keep any existing plugins present and append the following:
+		require('@tailwindcss/forms'),
 		...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')()
 	]
 };
