@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import parentLink from '$lib/stores/parentLink';
-	import pageTitle from '$lib/stores/pageTitle';
+	import headerTitle from '$lib/stores/headerTitle';
+	import wikiPage from '$lib/stores/wikiPage';
 
 	import type { PageData } from './$types';
 	export let data: PageData;
@@ -11,22 +12,20 @@
 	let pageName = $page.params['page'] ?? 'index';
 
 	$parentLink = wikiName;
-	$pageTitle = pageName;
+	$headerTitle = pageName;
+
+	wikiPage.setPageContent(pageContent);
+
+	$: buttonLabel = $wikiPage.isEditing ? 'Save' : 'Edit';
 
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
 	<section class="border-solid border-2 p-4">{pageContent.content}</section>
-	
 
 	<p>Last update: {new Date(pageContent.updatedAt)}</p>
 	<hr />
 	<section class="flex space-x-2">
-		<a
-			class="btn variant-filled-primary"
-			href="https://kit.svelte.dev/"
-			target="_blank"
-			rel="noreferrer">Edit</a
-		>
+		<button class="btn variant-filled-primary" on:click={wikiPage.toggleEditing}>{buttonLabel}</button>
 	</section>
 </div>
