@@ -1,8 +1,9 @@
 <script lang="ts">
-	// Base Classes
-	const cBase = 'space-y-4';
 </script>
 
-<div class="{cBase}">
-	menu
+<div class="space-x-0">
+	<button class="btn-icon"><i class="fa-solid fa-pen" /></button>
+	<button class="btn-icon"><i class="fa-solid fa-arrow-up-from-bracket" /></button>
+	<button class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></button>
+	<button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical"></i></button>
 </div>
