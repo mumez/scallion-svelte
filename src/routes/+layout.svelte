@@ -10,7 +10,7 @@
 	import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
 	import authService from '$lib/services/AuthService';
 	import parentLink from '$lib/stores/parentLink';
-	import pageTitle from '$lib/stores/pageTitle';
+	import headerTitle from '$lib/stores/headerTitle';
 
 	let isAuthenticated = false;
 
@@ -27,7 +27,7 @@
 	}
 
 	$: isRoot = $page.route.id == '/';
-	$: title = isRoot ? 'Swikis on this Site' : $pageTitle;
+	$: title = isRoot ? 'Swikis on this Site' : $headerTitle;
 	$: linkToParent = isRoot ? '' : $parentLink;
 </script>
 
