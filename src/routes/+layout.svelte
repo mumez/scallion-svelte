@@ -15,7 +15,7 @@
 	let isAuthenticated = false;
 
 	onMount(() => {
-		if (browser) return;
+		if (!browser) return;
 		authService.tryAutoLogin((result) => {
 			isAuthenticated = result;
 			console.log('auto logged in', isAuthenticated, $page.params);
