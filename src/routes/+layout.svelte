@@ -3,10 +3,10 @@
 	import '@skeletonlabs/skeleton/themes/theme-rocket.css';
 	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
-	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-
+	import { browser } from '$app/environment';
+	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
 	import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
 	import authService from '$lib/services/AuthService';
 	import parentLink from '$lib/stores/parentLink';
@@ -15,6 +15,7 @@
 	let isAuthenticated = false;
 
 	onMount(() => {
+		if (browser) return;
 		authService.tryAutoLogin((result) => {
 			isAuthenticated = result;
 			console.log('auto logged in', isAuthenticated, $page.params);

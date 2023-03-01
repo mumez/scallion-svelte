@@ -8,3 +8,11 @@ export interface PageContent {
     content: string;
     isLocked: boolean;
 }
+
+export const updatingPageContent = (originalContent: PageContent, contentText: string, updater: string): PageContent => {
+    return {
+        ...originalContent,
+        content: contentText,
+        updatedBy: updater,
+    }
+}

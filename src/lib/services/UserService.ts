@@ -45,4 +45,12 @@ class UserService extends BaseService {
     }
 }
 
-export default new UserService();
+const userService = new UserService();
+
+export const uid = () => {
+    const user = userService.user;
+    if (user && user.uid) { return user.uid; }
+    return ''
+}
+export default userService;
+

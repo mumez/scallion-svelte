@@ -1,7 +1,6 @@
 import BaseApiService from './BaseApiService';
 import type { PageContent } from '$lib/models/PageContent';
 
-
 class PageService extends BaseApiService {
     protected wikiName = '';
     protected pageName = '';
@@ -12,10 +11,10 @@ class PageService extends BaseApiService {
         this.pageName = pageName;
     }
 
-    public async putContent(pageContent: PageContent, token = ''): Promise<PageContent> {
+    public async putContent(pageContent: PageContent, jwt = ''): Promise<PageContent> {
         const url = this.targetUrl();
         const acc = this.apiAccessor;
-        acc.setJwt(token);
+        acc.setJwt(jwt);
         const resp = await acc.put(url, JSON.stringify(pageContent)).catch(e => { return {}; });
         console.log('-resp----', url, resp);
         return resp as PageContent;

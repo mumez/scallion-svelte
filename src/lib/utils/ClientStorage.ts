@@ -28,3 +28,7 @@ export const clientStoreForSession = (typeof window !== 'undefined')
 export const clientStore = (typeof window !== 'undefined')
     ? new ClientStorage(localStorage)
     : new ClientStorage(undefined)
+
+export const jwt = () => {
+    return clientStoreForSession.getJwt();
+}
