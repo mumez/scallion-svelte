@@ -26,18 +26,21 @@
 	let editingContent = pageContent.content;
 
 	async function saveContent() {
-		console.log('editingContent :>> ', editingContent);
 		const originalPageContent = $wikiPage.pageContent;
 		if (originalPageContent && editingContent !== $wikiPage.pageContent?.content) {
 			const updatingContent = updatingPageContent(originalPageContent, editingContent, uid());
-			console.log('--save--', updatingContent);
 			const updatedContent = await pageService.putContent(updatingContent, jwt());
 			if (updatedContent) {
+				console.log('---updatedContent---', updatedContent);
 				wikiPage.setPageContent(updatedContent);
+				editingContent = updatedContent.content;
+				console.log('---editingContent---', editingContent);
 			}
 		}
 		wikiPage.stopEditing();
 	}
+
+	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt: 0;
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
@@ -47,8 +50,8 @@
 			<MarkdownViewer markdown={editingContent} />
 		</div>
 	{:else}
-		<section class="border-solid border-2 p-4">{pageContent.content}</section>
-		<p>Last update: {new Date(pageContent.updatedAt)}</p>
+		<section class="border-solid border-2 p-4">{editingContent}</section>
+		<p>Last update: {updatedAt} ; {new Date(updatedAt)}</p>
 	{/if}
 	<hr />
 	<section class="flex space-x-2">

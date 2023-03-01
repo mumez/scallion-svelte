@@ -16,14 +16,12 @@ class PageService extends BaseApiService {
         const acc = this.apiAccessor;
         acc.setJwt(jwt);
         const resp = await acc.put(url, JSON.stringify(pageContent)).catch(e => { return {}; });
-        console.log('-resp----', url, resp);
         return resp as PageContent;
     }
 
     public async getContent(): Promise<PageContent> {
         const url = this.targetUrl();
         const resp = await this.apiAccessor.get(url).catch(e => { return {}; });
-        console.log('-resp----', url, resp);
         return resp as PageContent;
     }
 

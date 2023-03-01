@@ -8,7 +8,7 @@ export class WebApiAccessor {
     }
 
     public setJwt(jwt: string) {
-        this.ky = ky.extend({
+        this.ky = this.ky.extend({
             headers: {
                 authorization: `Bearer ${jwt}`
             }
@@ -16,37 +16,36 @@ export class WebApiAccessor {
     }
 
     public async get(url: string): Promise<unknown> {
-        const resp = await this.ky(url, {
-            method: 'GET',
-            mode: 'cors',
-        });
-        return resp.json();
+        return (await this.request('GET', url)).json();
     }
 
     public async post(url: string, body: BodyInit): Promise<boolean> {
-        const resp = await this.ky(url, {
-            method: 'PUT',
-            body: body,
-            mode: 'cors',
-        });
-        return (resp.ok && resp.status === 201);
+        return (await this.updateRequest('POST', url, body)).json();
     }
 
-    public async put(url: string, body: BodyInit): Promise<boolean> {
-        const resp = await this.ky(url, {
-            method: 'PUT',
-            body: body,
-            mode: 'cors',
-        });
-        return (resp.ok && resp.status === 201);
+    public async put(url: string, body: BodyInit): Promise<unknown> {
+        return (await this.updateRequest('PUT', url, body)).json();
     }
 
     public async delete(url: string): Promise<boolean> {
+        const resp = await this.request('DELETE', url);
+        return (resp.ok && resp.status === 201);
+    }
+
+    private async request(method: string, url: string) {
         const resp = await this.ky(url, {
-            method: 'DELETE',
+            method: method,
             mode: 'cors',
         });
-        return (resp.ok && resp.status === 201);
+        return resp;
+    }
+    private async updateRequest(method: string, url: string, body: BodyInit) {
+        const resp = await this.ky(url, {
+            method: method,
+            body: body,
+            mode: 'cors',
+        });
+        return resp;
     }
 
 }

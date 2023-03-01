@@ -1,6 +1,7 @@
 export interface PageContent {
     id: string;
     bookId: string;
+    wiki: string;
     name: string;
     updatedAt: number;
     updatedBy: string;
