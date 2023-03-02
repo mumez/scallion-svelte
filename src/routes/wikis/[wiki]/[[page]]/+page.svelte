@@ -7,7 +7,7 @@
 	import PageService from '$lib/services/PageService';
 	import { updatingPageContent } from '$lib/models/PageContent';
 
-	import { uid } from '$lib/services/UserService';
+	import { email } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
 
 	import type { PageData } from './$types';
@@ -28,19 +28,22 @@
 	async function saveContent() {
 		const originalPageContent = $wikiPage.pageContent;
 		if (originalPageContent && editingContent !== $wikiPage.pageContent?.content) {
-			const updatingContent = updatingPageContent(originalPageContent, editingContent, uid());
+			const updatingContent = updatingPageContent(originalPageContent, editingContent, email());
 			const updatedContent = await pageService.putContent(updatingContent, jwt());
 			if (updatedContent) {
-				console.log('---updatedContent---', updatedContent);
 				wikiPage.setPageContent(updatedContent);
 				editingContent = updatedContent.content;
-				console.log('---editingContent---', editingContent);
 			}
 		}
 		wikiPage.stopEditing();
 	}
 
-	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt: 0;
+	function cancelContent() {
+		editingContent = $wikiPage.pageContent?.content ?? '';
+		wikiPage.stopEditing();
+	}
+
+	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt : 0;
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
@@ -56,6 +59,7 @@
 	<hr />
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
+			<button class="btn bg-red-100" on:click={cancelContent}>Cancel</button>
 			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
 		{:else}
 			<button class="btn variant-filled-primary" on:click={wikiPage.startEditing}>Edit</button>

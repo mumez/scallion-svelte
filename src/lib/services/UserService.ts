@@ -52,5 +52,10 @@ export const uid = () => {
     if (user && user.uid) { return user.uid; }
     return ''
 }
+export const email = () => {
+    const user = userService.user;
+    if (user && user.email) { return user.email; }
+    return ''
+}
 export default userService;
 
