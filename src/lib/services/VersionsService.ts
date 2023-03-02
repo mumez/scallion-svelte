@@ -1,7 +1,7 @@
 import BaseApiService from './BaseApiService';
 import type { PageContent } from '$lib/models/PageContent';
 
-class PageService extends BaseApiService {
+class VersionsService extends BaseApiService {
     protected wikiName = '';
     protected pageName = '';
 
@@ -11,22 +11,16 @@ class PageService extends BaseApiService {
         this.pageName = pageName;
     }
 
-    public async putContent(pageContent: PageContent, jwt = ''): Promise<PageContent> {
-        const url = this.targetUrl();
-        const acc = this.apiAccessor;
-        acc.setJwt(jwt);
-        const resp = await acc.put(url, JSON.stringify(pageContent)).catch(e => { return {}; });
-        return resp as PageContent;
+    public async getLastVersionNumber(): Promise<number> {
+        const url = `${this.targetUrl('version')}&field=lastVersionNumber`;
+        const resp = await this.apiAccessor.get(url).catch(e => { return 0; });
+        return resp as number;
     }
 
-    public async getContent(): Promise<PageContent> {
-        const url = this.targetUrl();
-        const resp = await this.apiAccessor.get(url).catch(e => { return {}; });
-        return resp as PageContent;
-    }
-
-    public override serviceName(): string {
-        return 'page';
+    public async getVersions(from = 1, size = 1): Promise<PageContent[]> {
+        const url = `${this.targetUrl('versions')}&from=${from}&size=${size}`;
+        const resp = await this.apiAccessor.get(url).catch(e => { return []; });
+        return resp as PageContent[];
     }
 
     // accessing
@@ -36,10 +30,10 @@ class PageService extends BaseApiService {
     getWikiName() {
         return this.wikiName;
     }
-    targetUrl() {
-        return `${this.serviceName()}?wiki=${this.wikiName}&name=${this.pageName}`;
+    targetUrl(baseDir: string) {
+        return `${baseDir}?wiki=${this.wikiName}&page=${this.pageName}`;
     }
 
 }
 
-export default PageService;
+export default VersionsService;
