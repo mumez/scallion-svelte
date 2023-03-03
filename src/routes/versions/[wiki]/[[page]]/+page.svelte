@@ -32,15 +32,18 @@
 		amounts: [5, 10]
 	} as PaginationSettings;
 
-	function onPageChange(e: CustomEvent): void {
+	function onPageChange(e: CustomEvent) {
 		const pageNum = e.detail;
 		versionFrom = lastVersionNumber - pageNum * rowsPerPage;
 		getVersions();
 	}
-	function onAmountChange(e: CustomEvent): void {
+	function onAmountChange(e: CustomEvent) {
 		versionFrom = lastVersionNumber;
 		rowsPerPage = e.detail;
 		getVersions();
+	}
+	function onVersionsTableRowSelected(e: CustomEvent) {
+		console.log('-selected -row-', e.detail);
 	}
 	async function getVersions(){
 		versions = await versionsService.getVersions(versionFrom, rowsPerPage);
@@ -67,6 +70,8 @@
 			head: versionsTableHeaders,
 			body: versionsTableBody
 		}}
+		interactive={true}
+		on:selected={onVersionsTableRowSelected} 
 	/>
 	<Paginator bind:settings={pagination} on:page={onPageChange} on:amount={onAmountChange} />
 </div>
