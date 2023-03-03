@@ -1,10 +1,18 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import wikiPage from '$lib/stores/wikiPage';
+	let wikiName = $page.params['wiki'] ?? '';
+	let pageName = $page.params['page'] ?? 'index';
+
+	console.log('object :>> ', ($page.route.id ?? '').split('/'));
+
+	$: routeFirstPart = ($page.route.id ?? '').split('/')[1];
 </script>
 
 <div class="space-x-0">
 	<button class="btn-icon" disabled="{$wikiPage.isEditing}" on:click={wikiPage.startEditing}><i class="fa-solid fa-pen" /></button>
 	<button class="btn-icon"><i class="fa-solid fa-arrow-up-from-bracket" /></button>
-	<button class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></button>
+	<a class:disabled="{routeFirstPart=='versions'}" href="/versions/{wikiName}/{pageName}" class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a>
 	<button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+	<span>{routeFirstPart}</span>
 </div>
