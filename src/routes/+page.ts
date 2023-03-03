@@ -1,4 +1,4 @@
-import wikiBookService from "$lib/services/WikiBookService";
+import wikiBookService from '$lib/services/WikiBookService';
 import type { WikiBook } from '$lib/models/WikiBook';
 
 export async function load() {

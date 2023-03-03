@@ -1,7 +1,7 @@
 class BaseService {
-    public serviceName(): string {
-        return '';
-    }
+	public serviceName(): string {
+		return '';
+	}
 }
 
 export default BaseService;

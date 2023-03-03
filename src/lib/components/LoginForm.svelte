@@ -40,10 +40,15 @@
 		</label>
 		<label class="label">
 			<span>Email</span>
-			<input class="input" type="email" bind:value={formData.email} placeholder="Enter email address..." />
+			<input
+				class="input"
+				type="email"
+				bind:value={formData.email}
+				placeholder="Enter email address..."
+			/>
 		</label>
 	</form>
-    <slot/>
+	<slot />
 	<!-- prettier-ignore -->
 	<footer class="modal-footer {parent.regionFooter}">
         <button class="btn {parent.buttonNeutral}" on:click={parent.onClose}>{parent.buttonTextCancel}</button>

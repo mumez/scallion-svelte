@@ -1,4 +1,4 @@
-import VersionsService from "$lib/services/VersionsService";
+import VersionsService from '$lib/services/VersionsService';
 
 export async function load({ params }) {
 	console.log('-params--', params);

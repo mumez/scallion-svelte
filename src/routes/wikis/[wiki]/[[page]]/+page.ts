@@ -1,4 +1,4 @@
-import PageService from "$lib/services/PageService";
+import PageService from '$lib/services/PageService';
 
 export async function load({ params }) {
 	console.log('-params--', params);
