@@ -10,9 +10,30 @@
 </script>
 
 <div class="space-x-0">
-	<button class="btn-icon" disabled="{$wikiPage.isEditing}" on:click={wikiPage.startEditing}><i class="fa-solid fa-pen" /></button>
-	<button class="btn-icon"><i class="fa-solid fa-arrow-up-from-bracket" /></button>
-	<a class:disabled="{routeFirstPart=='versions'}" href="/versions/{wikiName}/{pageName}" class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a>
-	<button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-	<span>{routeFirstPart}</span>
+	{#if routeFirstPart == 'wikis'}
+		<button class="btn-icon" disabled={$wikiPage.isEditing} on:click={wikiPage.startEditing}><i class="fa-solid fa-pen" /></button>
+	{:else}
+		<a
+			href="/wikis/{wikiName}/{pageName}"
+			class="btn-icon"><i class="fa-solid fa-pen" /></a
+		>
+	{/if}
+	<a
+		class:disabled={routeFirstPart == 'attachments'}
+		href="/attachments/{wikiName}/{pageName}"
+		class="btn-icon"><i class="fa-solid fa-arrow-up-from-bracket" /></a
+	>
+	<a
+		class:disabled={routeFirstPart == 'versions'}
+		href="/versions/{wikiName}/{pageName}"
+		class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a
+	>
+	<button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical" /></button>
 </div>
+
+<style>
+	.disabled {
+		cursor: not-allowed !important;
+		opacity: 0.5 !important;
+	}
+</style>
