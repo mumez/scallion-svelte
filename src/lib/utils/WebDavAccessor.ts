@@ -1,41 +1,51 @@
 import WebApiAccessor from './WebApiAccessor';
-import WebDavEntry from './WebDavEntry';
+import type WebDavEntry from './WebDavEntry';
+import { XMLParser } from 'fast-xml-parser';
 
-const ns = 'DAV:';
-const domParser = new DOMParser();
+const options = {
+	ignoreDeclaration: true,
+	ignorePiTags: true,
+	removeNSPrefix: true,
+};
 
 function entriesFromXml(xmlString: string): WebDavEntry[] {
-	const dom = domParser.parseFromString(xmlString, 'application/xml');
-	const elements = dom.documentElement.getElementsByTagNameNS(ns, 'response');
-	const entries = [];
-	for (const elem of elements) {
-		const entry = new WebDavEntry();
-		entry.name = tagContentNamed('displayname', elem);
-		entry.href = tagContentNamed('href', elem);
-		if (checkIsDirectory(elem)) {
-			entry.isDirectory = true;
-		} else {
-			entry.contentLength = +tagContentNamed('getcontentlength', elem);
-			entry.contentType = tagContentNamed('getcontenttype', elem);
-			entry.etag = tagContentNamed('getetag', elem);
-		}
-		entry.lastModified = tagContentNamed('getlastmodified', elem);
-		entry.status = tagContentNamed('status', elem);
+	const xmlParser = new XMLParser(options);
+	const parsed = xmlParser.parse(xmlString);
+	const response = parsed?.multistatus?.response ?? [];
+	const entries: WebDavEntry[] = [];
+	for (const element of response) {
+		const props = element.propstat?.prop ?? {};
+		console.log('elem :>> ', props);
+		const entry = newEntry();
+		entry.href = element['href'];
+		entry.status = element.propstat?.status ?? '';
+		entry.name = props['displayname'];
+		entry.contentType = props['getcontenttype'];
+		entry.contentLength = props['getcontentlength'];
+		entry.etag = props['getetag'];
+		entry.lastModified = props['getlastmodified'];
+		entry.isDirectory = checkIsDirectory(props['resourcetype']);
 		entries.push(entry);
 	}
 	return entries;
 }
 
-function tagContentNamed(localName: string, domElem: Element): string {
-	return domElem.getElementsByTagNameNS(ns, localName).item(0)?.innerHTML ?? '';
+function newEntry(): WebDavEntry {
+	return {
+		name: '',
+		href: '',
+		contentType: '',
+		contentLength: 0,
+		lastModified: '',
+		etag: '',
+		status: '',
+		isDirectory: false
+	}
 }
 
-function checkIsDirectory(domElem: Element): boolean {
-	const elem = domElem.getElementsByTagNameNS(ns, 'resourcetype').item(0);
-	if (!elem) {
-		return false;
-	}
-	return (elem.getElementsByTagNameNS(ns, 'collection')?.length ?? 0) > 0;
+function checkIsDirectory(resourceTypeProps = {}): boolean {
+	if (!resourceTypeProps) return false;
+	return ('collection' in resourceTypeProps);
 }
 
 export class WebDavAccessor extends WebApiAccessor {
@@ -49,7 +59,7 @@ export class WebDavAccessor extends WebApiAccessor {
 		url: string,
 		depth = 1,
 	): Promise<WebDavEntry[]> {
-		const resp = await this.fetch(url, {
+		const resp = await this.fetch(this.buildUrl(url), {
 			method: 'PROPFIND',
 			mode: 'cors',
 			headers: {
@@ -61,7 +71,7 @@ export class WebDavAccessor extends WebApiAccessor {
 	}
 
 	public async mkcol(url: string): Promise<boolean> {
-		const resp = await this.fetch(url, {
+		const resp = await this.fetch(this.buildUrl(url), {
 			method: 'MKCOL',
 			mode: 'cors',
 			headers: this.headers
@@ -70,12 +80,12 @@ export class WebDavAccessor extends WebApiAccessor {
 	}
 
 	public async move(fromUrl: string, toUrl: string): Promise<boolean> {
-		const resp = await this.fetch(fromUrl, {
+		const resp = await this.fetch(this.buildUrl(fromUrl), {
 			method: 'MOVE',
 			mode: 'cors',
 			headers: {
 				...this.headers,
-				Destination: toUrl
+				Destination: (this.buildUrl(toUrl))
 			}
 		});
 		return resp.ok && resp.status === 201;
