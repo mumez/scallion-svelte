@@ -1,6 +1,6 @@
 import appConfig from '../configs';
-import WebApiAccessor from '../utils/WebApiAccessor';
 import BaseService from './BaseService';
+import WebApiAccessor from '$lib/utils/WebApiAccessor';
 
 class BaseApiService extends BaseService {
 	protected fetch: typeof fetch;
@@ -14,6 +14,7 @@ class BaseApiService extends BaseService {
 		this.fetch = fetcher;
 	}
 
+	// accessing
 	get apiAccessor() {
 		return new WebApiAccessor(this.fetch, this.apiBaseUrl);
 	}

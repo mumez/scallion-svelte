@@ -28,12 +28,6 @@ class VersionsService extends BaseApiService {
 	}
 
 	// accessing
-	getPageName() {
-		return this.pageName;
-	}
-	getWikiName() {
-		return this.wikiName;
-	}
 	targetUrl(baseDir: string) {
 		return `${baseDir}?wiki=${this.wikiName}&page=${this.pageName}`;
 	}

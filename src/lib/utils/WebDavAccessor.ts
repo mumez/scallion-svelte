@@ -38,7 +38,7 @@ function checkIsDirectory(domElem: Element): boolean {
 	return (elem.getElementsByTagNameNS(ns, 'collection')?.length ?? 0) > 0;
 }
 
-export class WebDav extends WebApiAccessor {
+export class WebDavAccessor extends WebApiAccessor {
 
 	public override async put(url: string, body: File): Promise<boolean> {
 		const resp = await this.updatingRequest('PUT', url, body);
@@ -82,4 +82,4 @@ export class WebDav extends WebApiAccessor {
 	}
 }
 
-export default WebDav;
+export default WebDavAccessor;
