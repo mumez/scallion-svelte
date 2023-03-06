@@ -28,8 +28,8 @@ class VersionsService extends BaseApiService {
 	}
 
 	// accessing
-	targetUrl(baseDir: string) {
-		return `${baseDir}?wiki=${this.wikiName}&page=${this.pageName}`;
+	targetUrl(serviceName: string) {
+		return `${serviceName}?wiki=${this.wikiName}&page=${this.pageName}`;
 	}
 }
 

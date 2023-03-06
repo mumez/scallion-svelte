@@ -13,12 +13,12 @@ class FilesService extends BaseApiService {
 	}
 
 	public async files() {
-		return await this.webDavAccessor.propfind(rootUri);
+		return await this.webDavAccessor.propfind(this.targetUrl());
 	}
 
 	public async uploadFiles(files: File[]) {
 		files.forEach((each) => {
-			this.webDavAccessor.put(`${rootUri}/${each.name}`, each);
+			this.webDavAccessor.put(`${this.targetUrl()}/${each.name}`, each);
 		});
 	}
 
@@ -31,7 +31,7 @@ class FilesService extends BaseApiService {
 	}
 
 	targetUrl() {
-		return `${this.serviceName()}?wiki=${this.wikiName}&name=${this.pageName}`;
+		return `${this.wikiName}/${this.pageName}`;
 	}
 }
 
