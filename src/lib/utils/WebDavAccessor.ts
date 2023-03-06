@@ -15,15 +15,14 @@ function entriesFromXml(xmlString: string): WebDavEntry[] {
 	const entries: WebDavEntry[] = [];
 	for (const element of response) {
 		const props = element.propstat?.prop ?? {};
-		console.log('elem :>> ', props);
 		const entry = newEntry();
-		entry.href = element['href'];
-		entry.status = element.propstat?.status ?? '';
 		entry.name = props['displayname'];
 		entry.contentType = props['getcontenttype'];
-		entry.contentLength = props['getcontentlength'];
+		entry.contentLength = props['getcontentlength'] ?? 0;
 		entry.etag = props['getetag'];
 		entry.lastModified = props['getlastmodified'];
+		entry.href = element['href'];
+		entry.status = element.propstat?.status ?? '';
 		entry.isDirectory = checkIsDirectory(props['resourcetype']);
 		entries.push(entry);
 	}
@@ -33,11 +32,11 @@ function entriesFromXml(xmlString: string): WebDavEntry[] {
 function newEntry(): WebDavEntry {
 	return {
 		name: '',
-		href: '',
 		contentType: '',
 		contentLength: 0,
 		lastModified: '',
 		etag: '',
+		href: '',
 		status: '',
 		isDirectory: false
 	}
