@@ -13,9 +13,9 @@
 	import type { PageData } from './$types';
 	export let data: PageData;
 
-	let pageContent = data.page ?? {};
-	let wikiName = $page.params['wiki'] ?? '';
-	let pageName = $page.params['page'] ?? 'index';
+	const pageContent = data.page ?? {};
+	const wikiName = $page.params['wiki'] ?? '';
+	const pageName = $page.params['page'] ?? 'index';
 
 	const pageService = new PageService(wikiName, pageName);
 

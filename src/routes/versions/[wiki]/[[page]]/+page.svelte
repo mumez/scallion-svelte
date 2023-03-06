@@ -10,16 +10,14 @@
 	import type { PageData } from './$types';
 	export let data: PageData;
 
-	let lastVersionNumber = data.lastVersionNumber;
-	let versions = data.versions;
-	let wikiName = $page.params['wiki'] ?? '';
-	let pageName = $page.params['page'] ?? 'index';
-
-	const versionsService = new VersionsService(wikiName, pageName);
-
+	const wikiName = $page.params['wiki'] ?? '';
+	const pageName = $page.params['page'] ?? 'index';
 	$parentLink = wikiName;
 	$headerTitle = pageName;
 
+	const versionsService = new VersionsService(wikiName, pageName);
+	const lastVersionNumber = data.lastVersionNumber;
+	let versions = data.versions;	
 	let versionFrom = lastVersionNumber;
 	let rowsPerPage = 5;
 
@@ -42,7 +40,7 @@
 		rowsPerPage = e.detail;
 		getVersions();
 	}
-	function onVersionsTableRowSelected(e: CustomEvent) {
+	function onRowSelected(e: CustomEvent) {
 		console.log('-selected -row-', e.detail);
 	}
 	async function getVersions(){
@@ -71,7 +69,7 @@
 			body: versionsTableBody
 		}}
 		interactive={true}
-		on:selected={onVersionsTableRowSelected} 
+		on:selected={onRowSelected} 
 	/>
 	<Paginator bind:settings={pagination} on:page={onPageChange} on:amount={onAmountChange} />
 </div>
