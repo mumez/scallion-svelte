@@ -1,18 +1,15 @@
-import ky from 'ky';
-
 export class WebApiAccessor {
-	protected ky: typeof ky;
+	protected baseUrl = '';
+	protected fetch: typeof fetch;
+	protected headers = new Headers();
 
-	constructor(baseUrl = '') {
-		this.ky = ky.create({ prefixUrl: baseUrl });
+	constructor(fetcher: typeof fetch, baseUrl = '') {
+		this.fetch = fetcher;
+		this.baseUrl = baseUrl;
 	}
 
 	public setJwt(jwt: string) {
-		this.ky = this.ky.extend({
-			headers: {
-				authorization: `Bearer ${jwt}`
-			}
-		});
+		this.headers.set('Authorization', `Bearer ${jwt}`);
 	}
 
 	public async get(url: string): Promise<unknown> {
@@ -20,11 +17,11 @@ export class WebApiAccessor {
 	}
 
 	public async post(url: string, body: BodyInit): Promise<boolean> {
-		return (await this.updateRequest('POST', url, body)).json();
+		return (await this.updatingRequest('POST', url, body)).json();
 	}
 
 	public async put(url: string, body: BodyInit): Promise<unknown> {
-		return (await this.updateRequest('PUT', url, body)).json();
+		return (await this.updatingRequest('PUT', url, body)).json();
 	}
 
 	public async delete(url: string): Promise<boolean> {
@@ -32,20 +29,28 @@ export class WebApiAccessor {
 		return resp.ok && resp.status === 201;
 	}
 
-	private async request(method: string, url: string) {
-		const resp = await this.ky(url, {
+	protected async request(method: string, url: string) {
+		const resp = await this.fetch(this.buildUrl(url), {
 			method: method,
-			mode: 'cors'
+			mode: 'cors',
+			headers: this.headers,
 		});
 		return resp;
 	}
-	private async updateRequest(method: string, url: string, body: BodyInit) {
-		const resp = await this.ky(url, {
+	protected async updatingRequest(method: string, url: string, body: BodyInit) {
+		const resp = await this.fetch(this.buildUrl(url), {
 			method: method,
 			body: body,
-			mode: 'cors'
+			mode: 'cors',
+			headers: this.headers
 		});
 		return resp;
+	}
+
+	protected buildUrl(urlPart) {
+		if (this.baseUrl.length == 0) return urlPart;
+		if (this.baseUrl.endsWith("/")) return `${this.baseUrl}${urlPart}`;
+		return `${this.baseUrl}/${urlPart}`;
 	}
 }
 

@@ -1,5 +1,3 @@
-import ky from 'ky';
-
 import WebApiAccessor from './WebApiAccessor';
 import WebDavEntry from './WebDavEntry';
 
@@ -41,37 +39,44 @@ function checkIsDirectory(domElem: Element): boolean {
 }
 
 export class WebDav extends WebApiAccessor {
+
+	public override async put(url: string, body: File): Promise<boolean> {
+		const resp = await this.updatingRequest('PUT', url, body);
+		return resp.ok && resp.status === 201;
+	}
+
 	public async propfind(
 		url: string,
-		depth: number = 1,
-		headers: object = { api: true }
+		depth = 1,
 	): Promise<WebDavEntry[]> {
-		const resp = await this.ky(url, {
+		const resp = await this.fetch(url, {
 			method: 'PROPFIND',
+			mode: 'cors',
 			headers: {
+				...this.headers,
 				Depth: String(depth),
-				...headers
 			},
-			mode: 'cors'
 		});
 		return entriesFromXml(await resp.text());
 	}
 
 	public async mkcol(url: string): Promise<boolean> {
-		const resp = await this.ky(url, {
+		const resp = await this.fetch(url, {
 			method: 'MKCOL',
-			mode: 'cors'
+			mode: 'cors',
+			headers: this.headers
 		});
 		return resp.ok && resp.status === 201;
 	}
 
 	public async move(fromUrl: string, toUrl: string): Promise<boolean> {
-		const resp = await this.ky(fromUrl, {
+		const resp = await this.fetch(fromUrl, {
 			method: 'MOVE',
+			mode: 'cors',
 			headers: {
+				...this.headers,
 				Destination: toUrl
-			},
-			mode: 'cors'
+			}
 		});
 		return resp.ok && resp.status === 201;
 	}

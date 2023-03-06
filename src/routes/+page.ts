@@ -1,8 +1,7 @@
-import wikiBookService from '$lib/services/WikiBookService';
-import type { WikiBook } from '$lib/models/WikiBook';
+import WikiBookService from '$lib/services/WikiBookService';
 
-export async function load() {
-	let wikiBooks: WikiBook[] = [];
-	wikiBooks = await wikiBookService.listBooks();
+export async function load({ fetch }) {
+	const wikiBookService = new WikiBookService(fetch);
+	const wikiBooks = await wikiBookService.listBooks();
 	return { books: wikiBooks };
 }

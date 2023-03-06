@@ -40,7 +40,6 @@
 		"@types/lodash": "^4.14.191",
 		"@types/marked": "^4.0.8",
 		"firebase": "^9.17.1",
-		"ky": "^0.33.2",
 		"lodash": "^4.17.21",
 		"marked": "^4.2.12"
 	},
