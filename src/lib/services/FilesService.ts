@@ -1,6 +1,7 @@
 import appConfig from '../configs';
 import BaseApiService from './BaseApiService';
 import WebDavAccessor from '$lib/utils/WebDavAccessor';
+import type WebDavEntry from '$lib/utils/WebDavEntry';
 
 class FilesService extends BaseApiService {
 	protected wikiName = '';
@@ -12,7 +13,7 @@ class FilesService extends BaseApiService {
 		this.pageName = pageName;
 	}
 
-	public async files() {
+	public async files(): Promise<WebDavEntry[]> {
 		return await this.webDavAccessor.propfind(this.targetUrl());
 	}
 
