@@ -8,6 +8,7 @@
 	import { browser } from '$app/environment';
 	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
 	import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
+	import WikiBookIndexLink from '$lib/components/WikiBookIndexLink.svelte';
 	import authService from '$lib/services/AuthService';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
@@ -37,7 +38,7 @@
 	<svelte:fragment slot="header">
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<span>{linkToParent}<span><h1>{title}</h1> </span></span></svelte:fragment
+				<WikiBookIndexLink wikiBookName={linkToParent}/><h1>{title}</h1></svelte:fragment
 			>
 			<svelte:fragment slot="trail">
 				{#if !isAuthenticated}
