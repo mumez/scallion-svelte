@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import parentLink from '$lib/stores/parentLink';
-	import headerTitle from '$lib/stores/headerTitle';
 	import {
-		FileDropzone,
 		Table,
 		tableSourceMapper,
 		tableSourceValues
 	} from '@skeletonlabs/skeleton';
+	import FilesUploader from '$lib/components/FilesUploader.svelte';
+	import parentLink from '$lib/stores/parentLink';
+	import headerTitle from '$lib/stores/headerTitle';
 	import type WebDavEntry from '$lib/utils/WebDavEntry';
 
 	import type { PageData } from './$types';
@@ -19,7 +19,6 @@
 	$headerTitle = pageName;
 
 	const files = data.files;
-
 	const filesTableHeaders: string[] = ['Name', 'Size', 'Date'];
 
 	function onRowSelected(e: CustomEvent) {
@@ -41,7 +40,8 @@
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
-	<FileDropzone><svelte:fragment slot="message">(message)</svelte:fragment></FileDropzone>
+	<FilesUploader/>
+
 	<Table
 		source={{
 			head: filesTableHeaders,

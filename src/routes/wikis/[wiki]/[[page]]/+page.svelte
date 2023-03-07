@@ -59,7 +59,7 @@
 	<hr />
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
-			<button class="btn bg-red-100" on:click={cancelContent}>Cancel</button>
+			<button class="btn variant-filled-warning" on:click={cancelContent}>Cancel</button>
 			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
 		{:else}
 			<button class="btn variant-filled-primary" on:click={wikiPage.startEditing}>Edit</button>
