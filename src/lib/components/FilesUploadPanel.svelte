@@ -1,9 +1,12 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte'
+	import { createEventDispatcher } from 'svelte';
 	import { FileDropzone } from '@skeletonlabs/skeleton';
+
+	export let uploader: (file: File) => Promise<boolean> = (file) => Promise.resolve(true);
 
 	let uploadingFileList: FileList | null;
 	let uploadingFileArray: File[] = [];
+	let isUploading = false;
 
 	const dispatch = createEventDispatcher();
 
@@ -13,13 +16,37 @@
 	function clear() {
 		uploadingFileList = null;
 	}
-	function requestUpload() {
-		dispatch('request-upload', uploadingFileArray);
-		clear();
+	async function upload() {
+		isUploading = true;
+		const files = Array.from(uploadingFileArray);
+		dispatch('upload-start', files);
+		const promises = files.map((each) => {
+			return uploader(each).then((result) => {
+				console.log('result :>> ', result);
+				dispatch('upload-progress', {
+					file: each,
+					result
+				});
+				if (result) {
+					uploadingFileArray = uploadingFileArray.filter((e) => e != each);
+				}
+			});
+		});
+		await Promise.all(promises);
+		console.log('--upload-end---uploadingFileArray :>> ', uploadingFileArray);
+		dispatch('upload-end', uploadingFileArray);
+		isUploading = false;
 	}
+	// function requestUpload() {
+	// 	const result = dispatch('request-upload', uploadingFileArray, {cancelable: true});
+	// 	if(result){
+	// 		clear();
+	// 	}
+	// 	console.log('done :>> ', result);
+	// }
 
 	$: uploadingFileArray = uploadingFileList ? [...uploadingFileList] : [];
-	$: shouldEnableActionButtons = uploadingFileArray.length > 0;
+	$: shouldEnableActionButtons = !isUploading && uploadingFileArray.length > 0;
 </script>
 
 <div class="relative">
@@ -44,7 +71,7 @@
 		<button
 			disabled={!shouldEnableActionButtons}
 			class="border-current border-2 variant-filled-primary"
-			on:click={requestUpload}>Upload</button
+			on:click={upload}>Upload</button
 		>
 	</div>
 </div>

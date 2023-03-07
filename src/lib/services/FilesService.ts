@@ -27,7 +27,7 @@ class FilesService extends BaseApiService {
 		});
 	}
 
-	public uploadFile(file: File) {
+	public uploadFile(file: File): Promise<boolean> {
 		return this.webDavAccessor.put(`${this.targetUrl()}/${file.name}`, file);
 	}
 

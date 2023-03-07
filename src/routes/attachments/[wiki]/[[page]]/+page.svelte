@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { Table, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
-	import FilesUploader from '$lib/components/FilesUploader.svelte';
+	import FilesUploadPanel from '$lib/components/FilesUploadPanel.svelte';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import type WebDavEntry from '$lib/utils/WebDavEntry';
+
+	import FilesService from '$lib/services/FilesService';
 
 	import type { PageData } from './$types';
 	export let data: PageData;
@@ -14,6 +16,7 @@
 	$parentLink = wikiName;
 	$headerTitle = pageName;
 
+	const filesService = new FilesService(wikiName, pageName);
 	const files = data.files;
 	const filesTableHeaders: string[] = ['Name', 'Size', 'Date'];
 
@@ -32,17 +35,20 @@
 		return tableSourceValues(mappedVersions);
 	}
 
-	function uploadRequested(ev: CustomEvent) {
-		const files: File[] = ev.detail;
-		console.log('--upload requested--', files);
-		
+	async function uploadFile(file: File) {
+		console.log('---upload :>> ', file);
+		return await filesService.uploadFile(file);
+	}
+
+	function onUploadProgress(ev: CustomEvent) {
+		console.log('--upload progress--', ev.detail);
 	}
 
 	$: filesTableBody = processRowsForTable(files);
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
-	<FilesUploader on:request-upload={uploadRequested}/>
+	<FilesUploadPanel uploader={uploadFile} on:upload-progress={onUploadProgress} />
 
 	<Table
 		source={{
