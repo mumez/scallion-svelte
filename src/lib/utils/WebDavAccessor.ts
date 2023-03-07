@@ -5,7 +5,7 @@ import { XMLParser } from 'fast-xml-parser';
 const options = {
 	ignoreDeclaration: true,
 	ignorePiTags: true,
-	removeNSPrefix: true,
+	removeNSPrefix: true
 };
 
 function entriesFromXml(xmlString: string): WebDavEntry[] {
@@ -39,32 +39,28 @@ function newEntry(): WebDavEntry {
 		href: '',
 		status: '',
 		isDirectory: false
-	}
+	};
 }
 
 function checkIsDirectory(resourceTypeProps = {}): boolean {
 	if (!resourceTypeProps) return false;
-	return ('collection' in resourceTypeProps);
+	return 'collection' in resourceTypeProps;
 }
 
 export class WebDavAccessor extends WebApiAccessor {
-
 	public override async put(url: string, body: File): Promise<boolean> {
 		const resp = await this.updatingRequest('PUT', url, body);
 		return resp.ok && resp.status === 201;
 	}
 
-	public async propfind(
-		url: string,
-		depth = 1,
-	): Promise<WebDavEntry[]> {
+	public async propfind(url: string, depth = 1): Promise<WebDavEntry[]> {
 		const resp = await this.fetch(this.buildUrl(url), {
 			method: 'PROPFIND',
 			mode: 'cors',
 			headers: {
 				...this.headers,
-				Depth: String(depth),
-			},
+				Depth: String(depth)
+			}
 		});
 		return entriesFromXml(await resp.text());
 	}
@@ -84,7 +80,7 @@ export class WebDavAccessor extends WebApiAccessor {
 			mode: 'cors',
 			headers: {
 				...this.headers,
-				Destination: (this.buildUrl(toUrl))
+				Destination: this.buildUrl(toUrl)
 			}
 		});
 		return resp.ok && resp.status === 201;

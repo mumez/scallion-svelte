@@ -33,7 +33,7 @@ export class WebApiAccessor {
 		const resp = await this.fetch(this.buildUrl(url), {
 			method: method,
 			mode: 'cors',
-			headers: this.headers,
+			headers: this.headers
 		});
 		return resp;
 	}
@@ -49,7 +49,7 @@ export class WebApiAccessor {
 
 	protected buildUrl(urlPart) {
 		if (this.baseUrl.length == 0) return urlPart;
-		if (this.baseUrl.endsWith("/")) return `${this.baseUrl}${urlPart}`;
+		if (this.baseUrl.endsWith('/')) return `${this.baseUrl}${urlPart}`;
 		return `${this.baseUrl}/${urlPart}`;
 	}
 }

@@ -38,7 +38,8 @@
 	<svelte:fragment slot="header">
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<WikiBookIndexLink wikiBookName={linkToParent}/><h1>{title}</h1></svelte:fragment
+				<WikiBookIndexLink wikiBookName={linkToParent} />
+				<h1>{title}</h1></svelte:fragment
 			>
 			<svelte:fragment slot="trail">
 				{#if !isAuthenticated}

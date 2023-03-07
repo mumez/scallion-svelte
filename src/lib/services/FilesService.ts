@@ -13,8 +13,12 @@ class FilesService extends BaseApiService {
 		this.pageName = pageName;
 	}
 
-	public async files(): Promise<WebDavEntry[]> {
+	public async filesAndDirectories(): Promise<WebDavEntry[]> {
 		return await this.webDavAccessor.propfind(this.targetUrl());
+	}
+
+	public async files(): Promise<WebDavEntry[]> {
+		return (await this.filesAndDirectories()).filter((each) => !each.isDirectory);
 	}
 
 	public async uploadFiles(files: File[]) {
@@ -31,7 +35,7 @@ class FilesService extends BaseApiService {
 		return appConfig.webDav.baseUrl;
 	}
 
-	targetUrl() {
+	public targetUrl() {
 		return `${this.wikiName}/${this.pageName}`;
 	}
 }
