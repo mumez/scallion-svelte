@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte'
 	import { FileDropzone } from '@skeletonlabs/skeleton';
 
 	let uploadingFileList: FileList | null;
 	let uploadingFileArray: File[] = [];
+
+	const dispatch = createEventDispatcher();
 
 	function onFilesChange(e: Event) {
 		uploadingFileList = e.target ? (e.target as HTMLInputElement).files : null;
@@ -10,7 +13,8 @@
 	function clear() {
 		uploadingFileList = null;
 	}
-	function upload() {
+	function requestUpload() {
+		dispatch('request-upload', uploadingFileArray);
 		clear();
 	}
 
@@ -40,7 +44,7 @@
 		<button
 			disabled={!shouldEnableActionButtons}
 			class="border-current border-2 variant-filled-primary"
-			on:click={upload}>Upload</button
+			on:click={requestUpload}>Upload</button
 		>
 	</div>
 </div>

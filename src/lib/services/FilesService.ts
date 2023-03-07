@@ -22,9 +22,13 @@ class FilesService extends BaseApiService {
 	}
 
 	public async uploadFiles(files: File[]) {
-		files.forEach((each) => {
-			this.webDavAccessor.put(`${this.targetUrl()}/${each.name}`, each);
+		return files.map((each) => {
+			return this.uploadFile(each);
 		});
+	}
+
+	public uploadFile(file: File) {
+		return this.webDavAccessor.put(`${this.targetUrl()}/${file.name}`, file);
 	}
 
 	// accessing

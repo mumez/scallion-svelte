@@ -17,8 +17,8 @@
 	const files = data.files;
 	const filesTableHeaders: string[] = ['Name', 'Size', 'Date'];
 
-	function onRowSelected(e: CustomEvent) {
-		console.log('-selected -row-', e.detail);
+	function onRowSelected(ev: CustomEvent) {
+		console.log('-selected -row-', ev.detail);
 	}
 
 	function processRowsForTable(files: WebDavEntry[]) {
@@ -32,11 +32,17 @@
 		return tableSourceValues(mappedVersions);
 	}
 
+	function uploadRequested(ev: CustomEvent) {
+		const files: File[] = ev.detail;
+		console.log('--upload requested--', files);
+		
+	}
+
 	$: filesTableBody = processRowsForTable(files);
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
-	<FilesUploader />
+	<FilesUploader on:request-upload={uploadRequested}/>
 
 	<Table
 		source={{
