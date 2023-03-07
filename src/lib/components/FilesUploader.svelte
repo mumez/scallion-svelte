@@ -1,33 +1,46 @@
 <script lang="ts">
 	import { FileDropzone } from '@skeletonlabs/skeleton';
 
-	let uploadingFileList: FileList;
+	let uploadingFileList: FileList | null;
+	let uploadingFileArray: File[] = [];
 
-	function onUploadingFilesChange(e: Event) {
-		console.log('file data--', e);
+	function onFilesChange(e: Event) {
+		uploadingFileList = e.target ? (e.target as HTMLInputElement).files : null;
+	}
+	function clear() {
+		uploadingFileList = null;
+	}
+	function upload() {
+		clear();
 	}
 
-	$: uploadingFiles = [{ name: 'aa' }, { name: 'a' }, { name: 'a' }, { name: 'a' }, { name: 'a' }];
+	$: uploadingFileArray = uploadingFileList ? [...uploadingFileList] : [];
+	$: shouldEnableActionButtons = uploadingFileArray.length > 0;
 </script>
 
 <div class="relative">
-	<FileDropzone
-		multiple
-		name="uploadingFiles"
-		bind:uploadingFileList
-		on:change={onUploadingFilesChange}
-	>
+	<FileDropzone multiple name="uploadingFiles" padding="py-1" on:change={onFilesChange}>
 		<svelte:fragment slot="lead">
-			<span>Upload files by Drag & Drop</span>
+			<span>Click to start uploading files</span>
 		</svelte:fragment>
 		<svelte:fragment slot="message">
-			{#each uploadingFiles as uploadingFile}
-				<li>{uploadingFile.name}</li>
-			{/each}
+			<ul class="text-left">
+				{#each uploadingFileArray as uploadingFile}
+					<li>{uploadingFile.name}</li>
+				{/each}
+			</ul>
 		</svelte:fragment>
 	</FileDropzone>
 	<div class="absolute bottom-0 right-0">
-		<button class="border-current border-2 variant-filled-warning">Clear</button>
-		<button class="border-current border-2 variant-filled-primary">Upload</button>
+		<button
+			disabled={!shouldEnableActionButtons}
+			class="border-current border-2 variant-filled-warning"
+			on:click={clear}>Clear</button
+		>
+		<button
+			disabled={!shouldEnableActionButtons}
+			class="border-current border-2 variant-filled-primary"
+			on:click={upload}>Upload</button
+		>
 	</div>
 </div>

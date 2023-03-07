@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import {
-		Table,
-		tableSourceMapper,
-		tableSourceValues
-	} from '@skeletonlabs/skeleton';
+	import { Table, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
 	import FilesUploader from '$lib/components/FilesUploader.svelte';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
@@ -40,7 +36,7 @@
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
-	<FilesUploader/>
+	<FilesUploader />
 
 	<Table
 		source={{
