@@ -18,7 +18,7 @@
 	$headerTitle = pageName;
 
 	const filesService = new FilesService(wikiName, pageName);
-	const files = data.files;
+	let files = data.files;
 	const filesTableHeaders: string[] = ['Name', 'Size', 'Date'];
 
 	function onRowSelected(ev: CustomEvent) {
@@ -37,20 +37,23 @@
 	}
 
 	async function uploadFile(file: File) {
-		console.log('---upload :>> ', file, jwt());
 		return await filesService.uploadFile(file, jwt());
 	}
 
-	function onUploadProgress(ev: CustomEvent) {
-		console.log('--upload progress--', ev.detail);
+	function onUploadEnd(ev: CustomEvent) {
+		console.log('--upload ended--', ev.detail);
+		reloadFiles();
+	}
+
+	async function reloadFiles() {
+		files = await filesService.files();
 	}
 
 	$: filesTableBody = processRowsForTable(files);
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
-	<FilesUploadPanel uploader={uploadFile} on:upload-progress={onUploadProgress} />
-
+	<FilesUploadPanel uploader={uploadFile} on:upload-end={onUploadEnd} />
 	<Table
 		source={{
 			head: filesTableHeaders,

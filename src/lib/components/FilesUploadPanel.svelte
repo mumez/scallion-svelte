@@ -22,7 +22,6 @@
 		dispatch('upload-start', files);
 		const promises = files.map((each) => {
 			return uploader(each).then((result) => {
-				console.log('result :>> ', result);
 				dispatch('upload-progress', {
 					file: each,
 					result
@@ -33,7 +32,6 @@
 			});
 		});
 		await Promise.all(promises);
-		console.log('--upload-end---uploadingFileArray :>> ', uploadingFileArray);
 		dispatch('upload-end', uploadingFileArray);
 		isUploading = false;
 	}
@@ -45,7 +43,11 @@
 <div class="relative">
 	<FileDropzone multiple name="uploadingFiles" padding="py-1" on:change={onFilesChange}>
 		<svelte:fragment slot="lead">
-			<span>Click to start uploading files</span>
+			{#if isUploading}
+				<i class="animate-spin text-3xl fa-solid fa-spinner" />
+			{:else}
+				<span>Click to start uploading files</span>
+			{/if}
 		</svelte:fragment>
 		<svelte:fragment slot="message">
 			<ul class="text-left">
