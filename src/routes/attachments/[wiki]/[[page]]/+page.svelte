@@ -5,6 +5,7 @@
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import type WebDavEntry from '$lib/utils/WebDavEntry';
+	import { jwt } from '$lib/utils/ClientStorage';
 
 	import FilesService from '$lib/services/FilesService';
 
@@ -36,8 +37,8 @@
 	}
 
 	async function uploadFile(file: File) {
-		console.log('---upload :>> ', file);
-		return await filesService.uploadFile(file);
+		console.log('---upload :>> ', file, jwt());
+		return await filesService.uploadFile(file, jwt());
 	}
 
 	function onUploadProgress(ev: CustomEvent) {

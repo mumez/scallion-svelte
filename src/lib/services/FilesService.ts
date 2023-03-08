@@ -21,14 +21,16 @@ class FilesService extends BaseApiService {
 		return (await this.filesAndDirectories()).filter((each) => !each.isDirectory);
 	}
 
-	public async uploadFiles(files: File[]) {
+	public async uploadFiles(files: File[], jwt = '') {
 		return files.map((each) => {
-			return this.uploadFile(each);
+			return this.uploadFile(each, jwt);
 		});
 	}
 
-	public uploadFile(file: File): Promise<boolean> {
-		return this.webDavAccessor.put(`${this.targetUrl()}/${file.name}`, file);
+	public uploadFile(file: File, jwt = ''): Promise<boolean> {
+		const acc = this.webDavAccessor;
+		acc.setJwt(jwt);
+		return acc.put(`${this.targetUrl()}/${file.name}`, file);
 	}
 
 	// accessing

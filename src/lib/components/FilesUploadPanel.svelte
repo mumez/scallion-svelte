@@ -37,13 +37,6 @@
 		dispatch('upload-end', uploadingFileArray);
 		isUploading = false;
 	}
-	// function requestUpload() {
-	// 	const result = dispatch('request-upload', uploadingFileArray, {cancelable: true});
-	// 	if(result){
-	// 		clear();
-	// 	}
-	// 	console.log('done :>> ', result);
-	// }
 
 	$: uploadingFileArray = uploadingFileList ? [...uploadingFileList] : [];
 	$: shouldEnableActionButtons = !isUploading && uploadingFileArray.length > 0;
