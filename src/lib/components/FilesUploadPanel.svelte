@@ -57,7 +57,7 @@
 			</ul>
 		</svelte:fragment>
 	</FileDropzone>
-	<div class="absolute bottom-0 right-0">
+	<div class="absolute z-30 bottom-0 right-0">
 		<button
 			disabled={!shouldEnableActionButtons}
 			class="border-current border-2 variant-filled-warning"
