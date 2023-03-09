@@ -1,9 +1,18 @@
 <script lang="ts">
+	import { Avatar } from '@skeletonlabs/skeleton'; 
 	import ModalCloseButton from '$lib/components/ModalCloseButton.svelte';
 
 	export let fileName = '';
 	export let baseUrl = '';
 	export let parent: unknown;
+
+	function isImage() {
+		return (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(fileName);
+	}
+
+	function fileExtension() {
+		return fileName.slice((Math.max(0, fileName.lastIndexOf(".")) || Infinity) + 1);
+	}
 
 	async function download() {
 		const resp = await fetch(`${baseUrl}/${fileName}`);
@@ -23,6 +32,11 @@
 
 <div class="relative">
 	<ModalCloseButton />
+	{#if isImage()}
+		<Avatar src="{baseUrl}/{fileName}" rounded="rounded-xl"/>
+	{:else}
+		<div class="card w-12 h-12 rounded-xl bg-white text-center truncate">{fileExtension()}</div>
+	{/if}
 	<div>
 		<a href="{baseUrl}/{fileName}" on:click|preventDefault={download}>{fileName}</a>
 	</div>
