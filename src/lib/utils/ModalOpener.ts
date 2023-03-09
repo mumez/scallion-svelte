@@ -4,7 +4,8 @@ import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton/utili
 export const asModalComponent = (component: unknown, props = {}): ModalComponent => {
 	return {
 		ref: component,
-		props: props
+		props: props,
+		slot: ''
 	};
 };
 
