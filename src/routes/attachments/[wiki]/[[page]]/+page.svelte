@@ -6,6 +6,7 @@
 	import headerTitle from '$lib/stores/headerTitle';
 	import type WebDavEntry from '$lib/utils/WebDavEntry';
 	import { jwt } from '$lib/utils/ClientStorage';
+	import { openModal } from '$lib/utils/ModalOpener';
 
 	import FilesService from '$lib/services/FilesService';
 
@@ -23,6 +24,7 @@
 
 	function onRowSelected(ev: CustomEvent) {
 		console.log('-selected -row-', ev.detail);
+		openModal()
 	}
 
 	function processRowsForTable(files: WebDavEntry[]) {
