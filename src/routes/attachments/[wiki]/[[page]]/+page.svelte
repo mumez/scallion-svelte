@@ -25,8 +25,9 @@
 
 	function onRowSelected(ev: CustomEvent) {
 		const fileName = ev.detail[0];
+		const baseUrl = filesService.downloadBaseUrl;
 		console.log('-selected -row-', fileName);
-		openModal(FileDownloader, { fileName });
+		openModal(FileDownloader, { baseUrl, fileName });
 	}
 
 	function processRowsForTable(files: WebDavEntry[]) {

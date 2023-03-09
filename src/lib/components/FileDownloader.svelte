@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 
 	export let fileName = '';
+	export let baseUrl = '';
 	export let parent: unknown;
 
 	onMount(() => {
@@ -11,7 +12,7 @@
 
 <div class="">
 	<div>
-		click to file download {fileName}
+		<a href="{baseUrl}/{fileName}">{fileName}</a>
 	</div>
 	<slot />
 	<footer class="modal-footer">

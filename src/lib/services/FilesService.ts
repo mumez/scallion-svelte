@@ -40,6 +40,9 @@ class FilesService extends BaseApiService {
 	get webDavBaseUrl() {
 		return appConfig.webDav.baseUrl;
 	}
+	get downloadBaseUrl() {
+		return `${this.webDavBaseUrl}${this.targetUrl()}`
+	}
 
 	public targetUrl() {
 		return `${this.wikiName}/${this.pageName}`;
