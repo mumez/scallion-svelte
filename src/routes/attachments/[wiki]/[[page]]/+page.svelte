@@ -2,11 +2,12 @@
 	import { page } from '$app/stores';
 	import { Table, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
 	import FilesUploadPanel from '$lib/components/FilesUploadPanel.svelte';
+	import FileDownloader from '$lib/components/FileDownloader.svelte';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import type WebDavEntry from '$lib/utils/WebDavEntry';
 	import { jwt } from '$lib/utils/ClientStorage';
-	import { openModal } from '$lib/utils/ModalOpener';
+	import { openModal, openAlert } from '$lib/utils/ModalOpener';
 
 	import FilesService from '$lib/services/FilesService';
 
@@ -23,8 +24,9 @@
 	const filesTableHeaders: string[] = ['Name', 'Size', 'Date'];
 
 	function onRowSelected(ev: CustomEvent) {
-		console.log('-selected -row-', ev.detail);
-		openModal()
+		const fileName = ev.detail[0];
+		console.log('-selected -row-', fileName);
+		openModal(FileDownloader, { fileName });
 	}
 
 	function processRowsForTable(files: WebDavEntry[]) {
