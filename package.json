@@ -13,7 +13,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@skeletonlabs/skeleton": "^0.124.2",
+		"@skeletonlabs/skeleton": "^0.132.5",
 		"@sveltejs/adapter-node": "^1.2.0",
 		"@sveltejs/kit": "^1.7.1",
 		"@tailwindcss/forms": "^0.5.3",
@@ -27,6 +27,7 @@
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.4",
 		"prettier-plugin-svelte": "^2.9.0",
+		"sass": "^1.58.3",
 		"svelte": "^3.55.1",
 		"svelte-check": "^3.0.3",
 		"svelte-preprocess": "^4.10.7",
