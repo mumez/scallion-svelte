@@ -2,10 +2,13 @@
 	import { page } from '$app/stores';
 	import { Table, Paginator, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
 	import type { PaginationSettings } from '@skeletonlabs/skeleton/components/Paginator/types';
+	import VersionPreview from '$lib/components/VersionPreview.svelte';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import VersionsService from '$lib/services/VersionsService';
+	import PageService from '$lib/services/PageService';
 	import type { PageContent } from '$lib/models/PageContent';
+	import { openModal } from '$lib/utils/ModalOpener';
 
 	import type { PageData } from './$types';
 	export let data: PageData;
@@ -16,6 +19,7 @@
 	$headerTitle = pageName;
 
 	const versionsService = new VersionsService(wikiName, pageName);
+	const pageService = new PageService(wikiName, pageName); 
 	const lastVersionNumber = data.lastVersionNumber;
 	let versions = data.versions;
 	let versionFrom = lastVersionNumber;
@@ -40,8 +44,17 @@
 		rowsPerPage = e.detail;
 		getVersions();
 	}
-	function onRowSelected(e: CustomEvent) {
-		console.log('-selected -row-', e.detail);
+	async function onRowSelected(e: CustomEvent) {
+		console.log('-selected -row-', e);
+		const versionNumber = e.detail[0];
+		const index = (lastVersionNumber - versionNumber) % rowsPerPage;
+		const selectedVersion = versions[index];
+		console.log('--selected--', index, selectedVersion);
+		const latestPageContent = await pageService.getContent();
+		openModal(VersionPreview, {
+			pageContent: selectedVersion,
+			latestPageContent
+		});
 	}
 	async function getVersions() {
 		versions = await versionsService.getVersions(versionFrom, rowsPerPage);
