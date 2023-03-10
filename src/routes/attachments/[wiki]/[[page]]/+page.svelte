@@ -7,7 +7,7 @@
 	import headerTitle from '$lib/stores/headerTitle';
 	import type WebDavEntry from '$lib/utils/WebDavEntry';
 	import { jwt } from '$lib/utils/ClientStorage';
-	import { openModal, openAlert } from '$lib/utils/ModalOpener';
+	import { openModal } from '$lib/utils/ModalOpener';
 
 	import FilesService from '$lib/services/FilesService';
 

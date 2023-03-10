@@ -19,7 +19,7 @@
 	$headerTitle = pageName;
 
 	const versionsService = new VersionsService(wikiName, pageName);
-	const pageService = new PageService(wikiName, pageName); 
+	const pageService = new PageService(wikiName, pageName);
 	const lastVersionNumber = data.lastVersionNumber;
 	let versions = data.versions;
 	let versionFrom = lastVersionNumber;
@@ -45,7 +45,6 @@
 		getVersions();
 	}
 	async function onRowSelected(e: CustomEvent) {
-		console.log('-selected -row-', e);
 		const versionNumber = e.detail[0];
 		const index = (lastVersionNumber - versionNumber) % rowsPerPage;
 		const selectedVersion = versions[index];

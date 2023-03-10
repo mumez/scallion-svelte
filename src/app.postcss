@@ -3,3 +3,20 @@ html,
 body {
 	@apply h-full overflow-hidden;
 }
+
+.diff ins,
+del {
+	display: inline;
+	padding-left: 0.1rem;
+	padding-right: 0.1rem;
+}
+.diff ins {
+	background-color: rgb(var(--color-success-400));
+}
+.diff del {
+	background-color: rgb(var(--color-error-400));
+}
+.diff ins::before,
+del::before {
+	content: '';
+}

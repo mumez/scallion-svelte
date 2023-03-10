@@ -1,5 +1,6 @@
 <script lang="ts">
 	//import '@skeletonlabs/skeleton/themes/theme-crimson.css';
+	import '../theme.postcss';
 	import '@skeletonlabs/skeleton/themes/theme-rocket.css';
 	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';

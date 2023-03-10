@@ -28,7 +28,7 @@
 	}
 </script>
 
-<div class="relative">
+<div class="relative card p-4 w-modal shadow-xl">
 	<ModalCloseButton />
 	<div class="flex items-center">
 		{#if isImage()}
