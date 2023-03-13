@@ -4,6 +4,7 @@ import type { PageContent } from '$lib/models/PageContent';
 const wikiPage = writable<{
 	isEditing: boolean;
 	pageContent?: PageContent;
+	revertingPageContent?: PageContent;
 }>({
 	isEditing: false
 });
@@ -23,12 +24,14 @@ function startEditing() {
 function stopEditing() {
 	wikiPage.update((val) => {
 		val.isEditing = false;
+		val.revertingPageContent = undefined;
 		return val;
 	});
 }
-function toggleEditing() {
+function startEditingWithOldVersion(pageContent: PageContent) {
 	wikiPage.update((val) => {
-		val.isEditing = !val.isEditing;
+		val.isEditing = true;
+		val.revertingPageContent = pageContent;
 		return val;
 	});
 }
@@ -38,5 +41,5 @@ export default {
 	setPageContent,
 	startEditing,
 	stopEditing,
-	toggleEditing
+	startEditingWithOldVersion
 };

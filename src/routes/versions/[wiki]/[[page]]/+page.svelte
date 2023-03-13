@@ -52,8 +52,8 @@
 		const latestPageContent = await pageService.getContent();
 		openModal(VersionPreview, {
 			pageContent: selectedVersion,
-			versionNumber,
-			latestPageContent
+			latestPageContent,
+			versionNumber
 		});
 	}
 	async function getVersions() {

@@ -13,7 +13,7 @@
 	import type { PageData } from './$types';
 	export let data: PageData;
 
-	const pageContent = data.page ?? {};
+	const loadedPageContent = data.page ?? {};
 	const wikiName = $page.params['wiki'] ?? '';
 	const pageName = $page.params['page'] ?? 'index';
 
@@ -21,9 +21,13 @@
 
 	$parentLink = wikiName;
 	$headerTitle = pageName;
-	wikiPage.setPageContent(pageContent);
 
-	let editingContent = pageContent.content;
+	wikiPage.setPageContent(loadedPageContent);
+
+	const initialEditingPageContent = $wikiPage.revertingPageContent
+		? $wikiPage.revertingPageContent
+		: loadedPageContent;
+	let editingContent = initialEditingPageContent.content;
 
 	async function saveContent() {
 		const originalPageContent = $wikiPage.pageContent;
