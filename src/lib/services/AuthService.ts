@@ -39,7 +39,6 @@ class AuthService {
 		return this.userFromCredential(userCredential);
 	}
 	public async authByEmailAndPassword(email: string, password: string): Promise<User | null> {
-		console.log('email-pass-', email, password);
 		const userCredential = await authByEmailAndPassword(email, password).catch((ex) => {
 			console.log(ex);
 			return null;

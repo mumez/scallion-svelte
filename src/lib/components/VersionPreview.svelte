@@ -16,12 +16,9 @@
 	const diffResult = diff.diffPatch(latestPageContent.content, pageContent.content);
 
 	function startEditing() {
-		console.log('latestPageContent :>> ', latestPageContent);
-		console.log('URL--', $page.url);
 		const newUrlPath = $page.url.pathname.replace('/versions/', '/wikis/');
 		const gotoUrl = `${$page.url.origin}${newUrlPath}`;
-		console.log('gotoUrl :>> ', gotoUrl, newUrlPath);
-		goto(gotoUrl + `?version=${versionNumber}`);
+		goto(gotoUrl);
 		closeModal();
 	}
 

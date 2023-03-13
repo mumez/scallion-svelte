@@ -3,9 +3,6 @@
 	import wikiPage from '$lib/stores/wikiPage';
 	let wikiName = $page.params['wiki'] ?? '';
 	let pageName = $page.params['page'] ?? 'index';
-
-	console.log('object :>> ', ($page.route.id ?? '').split('/'));
-
 	$: routeFirstPart = ($page.route.id ?? '').split('/')[1];
 </script>
 

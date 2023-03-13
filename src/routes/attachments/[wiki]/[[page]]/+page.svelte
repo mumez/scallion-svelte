@@ -45,7 +45,6 @@
 	}
 
 	function onUploadEnd(ev: CustomEvent) {
-		console.log('--upload ended--', ev.detail);
 		reloadFiles();
 	}
 

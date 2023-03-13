@@ -21,7 +21,6 @@ class UserService extends BaseService {
 	}
 
 	public storeUser(user: User) {
-		console.log('--user---', user);
 		clientStoreForSession.put('_user', user);
 	}
 

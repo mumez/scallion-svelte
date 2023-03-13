@@ -48,7 +48,6 @@
 		const versionNumber = e.detail[0];
 		const index = (lastVersionNumber - versionNumber) % rowsPerPage;
 		const selectedVersion = versions[index];
-		console.log('--selected--', index, selectedVersion);
 		const latestPageContent = await pageService.getContent();
 		openModal(VersionPreview, {
 			pageContent: selectedVersion,
@@ -58,7 +57,6 @@
 	}
 	async function getVersions() {
 		versions = await versionsService.getVersions(versionFrom, rowsPerPage);
-		console.log('getVersions:', versions);
 	}
 	function processRowsForTable(versions: PageContent[]) {
 		let mappedVersions = tableSourceMapper(versions, ['content', 'updatedBy', 'updatedAt']);

@@ -22,7 +22,6 @@
 			isAuthenticated = result;
 			console.log('auto logged in', isAuthenticated, $page.params);
 		});
-		console.log('-isAuthenticated-?', isAuthenticated);
 	});
 
 	function tryLogin() {
