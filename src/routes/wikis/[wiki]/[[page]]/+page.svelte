@@ -5,7 +5,7 @@
 	import wikiPage from '$lib/stores/wikiPage';
 	import MarkdownViewer from '$lib/components/MarkdownViewer.svelte';
 	import PageService from '$lib/services/PageService';
-	import { newPageContent, updatingPageContent } from '$lib/models/PageContent';
+	import { updatingPageContent } from '$lib/models/PageContent';
 
 	import { email } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
@@ -23,6 +23,7 @@
 	$headerTitle = pageName;
 
 	let isNewPage = !loadedPageContent.id;
+	wikiPage.setPageContent(loadedPageContent);
 
 	const initialEditingPageContent = $wikiPage.revertingPageContent
 		? $wikiPage.revertingPageContent
@@ -83,5 +84,7 @@
 			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
 		{/if}
 	</section>
-	<div>{updatedAt} / {new Date(updatedAt)}</div>
+	{#if updatedAt}
+		<div>{new Date(updatedAt)}</div>
+	{/if}
 </div>
