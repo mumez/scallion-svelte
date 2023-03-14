@@ -11,16 +11,18 @@
 	import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
 	import WikiBookIndexLink from '$lib/components/WikiBookIndexLink.svelte';
 	import authService from '$lib/services/AuthService';
+	import isAuthenticated from '$lib/stores/isAuthenticated';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 
-	let isAuthenticated = false;
+	let showLoginButton = false;
 
 	onMount(() => {
 		if (!browser) return;
 		authService.tryAutoLogin((result) => {
-			isAuthenticated = result;
-			console.log('auto logged in', isAuthenticated, $page.params);
+			$isAuthenticated = result;
+			console.log('auto logged in', $isAuthenticated, $page.params);
+			showLoginButton = !$isAuthenticated;
 		});
 	});
 
@@ -42,7 +44,7 @@
 				<h1>{title}</h1></svelte:fragment
 			>
 			<svelte:fragment slot="trail">
-				{#if !isAuthenticated}
+				{#if showLoginButton}
 					<button class="btn btn-sm variant-filled-primary" on:click={tryLogin}
 						><i class="fa-solid fa-door-open" /><span>Login</span></button
 					>

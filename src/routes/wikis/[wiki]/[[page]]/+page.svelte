@@ -57,16 +57,14 @@
 			<MarkdownViewer markdown={editingContent} />
 		</div>
 	{:else}
-		<section class="border-solid border-2 p-4">{editingContent}</section>
-		<p>Last update: {updatedAt} ; {new Date(updatedAt)}</p>
+		<MarkdownViewer markdown={editingContent} />
 	{/if}
 	<hr />
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
 			<button class="btn variant-filled-warning" on:click={cancelContent}>Cancel</button>
 			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
-		{:else}
-			<button class="btn variant-filled-primary" on:click={wikiPage.startEditing}>Edit</button>
 		{/if}
 	</section>
+	<div>{new Date(updatedAt)}</div>
 </div>
