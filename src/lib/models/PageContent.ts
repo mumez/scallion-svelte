@@ -21,3 +21,17 @@ export const updatingPageContent = (
 		updatedBy: updater
 	};
 };
+
+export const newPageContent = (wiki: string, name: string, updater: string): PageContent => {
+	return {
+		wiki,
+		name,
+		content: '',
+		updatedBy: updater,
+		id: '',
+		bookId: '',
+		updatedAt: 0,
+		number: 0,
+		isLocked: false
+	};
+};

@@ -21,6 +21,11 @@ class BaseApiService extends BaseService {
 	get apiBaseUrl() {
 		return appConfig.wikiApi.baseUrl;
 	}
+	apiAccessorWithJwt(jwt: string) {
+		const acc = this.apiAccessor;
+		acc.setJwt(jwt);
+		return acc;
+	}
 }
 
 export default BaseApiService;

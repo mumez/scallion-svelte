@@ -5,7 +5,7 @@
 	import wikiPage from '$lib/stores/wikiPage';
 	import MarkdownViewer from '$lib/components/MarkdownViewer.svelte';
 	import PageService from '$lib/services/PageService';
-	import { updatingPageContent } from '$lib/models/PageContent';
+	import { newPageContent, updatingPageContent } from '$lib/models/PageContent';
 
 	import { email } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
@@ -22,7 +22,7 @@
 	$parentLink = wikiName;
 	$headerTitle = pageName;
 
-	wikiPage.setPageContent(loadedPageContent);
+	let isNewPage = !loadedPageContent.id;
 
 	const initialEditingPageContent = $wikiPage.revertingPageContent
 		? $wikiPage.revertingPageContent
@@ -30,11 +30,28 @@
 	let editingContent = initialEditingPageContent.content;
 
 	async function saveContent() {
+		if (isNewPage) {
+			createContent();
+		} else {
+			updateContent();
+		}
+	}
+	async function createContent() {
+		const originalPageContent = initialEditingPageContent;
+		const updatingContent = updatingPageContent(originalPageContent, editingContent, email());
+		const updatedContent = await pageService.postContent(updatingContent, jwt());
+		if (updatedContent.id) {
+			wikiPage.setPageContent(updatedContent);
+			editingContent = updatedContent.content;
+		}
+		wikiPage.stopEditing();
+	}
+	async function updateContent() {
 		const originalPageContent = $wikiPage.pageContent;
 		if (originalPageContent && editingContent !== $wikiPage.pageContent?.content) {
 			const updatingContent = updatingPageContent(originalPageContent, editingContent, email());
 			const updatedContent = await pageService.putContent(updatingContent, jwt());
-			if (updatedContent) {
+			if (updatedContent.id) {
 				wikiPage.setPageContent(updatedContent);
 				editingContent = updatedContent.content;
 			}
@@ -66,5 +83,5 @@
 			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
 		{/if}
 	</section>
-	<div>{new Date(updatedAt)}</div>
+	<div>{updatedAt} / {new Date(updatedAt)}</div>
 </div>
