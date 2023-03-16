@@ -36,13 +36,13 @@ class PageService extends BaseApiService {
 		return resp as PageContent;
 	}
 
-	public override serviceName(): string {
+	override get serviceName() {
 		return 'page';
 	}
 
 	// accessing
 	targetUrl() {
-		return `${this.serviceName()}?wiki=${this.wikiName}&name=${this.pageName}`;
+		return `${this.serviceName}?wiki=${this.wikiName}&name=${this.pageName}`;
 	}
 }
 

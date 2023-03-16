@@ -1,5 +1,5 @@
 class BaseService {
-	public serviceName(): string {
+	get serviceName(): string {
 		return '';
 	}
 }

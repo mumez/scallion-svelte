@@ -1,7 +1,7 @@
-import WikiBookService from '$lib/services/WikiBookService';
+import WikiBooksService from '$lib/services/WikiBooksService';
 
 export async function load({ fetch }) {
-	const wikiBookService = new WikiBookService(fetch);
-	const wikiBooks = await wikiBookService.listBooks();
+	const wikiBooksService = new WikiBooksService(fetch);
+	const wikiBooks = await wikiBooksService.listBooks();
 	return { books: wikiBooks };
 }
