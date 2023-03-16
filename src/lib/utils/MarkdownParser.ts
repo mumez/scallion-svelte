@@ -1,5 +1,9 @@
 import { marked } from 'marked';
 
+const externalCssClass = 'external';
+const internalNewCssClass = 'internal-new';
+const internalExistingCssClass = 'internal-existing';
+
 const isInternalLink = (href: string): boolean => {
 	return /[^/]+/.test(href);
 };
@@ -10,18 +14,22 @@ export const htmlFrom = (markdown: string): string => {
 
 export const enrichedHtmlFrom = (markdown: string, existingPageNames: string[] = []): string => {
 	const linkClass = (href: string): string => {
-		if (!isInternalLink(href)) return 'external';
-		return existingPageNames.includes(href) ? 'internal-existing' : 'internal-new';
+		if (!isInternalLink(href)) return externalCssClass;
+		return existingPageNames.includes(href) ? internalExistingCssClass : internalNewCssClass;
 	};
 
 	const linkTitle = (href: string): string => {
-		return linkClass(href) == 'internal-new' ? 'create new page' : '';
+		return linkClass(href) == internalNewCssClass ? 'create new page' : '';
 	};
 
 	const renderer = {
 		link(href, title, text) {
-			return `
-					<a class="${linkClass(href)}" title="${linkTitle(href)}" href="${href}">
+			if (existingPageNames.length == 0) {
+				return `<a href="${href}">
+						${text}
+						</a>`;
+			}
+			return `<a class="${linkClass(href)}" title="${linkTitle(href)}" href="${href}">
 						${text}
 					</a>`;
 		}

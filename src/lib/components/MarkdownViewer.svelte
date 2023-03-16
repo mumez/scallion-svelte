@@ -9,6 +9,4 @@
 
 <div class="space-x-0">
 	<article data-sveltekit-reload>{@html htmlText}</article>
-	<article>{htmlText}</article>
-	<article>{existingPageNames}</article>
 </div>
