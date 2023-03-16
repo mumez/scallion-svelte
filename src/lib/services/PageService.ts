@@ -3,12 +3,12 @@ import type { PageContent } from '$lib/models/PageContent';
 
 class PageService extends BaseApiService {
 	protected wikiName = '';
-	protected pageName = '';
+	protected name = '';
 
-	constructor(wikiName: string, pageName: string) {
+	constructor(wikiName: string, name: string) {
 		super();
 		this.wikiName = wikiName;
-		this.pageName = pageName;
+		this.name = name;
 	}
 
 	public async postContent(pageContent: PageContent, jwt = ''): Promise<PageContent> {
@@ -42,7 +42,7 @@ class PageService extends BaseApiService {
 
 	// accessing
 	targetUrl() {
-		return `${this.serviceName}?wiki=${this.wikiName}&name=${this.pageName}`;
+		return `${this.serviceName}?wiki=${this.wikiName}&name=${this.name}`;
 	}
 }
 

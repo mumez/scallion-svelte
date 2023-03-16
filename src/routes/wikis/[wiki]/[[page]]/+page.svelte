@@ -5,10 +5,12 @@
 	import wikiPage from '$lib/stores/wikiPage';
 	import MarkdownViewer from '$lib/components/MarkdownViewer.svelte';
 	import PageService from '$lib/services/PageService';
+	import WikiBookService from '$lib/services/WikiBookService';
 	import { updatingPageContent } from '$lib/models/PageContent';
 
 	import { email } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
+	import { extractInternalLinks } from '$lib/utils/MarkdownParser';
 
 	import type { PageData } from './$types';
 	export let data: PageData;
@@ -18,6 +20,7 @@
 	const pageName = $page.params['page'] ?? 'index';
 
 	const pageService = new PageService(wikiName, pageName);
+	const wikiBookService = new WikiBookService(wikiName);
 
 	$parentLink = wikiName;
 	$headerTitle = pageName;
@@ -65,17 +68,24 @@
 		wikiPage.stopEditing();
 	}
 
+	async function newPageNamesIn(markdown:string) {
+		const internalLinks = extractInternalLinks(markdown);
+		const hasPages = await wikiBookService.hasPages(internalLinks);
+		return internalLinks.filter((_, idx) => hasPages[idx]);
+	}
+
 	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt : 0;
+	$: existingPageNames = extractInternalLinks(editingContent);
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
 			<textarea class="textarea" rows="10" bind:value={editingContent} />
-			<MarkdownViewer markdown={editingContent} />
+			<MarkdownViewer markdown={editingContent} existingPageNames={existingPageNames} />
 		</div>
 	{:else}
-		<MarkdownViewer markdown={editingContent} />
+		<MarkdownViewer markdown={editingContent} existingPageNames={existingPageNames} />
 	{/if}
 	<hr />
 	<section class="flex space-x-2">
