@@ -13,6 +13,7 @@
 	import { extractInternalLinks } from '$lib/utils/MarkdownParser';
 
 	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
 	export let data: PageData;
 
 	const loadedPageContent = data.page ?? {};
@@ -26,7 +27,12 @@
 	$headerTitle = pageName;
 
 	let isNewPage = !loadedPageContent.id;
+	let existingPageNames: string[] = [];
 	wikiPage.setPageContent(loadedPageContent);
+
+	onMount(() => {
+		updateExistingPageNames();
+	});
 
 	const initialEditingPageContent = $wikiPage.revertingPageContent
 		? $wikiPage.revertingPageContent
@@ -47,6 +53,7 @@
 		if (updatedContent.id) {
 			wikiPage.setPageContent(updatedContent);
 			editingContent = updatedContent.content;
+			updateExistingPageNames();
 		}
 		wikiPage.stopEditing();
 	}
@@ -58,6 +65,7 @@
 			if (updatedContent.id) {
 				wikiPage.setPageContent(updatedContent);
 				editingContent = updatedContent.content;
+				updateExistingPageNames();
 			}
 		}
 		wikiPage.stopEditing();
@@ -68,24 +76,29 @@
 		wikiPage.stopEditing();
 	}
 
-	async function newPageNamesIn(markdown:string) {
+	async function updateExistingPageNames() {
+		existingPageNames = await existingPageNamesIn(
+			$wikiPage.pageContent?.content ? $wikiPage.pageContent?.content : ''
+		);
+	}
+
+	async function existingPageNamesIn(markdown: string) {
 		const internalLinks = extractInternalLinks(markdown);
 		const hasPages = await wikiBookService.hasPages(internalLinks);
 		return internalLinks.filter((_, idx) => hasPages[idx]);
 	}
 
 	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt : 0;
-	$: existingPageNames = extractInternalLinks(editingContent);
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
 			<textarea class="textarea" rows="10" bind:value={editingContent} />
-			<MarkdownViewer markdown={editingContent} existingPageNames={existingPageNames} />
+			<MarkdownViewer markdown={editingContent} {existingPageNames} />
 		</div>
 	{:else}
-		<MarkdownViewer markdown={editingContent} existingPageNames={existingPageNames} />
+		<MarkdownViewer markdown={editingContent} {existingPageNames} />
 	{/if}
 	<hr />
 	<section class="flex space-x-2">
