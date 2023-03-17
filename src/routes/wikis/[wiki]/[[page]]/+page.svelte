@@ -10,7 +10,7 @@
 
 	import { email } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
-	import { extractInternalLinks } from '$lib/utils/MarkdownParser';
+	import { extractInternalPageLinks } from '$lib/utils/MarkdownParser';
 
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
@@ -83,9 +83,9 @@
 	}
 
 	async function existingPageNamesIn(markdown: string) {
-		const internalLinks = extractInternalLinks(markdown);
-		const hasPages = await wikiBookService.hasPages(internalLinks);
-		return internalLinks.filter((_, idx) => hasPages[idx]);
+		const internalPageLinks = extractInternalPageLinks(markdown);
+		const hasPages = await wikiBookService.hasPages(internalPageLinks);
+		return internalPageLinks.filter((_, idx) => hasPages[idx]);
 	}
 
 	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt : 0;
@@ -94,6 +94,8 @@
 <div class="container mx-auto p-4 space-y-4">
 	{#if isNewPage}
 		<div>Empty page. Let's start editing.</div>
+	{:else}
+		<div>{existingPageNames}</div>
 	{/if}
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
