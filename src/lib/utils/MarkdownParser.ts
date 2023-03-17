@@ -17,25 +17,44 @@ const isImageFileLink = (href: string): boolean => {
 	return regex.test(href);
 };
 
-const renderLink = (href: string, text: string, existingPageNames: string[]): string => {
-	const linkHrefClass = (href: string): string => {
+class LinkRenderer {
+	existingPageNames: string[];
+	constructor(existingPageNames: string[]) {
+		this.existingPageNames = existingPageNames;
+	}
+	private linkHrefClass(href: string): string {
 		if (!isInternalLink(href)) return externalCssClass;
-		if (existingPageNames.length == 0) return '';
-		if (existingPageNames.includes(href)) return internalExistingCssClass;
+		if (this.existingPageNames.length == 0) return '';
+		if (this.existingPageNames.includes(href)) return internalExistingCssClass;
 		return internalNewCssClass;
-	};
-	const linkHrefTitle = (href: string): string => {
-		return linkHrefClass(href) == internalNewCssClass ? 'create new page' : '';
-	};
-
-	const renderHref = (href: string, text: string) => {
-		return `<a class="${linkHrefClass(href)}" title="${linkHrefTitle(href)}" href="${href}">${text}</a>`;
 	}
-	const renderImage = (href: string, text: string) => {
-		return `<img class="hoge" width="50%" alt="${text}" title="${text}" src="${href}"></img>`;
+	private linkHrefTitle(href: string): string {
+		return this.linkHrefClass(href) == internalNewCssClass ? 'create new page' : '';
 	}
 
-	return (isImageFileLink(href)) ? renderImage(href, text) : renderHref(href, text);
+	private renderHref(href: string, text: string) {
+		return `<a class="${this.linkHrefClass(href)}" title="${this.linkHrefTitle(
+			href
+		)}" href="${href}">${text}</a>`;
+	}
+	private renderImage(src: string, text: string) {
+		const srcPath = this.adjustImageSrcPath(src);
+		return `<img class="w-full object-contain max-w-2xl" alt="${text}" title="${text}" src="${srcPath}"></img>`;
+	}
+
+	private adjustImageSrcPath(src: string) {
+		if (!isInternalLink(src)) return src;
+		return src;
+	}
+
+	public render(href: string, text: string): string {
+		return isImageFileLink(href) ? this.renderImage(href, text) : this.renderHref(href, text);
+	}
+}
+
+const renderLink = (href: string, text: string, existingPageNames: string[]): string => {
+	const linkRenderer = new LinkRenderer(existingPageNames);
+	return linkRenderer.render(href, text);
 };
 
 export const htmlFrom = (markdown: string): string => {
