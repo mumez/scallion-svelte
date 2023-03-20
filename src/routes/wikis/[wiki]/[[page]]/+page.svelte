@@ -102,10 +102,10 @@
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
 			<textarea class="textarea" rows="10" bind:value={editingContent} />
-			<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl}/>
+			<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl} />
 		</div>
 	{:else}
-		<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl}/>
+		<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl} />
 	{/if}
 	<hr />
 	<section class="flex space-x-2">

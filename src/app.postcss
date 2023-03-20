@@ -12,17 +12,17 @@ body {
 /* For versions */
 .diff ins,
 del {
-	display: inline;
-	padding-left: 0.1rem;
-	padding-right: 0.1rem;
+	display: inline !important;
+	padding-left: 0.1rem !important;
+	padding-right: 0.1rem !important;
 }
 .diff ins {
-	background-color: rgb(var(--color-success-400));
+	background-color: rgb(var(--color-success-400)) !important;
 }
 .diff del {
-	background-color: rgb(var(--color-error-400));
+	background-color: rgb(var(--color-error-400)) !important;
 }
 .diff ins::before,
 del::before {
-	content: '';
+	content: '' !important;
 }
