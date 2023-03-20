@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import appConfig from '$lib/configs';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import wikiPage from '$lib/stores/wikiPage';
@@ -22,6 +23,7 @@
 
 	const pageService = new PageService(wikiName, pageName);
 	const wikiBookService = new WikiBookService(wikiName);
+	const baseImageUrl = `${appConfig.webDav.baseUrl}` + `${wikiName}/${pageName}/`;
 
 	$parentLink = wikiName;
 	$headerTitle = pageName;
@@ -100,10 +102,10 @@
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
 			<textarea class="textarea" rows="10" bind:value={editingContent} />
-			<MarkdownViewer markdown={editingContent} {existingPageNames} />
+			<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl}/>
 		</div>
 	{:else}
-		<MarkdownViewer markdown={editingContent} {existingPageNames} />
+		<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl}/>
 	{/if}
 	<hr />
 	<section class="flex space-x-2">

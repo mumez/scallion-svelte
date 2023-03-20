@@ -3,8 +3,9 @@
 
 	export let markdown = '';
 	export let existingPageNames: string[] = [];
+	export let baseImageUrl = '';
 
-	$: htmlText = enrichedHtmlFrom(markdown, existingPageNames);
+	$: htmlText = enrichedHtmlFrom(markdown, existingPageNames, baseImageUrl);
 </script>
 
 <div class="space-x-0">
