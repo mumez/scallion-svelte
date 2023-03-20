@@ -6,7 +6,7 @@ class WikiBooksService extends BaseApiService {
 		const resp = await this.apiAccessor.get(this.serviceName).catch((e) => {
 			return [];
 		});
-		const books = Object.values(resp as object) as WikiBook[];
+		const books = resp as WikiBook[];
 		return books.sort((a, b) => (a.name < b.name ? -1 : 1));
 	}
 
