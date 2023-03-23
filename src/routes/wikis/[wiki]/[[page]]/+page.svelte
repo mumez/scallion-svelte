@@ -5,7 +5,10 @@
 	import headerTitle from '$lib/stores/headerTitle';
 	import wikiPage from '$lib/stores/wikiPage';
 	import MarkdownViewer from '$lib/components/MarkdownViewer.svelte';
+	import AttachmentsPanel from '$lib/components/AttachmentsPanel.svelte';
 	import PageService from '$lib/services/PageService';
+	import FilesService from '$lib/services/FilesService';
+	import type WebDavEntry from '$lib/utils/WebDavEntry';
 	import WikiBookService from '$lib/services/WikiBookService';
 	import { updatingPageContent } from '$lib/models/PageContent';
 
@@ -25,6 +28,8 @@
 	const wikiBookService = new WikiBookService(wikiName);
 	const baseImageUrl = `${appConfig.webDav.baseUrl}` + `${wikiName}/${pageName}/`;
 
+	let attachmentFiles: WebDavEntry[] = [];
+
 	$parentLink = wikiName;
 	$headerTitle = pageName;
 
@@ -34,6 +39,7 @@
 
 	onMount(() => {
 		updateExistingPageNames();
+		retrieveAttachmentFiles();
 	});
 
 	const initialEditingPageContent = $wikiPage.revertingPageContent
@@ -90,6 +96,11 @@
 		return internalPageLinks.filter((_, idx) => hasPages[idx]);
 	}
 
+	async function retrieveAttachmentFiles() {
+		const filesService = new FilesService(wikiName, pageName);
+		attachmentFiles = await filesService.files();
+	}
+
 	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt : 0;
 </script>
 
@@ -106,6 +117,9 @@
 		</div>
 	{:else}
 		<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl} />
+	{/if}
+	{#if $wikiPage.isEditing}
+		<AttachmentsPanel files={attachmentFiles} />
 	{/if}
 	<hr />
 	<section class="flex space-x-2">
