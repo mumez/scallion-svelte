@@ -38,6 +38,7 @@
 		"vitest": "^0.29.3"
 	},
 	"dependencies": {
+		"@floating-ui/dom": "^1.2.5",
 		"@types/lodash": "^4.14.191",
 		"@types/marked": "^4.0.8",
 		"fast-xml-parser": "^4.1.3",

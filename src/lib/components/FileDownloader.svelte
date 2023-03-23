@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Avatar } from '@skeletonlabs/skeleton';
-	import {isImage, extensionFrom} from '$lib/utils/FileUtils';
+	import { isImage, extensionFrom } from '$lib/utils/FileUtils';
 	import ModalCloseButton from '$lib/components/ModalCloseButton.svelte';
 
 	export let fileName = '';
 	export let baseUrl = '';
 	export let parent: unknown;
-	
+
 	const fullUrl = `${baseUrl}/${fileName}`;
 
 	async function download() {
@@ -27,12 +27,14 @@
 	<ModalCloseButton />
 	<div class="flex items-center">
 		{#if isImage(fileName)}
-			<Avatar src="{fullUrl}" rounded="rounded-xl" />
+			<Avatar src={fullUrl} rounded="rounded-xl" />
 		{:else}
-			<div class="card w-12 h-12 rounded-xl bg-white text-center truncate">{extensionFrom(fileName)}</div>
+			<div class="card w-12 h-12 rounded-xl bg-white text-center truncate">
+				{extensionFrom(fileName)}
+			</div>
 		{/if}
 		<div class="p-2 truncate">
-			<a href="{fullUrl}" on:click|preventDefault={download}>{fileName}</a>
+			<a href={fullUrl} on:click|preventDefault={download}>{fileName}</a>
 		</div>
 	</div>
 	<slot />

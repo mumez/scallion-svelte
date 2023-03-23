@@ -4,9 +4,10 @@
 	import '@skeletonlabs/skeleton/themes/theme-rocket.css';
 	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
+	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
+	import { storePopup } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { browser } from '$app/environment';
 	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
 	import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
 	import WikiBookIndexLink from '$lib/components/WikiBookIndexLink.svelte';
@@ -16,9 +17,9 @@
 	import headerTitle from '$lib/stores/headerTitle';
 
 	let showLoginButton = false;
+	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	onMount(() => {
-		if (!browser) return;
 		authService.tryAutoLogin((result) => {
 			$isAuthenticated = result;
 			console.log('auto logged in', $isAuthenticated, $page.params);
