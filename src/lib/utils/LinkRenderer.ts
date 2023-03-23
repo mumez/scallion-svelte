@@ -26,14 +26,14 @@ export class LinkRenderer {
 			href
 		)}" href="${href}">${text}</a>`;
 	}
-	private renderImage(src: string, text: string) {
-		const srcPath = this.adjustImageSrcPath(src);
+	private renderImage(path: string, text: string) {
+		const srcPath = this.adjustImageSrcPath(path);
 		return `<img class="w-full object-contain max-w-2xl" alt="${text}" title="${text}" src="${srcPath}"></img>`;
 	}
 
-	private adjustImageSrcPath(src: string) {
-		if (isInternalLink(src)) return `${this.baseImageUrl}${src}`;
-		return src;
+	private adjustImageSrcPath(path: string) {
+		if (isInternalLink(path)) return `${this.baseImageUrl}/${path}`;
+		return path;
 	}
 
 	public render(href: string, text: string): string {

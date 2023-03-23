@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import appConfig from '$lib/configs';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import wikiPage from '$lib/stores/wikiPage';
@@ -25,8 +24,9 @@
 	const pageName = $page.params['page'] ?? 'index';
 
 	const pageService = new PageService(wikiName, pageName);
+	const filesService = new FilesService(wikiName, pageName);
 	const wikiBookService = new WikiBookService(wikiName);
-	const baseImageUrl = `${appConfig.webDav.baseUrl}` + `${wikiName}/${pageName}/`;
+	const baseImageUrl = filesService.downloadBaseUrl;
 
 	let attachmentFiles: WebDavEntry[] = [];
 
@@ -97,7 +97,6 @@
 	}
 
 	async function retrieveAttachmentFiles() {
-		const filesService = new FilesService(wikiName, pageName);
 		attachmentFiles = await filesService.files();
 	}
 
@@ -119,7 +118,7 @@
 		<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl} />
 	{/if}
 	{#if $wikiPage.isEditing}
-		<AttachmentsPanel files={attachmentFiles} />
+		<AttachmentsPanel baseUrl={baseImageUrl} files={attachmentFiles} />
 	{/if}
 	<hr />
 	<section class="flex space-x-2">
