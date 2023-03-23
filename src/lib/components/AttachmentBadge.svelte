@@ -9,11 +9,14 @@
 	export let baseUrl = '';
 
 	const fullUrl = `${baseUrl}/${fileName}`;
+	const popupTarget = `popup-${fullUrl}`;
+	const isTouchDevice = 'ontouchstart' in window;
 
-	let imageTooltip: PopupSettings = {
-		event: 'hover-click',
-		placement: 'top',
-		target: 'image-tooltip'
+	const imageTooltip: PopupSettings = {
+		event: isTouchDevice ? 'click' : 'hover',
+		placement: 'right',
+		closeQuery: 'button, .avatar',
+		target: popupTarget
 	};
 
 	let copied = false;
@@ -25,13 +28,13 @@
 	}
 </script>
 
+<div class="tooltip" data-popup={popupTarget}>
+	{#if isImage(fileName)}
+		<Avatar src={fullUrl} rounded="rounded-xl" />
+		<div class="arrow variant-glass-primary bg-opacity-20" />
+	{/if}
+</div>
 <div class="space-x-0">
-	<div data-popup="image-tooltip">
-		{#if isImage(fileName)}
-			<Avatar data-popup="imageTooltip" src={fullUrl} rounded="rounded-xl" />
-		{/if}
-	</div>
-	
 	<button
 		class="badge variant-ringed-primary"
 		use:clipboard={fileName}

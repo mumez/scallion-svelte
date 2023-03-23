@@ -7,7 +7,7 @@
 </script>
 
 <div class="space-x-0">
-	{#each files as file}
+	{#each files as file (file.name)}
 		<AttachmentBadge {baseUrl} fileName={file.name} />
 	{/each}
 </div>
