@@ -8,6 +8,6 @@
 	$: htmlText = enrichedHtmlFrom(markdown, existingPageNames, baseImageUrl);
 </script>
 
-<div class="space-x-0">
+<div class="html-from-markdown space-x-0">
 	<article data-sveltekit-reload>{@html htmlText}</article>
 </div>

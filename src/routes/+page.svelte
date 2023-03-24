@@ -11,11 +11,11 @@
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
-	<ul>
+	<ul class="list-disc">
 		{#each wikiBooks as wiki}
-			<li>
-				<a href="wikis/{wiki.name}/{initialPageFor(wiki)}">{wiki.title}<span>{wiki.name}</span></a
-				><span>({wiki.count})</span>
+			<li class="text-xl">
+				<a href="wikis/{wiki.name}/{initialPageFor(wiki)}" title="{wiki.title}">{wiki.title}</a
+				><span class="px-1">({wiki.count})</span>
 			</li>
 		{/each}
 	</ul>

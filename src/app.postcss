@@ -4,25 +4,42 @@ body {
 	@apply h-full overflow-hidden;
 }
 
-/* For internal page links */
-.internal-new {
-	background-color: rgb(var(--color-success-100));
+/* For wiki */
+.html-from-markdown {
+	/* indent for lists */
+	ul {
+		list-style: disc;
+		margin-left: 1rem;
+	}
+	ol {
+		list-style: decimal;
+		margin-left: 1rem;
+	}
+	/* indent for blockquote */
+	blockquote {
+		margin-left: 1rem;
+	}
+
+	/* For internal page links */
+	.internal-new {
+		background-color: rgb(var(--color-success-100));
+	}
 }
 
 /* For versions */
-.diff ins,
-del {
-	display: inline !important;
-	padding-left: 0.1rem !important;
-	padding-right: 0.1rem !important;
-}
-.diff ins {
-	background-color: rgb(var(--color-success-400)) !important;
-}
-.diff del {
-	background-color: rgb(var(--color-error-400)) !important;
-}
-.diff ins::before,
-del::before {
-	content: '' !important;
+.diff {
+	ins,del {
+		display: inline !important;
+		padding-left: 0.1rem !important;
+		padding-right: 0.1rem !important;
+	}
+	ins {
+		background-color: rgb(var(--color-success-100)) !important;
+	}
+	del {
+		background-color: rgb(var(--color-error-400)) !important;
+	}
+	ins::before,del::before {
+		content: '' !important;
+	}
 }
