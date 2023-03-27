@@ -30,7 +30,7 @@
 		href="/versions/{wikiName}/{pageName}"
 		class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a
 	>
-	<button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical" /></button>
+	<!-- <button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical" /></button> -->
 </div>
 
 <style>

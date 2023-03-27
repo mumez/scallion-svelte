@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { Avatar } from '@skeletonlabs/skeleton';
-	import { isImage, extensionFrom } from '$lib/utils/FileUtils';
+	import { isImage, concatPath, extensionFrom } from '$lib/utils/FileUtils';
 	import ModalCloseButton from '$lib/components/ModalCloseButton.svelte';
 
 	export let fileName = '';
 	export let baseUrl = '';
 	export let parent: unknown;
 
-	const fullUrl = `${baseUrl}/${fileName}`;
+	const fullUrl = concatPath(baseUrl, fileName);
 
 	async function download() {
-		const resp = await fetch(`${baseUrl}/${fileName}`);
+		const resp = await fetch(fullUrl);
 		const blob = await resp.blob();
 		const url = window.URL.createObjectURL(blob);
 		const a = document.createElement('a');

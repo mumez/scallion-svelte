@@ -2,13 +2,13 @@
 	import { popup } from '@skeletonlabs/skeleton';
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
 	import { Avatar } from '@skeletonlabs/skeleton';
-	import { isImage } from '$lib/utils/FileUtils';
+	import { isImage, concatPath } from '$lib/utils/FileUtils';
 	import { clipboard } from '@skeletonlabs/skeleton';
 
 	export let fileName = '';
 	export let baseUrl = '';
 
-	const fullUrl = `${baseUrl}/${fileName}`;
+	const fullUrl = concatPath(baseUrl, fileName);
 	const popupTarget = `popup-${fullUrl}`;
 	const isTouchDevice = 'ontouchstart' in window;
 

@@ -1,3 +1,5 @@
+import { concatPath } from './FileUtils';
+
 export class WebApiAccessor {
 	protected baseUrl = '';
 	protected fetch: typeof fetch;
@@ -48,9 +50,7 @@ export class WebApiAccessor {
 	}
 
 	protected buildUrl(urlPart) {
-		if (this.baseUrl.length == 0) return urlPart;
-		if (this.baseUrl.endsWith('/')) return `${this.baseUrl}${urlPart}`;
-		return `${this.baseUrl}/${urlPart}`;
+		return concatPath(this.baseUrl, urlPart);
 	}
 }
 
