@@ -1,5 +1,7 @@
+import { PUBLIC_WIKI_API_BASE_URL } from '$env/static/public';
+
 const wikiApiConfig = {
-	baseUrl: 'http://localhost:2016/api/'
+	baseUrl: PUBLIC_WIKI_API_BASE_URL || 'http://localhost:2016/api/'
 };
 
 export default wikiApiConfig;
