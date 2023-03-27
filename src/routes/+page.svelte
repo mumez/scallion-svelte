@@ -14,8 +14,9 @@
 	<ul class="list-disc">
 		{#each wikiBooks as wiki}
 			<li class="text-xl">
-				<a href="wikis/{wiki.name}/{initialPageFor(wiki)}" title="{wiki.title}">{wiki.title}</a
-				><span class="px-1">({wiki.count})</span>
+				<a href="wikis/{wiki.name}/{initialPageFor(wiki)}" title={wiki.title}>{wiki.title}</a><span
+					class="px-1">({wiki.count})</span
+				>
 			</li>
 		{/each}
 	</ul>
