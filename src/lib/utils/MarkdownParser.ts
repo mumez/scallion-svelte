@@ -36,6 +36,9 @@ export const enrichedHtmlFrom = (
 	const renderer = {
 		link(href: string, title: string, text: string) {
 			return renderLink(href, text, existingPageNames, baseImageUrl);
+		},
+		image(href: string, title: string, text: string) {
+			return renderLink(href, text, existingPageNames, baseImageUrl);
 		}
 	};
 	const options = { renderer };

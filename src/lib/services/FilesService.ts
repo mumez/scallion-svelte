@@ -33,10 +33,16 @@ class FilesService extends BaseApiService {
 		return acc.put(`${this.targetUrl()}/${file.name}`, file);
 	}
 
-	public async createDirectory(directoryName: string, jwt = ''): Promise<boolean> {
+	public async createSubDirectory(directoryName: string, jwt = ''): Promise<boolean> {
 		const acc = this.webDavAccessor;
 		acc.setJwt(jwt);
 		return acc.mkcol(`${this.targetUrl()}/${directoryName}`);
+	}
+
+	public async ensureDirectory(jwt = ''): Promise<boolean> {
+		const acc = this.webDavAccessor;
+		acc.setJwt(jwt);
+		return acc.mkcol(this.targetUrl());
 	}
 
 	// accessing
