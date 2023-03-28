@@ -13,7 +13,8 @@ function entriesFromXml(xmlString: string): WebDavEntry[] {
 	const parsed = xmlParser.parse(xmlString);
 	const response = parsed?.multistatus?.response ?? [];
 	const entries: WebDavEntry[] = [];
-	for (const element of response) {
+	const elements = Array.isArray(response) ? response : [response];
+	for (const element of elements) {
 		const props = element.propstat?.prop ?? {};
 		const entry = newEntry();
 		entry.name = props['displayname'];

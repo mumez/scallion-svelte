@@ -62,6 +62,7 @@
 			wikiPage.setPageContent(updatedContent);
 			editingContent = updatedContent.content;
 			updateExistingPageNames();
+			filesService.createDirectory(updatedContent.name, jwt());
 		}
 		wikiPage.stopEditing();
 	}
