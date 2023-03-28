@@ -57,5 +57,5 @@
 		</AppBar>
 	</svelte:fragment>
 	<slot />
-	<svelte:fragment slot="footer">Scallion Wiki</svelte:fragment>
+	<svelte:fragment slot="footer"><span class="px-2">Scallion Wiki</span></svelte:fragment>
 </AppShell>

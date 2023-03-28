@@ -4,5 +4,5 @@
 </script>
 
 {#if wikiBookName}
-	<a href="//{$page.url.host}/wikis/{wikiBookName}">{wikiBookName}</a>
+	<a class="px-2" href="//{$page.url.host}/wikis/{wikiBookName}">{wikiBookName}</a>
 {/if}
