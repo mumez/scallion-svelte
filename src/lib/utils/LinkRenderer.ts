@@ -5,38 +5,62 @@ export const internalNewCssClass = 'internal-new';
 export const internalExistingCssClass = 'internal-existing';
 
 export class LinkRenderer {
+	wikiName: string;
 	existingPageNames: string[];
-	baseImageUrl = '';
-	constructor(existingPageNames: string[], baseImageUrl = '') {
+	baseAttachmentUrl = '';
+	isInternal = false;
+	constructor(wikiName: string, existingPageNames: string[], baseAttachmentUrl = '') {
+		this.wikiName = wikiName;
 		this.existingPageNames = existingPageNames;
-		this.baseImageUrl = baseImageUrl;
+		this.baseAttachmentUrl = baseAttachmentUrl;
+	}
+
+	public render(href: string, text: string): string {
+		this.isInternal = isInternalLink(href);
+		return isImageFileLink(href) ? this.renderImage(href, text) : this.renderPageHref(href, text);
+	}
+	public renderForAttachment(href: string, text: string): string {
+		this.isInternal = isInternalLink(href);
+		return isImageFileLink(href) ? this.renderImage(href, text) : this.renderAttachmentHref(href, text);
+	}
+
+	private renderPageHref(href: string, text: string) {
+		return `<a class="${this.linkHrefClass(href)}" title="${this.linkHrefTitle(
+			href
+		)}" href="${this.renderHrefLinkValue(href)}">${text}</a>`;
+	}
+	private renderAttachmentHref(href: string, text: string) {
+		return `<a title="${this.linkHrefTitle(
+			href
+		)}" href="${this.renderAttachmentHrefLinkValue(href)}">${text}</a>`;
 	}
 	private linkHrefClass(href: string): string {
-		if (!isInternalLink(href)) return externalCssClass;
+		if (!this.isInternal) return externalCssClass;
 		if (this.existingPageNames.length == 0) return '';
 		if (this.existingPageNames.includes(href)) return internalExistingCssClass;
 		return internalNewCssClass;
 	}
 	private linkHrefTitle(href: string): string {
-		return this.linkHrefClass(href) == internalNewCssClass ? 'create new page' : '';
+		return this.isInternal ? 'create new page' : href;
 	}
 
-	private renderHref(href: string, text: string) {
-		return `<a class="${this.linkHrefClass(href)}" title="${this.linkHrefTitle(
-			href
-		)}" href="${href}">${text}</a>`;
+	private renderHrefLinkValue(href: string) {
+		if (this.isInternal) return this.renderInternalHrefLinkValue(href);
+		return href;
+	}
+	private renderInternalHrefLinkValue(href: string) {
+		return `/wikis/${this.wikiName}/${href}`;
+	}
+	private renderAttachmentHrefLinkValue(href: string) {
+		return this.adjustAttachmentPath(href);
 	}
 	private renderImage(path: string, text: string) {
-		const srcPath = this.adjustImageSrcPath(path);
+		const srcPath = this.adjustAttachmentPath(path);
 		return `<img class="w-full object-contain max-w-2xl" alt="${text}" title="${text}" src="${srcPath}"></img>`;
 	}
 
-	private adjustImageSrcPath(path: string) {
-		if (isInternalLink(path)) return `${this.baseImageUrl}/${path}`;
+	private adjustAttachmentPath(path: string) {
+		if (isInternalLink(path)) return `${this.baseAttachmentUrl}/${path}`;
 		return path;
-	}
-
-	public render(href: string, text: string): string {
-		return isImageFileLink(href) ? this.renderImage(href, text) : this.renderHref(href, text);
 	}
 }

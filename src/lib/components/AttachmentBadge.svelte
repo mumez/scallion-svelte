@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { popup } from '@skeletonlabs/skeleton';
+	import { popup, clipboard } from '@skeletonlabs/skeleton';
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
 	import { Avatar } from '@skeletonlabs/skeleton';
 	import { isImage, concatPath } from '$lib/utils/FileUtils';
-	import { clipboard } from '@skeletonlabs/skeleton';
 
 	export let fileName = '';
 	export let baseUrl = '';
@@ -26,6 +25,9 @@
 			copied = false;
 		}, 1000);
 	}
+	function clipboardTextFrom(fileName: string): string {
+		return `![${fileName}](${fileName})`;
+	}
 </script>
 
 <div class="tooltip" data-popup={popupTarget}>
@@ -37,7 +39,7 @@
 <div class="space-x-0">
 	<button
 		class="badge variant-ringed-primary"
-		use:clipboard={fileName}
+		use:clipboard={clipboardTextFrom(fileName)}
 		use:popup={imageTooltip}
 		on:click={onClick}
 		disabled={copied}>{copied ? 'Copied ✓ ' : fileName}</button

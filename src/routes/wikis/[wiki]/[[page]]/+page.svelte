@@ -26,7 +26,7 @@
 	const pageService = new PageService(wikiName, pageName);
 	const filesService = new FilesService(wikiName, pageName);
 	const wikiBookService = new WikiBookService(wikiName);
-	const baseImageUrl = filesService.downloadBaseUrl;
+	const baseAttachmentUrl = filesService.downloadBaseUrl;
 
 	let attachmentFiles: WebDavEntry[] = [];
 
@@ -108,19 +108,17 @@
 <div class="container mx-auto p-4 space-y-4">
 	{#if isNewPage}
 		<div>Empty page. Let's start editing.</div>
-	{:else}
-		<div>{existingPageNames}</div>
 	{/if}
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
 			<textarea class="textarea" rows="10" bind:value={editingContent} />
-			<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl} />
+			<MarkdownViewer markdown={editingContent} {wikiName} {existingPageNames} {baseAttachmentUrl} />
 		</div>
 	{:else}
-		<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl} />
+		<MarkdownViewer markdown={editingContent} {wikiName} {existingPageNames} {baseAttachmentUrl} />
 	{/if}
 	{#if $wikiPage.isEditing}
-		<AttachmentsPanel baseUrl={baseImageUrl} files={attachmentFiles} />
+		<AttachmentsPanel baseUrl={baseAttachmentUrl} files={attachmentFiles} />
 	{/if}
 	<hr />
 	<section class="flex space-x-2">
