@@ -4,9 +4,9 @@
 	export let markdown = '';
 	export let wikiName = '';
 	export let existingPageNames: string[] = [];
-	export let baseImageUrl = '';
+	export let baseAttachmentUrl = '';
 
-	$: htmlText = enrichedHtmlFrom(markdown, wikiName, existingPageNames, baseImageUrl);
+	$: htmlText = enrichedHtmlFrom(markdown, wikiName, existingPageNames, baseAttachmentUrl);
 </script>
 
 <div class="html-from-markdown space-x-0">
