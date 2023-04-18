@@ -108,16 +108,14 @@
 <div class="container mx-auto p-4 space-y-4">
 	{#if isNewPage}
 		<div>Empty page. Let's start editing.</div>
-	{:else}
-		<div>{existingPageNames}</div>
 	{/if}
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
 			<textarea class="textarea" rows="10" bind:value={editingContent} />
-			<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl} />
+			<MarkdownViewer markdown={editingContent} {wikiName} {existingPageNames} {baseImageUrl} />
 		</div>
 	{:else}
-		<MarkdownViewer markdown={editingContent} {existingPageNames} {baseImageUrl} />
+		<MarkdownViewer markdown={editingContent} {wikiName} {existingPageNames} {baseImageUrl} />
 	{/if}
 	{#if $wikiPage.isEditing}
 		<AttachmentsPanel baseUrl={baseImageUrl} files={attachmentFiles} />

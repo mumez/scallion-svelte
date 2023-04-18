@@ -17,10 +17,11 @@ export const isImageFileLink = (href: string): boolean => {
 const renderLink = (
 	href: string,
 	text: string,
+	wikiName: string,
 	existingPageNames: string[],
 	baseImageUrl = ''
 ): string => {
-	const linkRenderer = new LinkRenderer(existingPageNames, baseImageUrl);
+	const linkRenderer = new LinkRenderer(wikiName, existingPageNames, baseImageUrl);
 	return linkRenderer.render(href, text);
 };
 
@@ -30,15 +31,16 @@ export const htmlFrom = (markdown: string): string => {
 
 export const enrichedHtmlFrom = (
 	markdown: string,
+	wikiName: string,
 	existingPageNames: string[] = [],
 	baseImageUrl = ''
 ): string => {
 	const renderer = {
 		link(href: string, title: string, text: string) {
-			return renderLink(href, text, existingPageNames, baseImageUrl);
+			return renderLink(href, text, wikiName, existingPageNames, baseImageUrl);
 		},
 		image(href: string, title: string, text: string) {
-			return renderLink(href, text, existingPageNames, baseImageUrl);
+			return renderLink(href, text, wikiName, existingPageNames, baseImageUrl);
 		}
 	};
 	const options = { renderer };
