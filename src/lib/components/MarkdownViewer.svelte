@@ -1,14 +1,35 @@
 <script lang="ts">
+	import { debounce } from '$lib/utils/CoreUtils';
 	import { enrichedHtmlFrom } from '$lib/utils/MarkdownParser';
 
 	export let markdown = '';
 	export let wikiName = '';
 	export let existingPageNames: string[] = [];
 	export let baseAttachmentUrl = '';
+	export let isEditable = false;
 
-	$: htmlText = enrichedHtmlFrom(markdown, wikiName, existingPageNames, baseAttachmentUrl);
+	let html = markdown;
+
+	const debouncedHtmlFrom = debounce((markdown, wikiName, existingPageNames, baseAttachmentUrl) => {
+		html = enrichedHtmlFrom(markdown, wikiName, existingPageNames, baseAttachmentUrl);
+	}, 500);
+
+	function renderHtml(
+		markdown: string,
+		wikiName: string,
+		existingPageNames: string[],
+		baseAttachmentUrl: string
+	) {
+		if (isEditable) {
+			debouncedHtmlFrom(markdown, wikiName, existingPageNames, baseAttachmentUrl);
+			return;
+		}
+		html = enrichedHtmlFrom(markdown, wikiName, existingPageNames, baseAttachmentUrl);
+	}
+
+	$: renderHtml(markdown, wikiName, existingPageNames, baseAttachmentUrl);
 </script>
 
 <div class="html-from-markdown space-x-0">
-	<article data-sveltekit-reload>{@html htmlText}</article>
+	<article data-sveltekit-reload>{@html html}</article>
 </div>
