@@ -32,7 +32,7 @@ export class LinkRenderer {
 		)}" href="${this.renderHrefLinkValue(href)}">${text}</a>`;
 	}
 	private renderAttachmentHref(href: string, text: string) {
-		return `<a title="${this.linkHrefTitle(href)}" href="${this.renderAttachmentHrefLinkValue(
+		return `<a title="${this.linkAttachmentHrefTitle(href)}" href="${this.renderAttachmentHrefLinkValue(
 			href
 		)}">${text}</a>`;
 	}
@@ -43,7 +43,11 @@ export class LinkRenderer {
 		return internalNewCssClass;
 	}
 	private linkHrefTitle(href: string): string {
-		return this.isInternal ? 'create new page' : href;
+		const isInternalNew = this.linkHrefClass(href) == internalNewCssClass;
+		return isInternalNew ? 'create new page' : href;
+	}
+	private linkAttachmentHrefTitle(href: string): string {
+		return href;
 	}
 
 	private renderHrefLinkValue(href: string) {
