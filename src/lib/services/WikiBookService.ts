@@ -11,7 +11,7 @@ class WikiBookService extends BaseApiService {
 	public async hasPages(pageNames: string[]): Promise<boolean[]> {
 		const url = this.targetUrl();
 		const names = pageNames.join();
-		const resp = await this.apiAccessor.get(`${url}&exist-pages=${names}`).catch((e) => {
+		const resp = await this.apiAccessor.get(`${url}&exist-pages=${names}`).catch(() => {
 			return [];
 		});
 		return resp as boolean[];

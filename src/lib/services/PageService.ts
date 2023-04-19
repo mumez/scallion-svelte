@@ -14,7 +14,8 @@ class PageService extends BaseApiService {
 	public async postContent(pageContent: PageContent, jwt = ''): Promise<PageContent> {
 		const url = this.targetUrl();
 		const acc = this.apiAccessorWithJwt(jwt);
-		const resp = await acc.post(url, JSON.stringify(pageContent)).catch((e) => {
+		const resp = await acc.post(url, JSON.stringify(pageContent)).catch((ex) => {
+			console.error(ex);
 			return {};
 		});
 		return resp as PageContent;
@@ -22,7 +23,8 @@ class PageService extends BaseApiService {
 	public async putContent(pageContent: PageContent, jwt = ''): Promise<PageContent> {
 		const url = this.targetUrl();
 		const acc = this.apiAccessorWithJwt(jwt);
-		const resp = await acc.put(url, JSON.stringify(pageContent)).catch((e) => {
+		const resp = await acc.put(url, JSON.stringify(pageContent)).catch((ex) => {
+			console.error(ex);
 			return {};
 		});
 		return resp as PageContent;
@@ -30,7 +32,7 @@ class PageService extends BaseApiService {
 
 	public async getContent(): Promise<PageContent> {
 		const url = this.targetUrl();
-		const resp = await this.apiAccessor.get(url).catch((e) => {
+		const resp = await this.apiAccessor.get(url).catch(() => {
 			return {};
 		});
 		return resp as PageContent;

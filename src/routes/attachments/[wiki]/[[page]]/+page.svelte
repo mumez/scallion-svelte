@@ -31,7 +31,7 @@
 
 	function processRowsForTable(files: WebDavEntry[]) {
 		let mappedVersions = tableSourceMapper(files, ['name', 'contentLength', 'lastModified']);
-		mappedVersions = mappedVersions.map((v, i) => {
+		mappedVersions = mappedVersions.map((v) => {
 			v.lastModified = new Date(v.lastModified).toString();
 			return {
 				...v
@@ -44,7 +44,7 @@
 		return await filesService.uploadFile(file, jwt());
 	}
 
-	function onUploadEnd(ev: CustomEvent) {
+	function onUploadEnd(_ev: CustomEvent) {
 		reloadFiles();
 	}
 

@@ -21,7 +21,9 @@ export class LinkRenderer {
 	}
 	public renderForAttachment(href: string, text: string): string {
 		this.isInternal = isInternalLink(href);
-		return isImageFileLink(href) ? this.renderImage(href, text) : this.renderAttachmentHref(href, text);
+		return isImageFileLink(href)
+			? this.renderImage(href, text)
+			: this.renderAttachmentHref(href, text);
 	}
 
 	private renderPageHref(href: string, text: string) {
@@ -30,18 +32,22 @@ export class LinkRenderer {
 		)}" href="${this.renderHrefLinkValue(href)}">${text}</a>`;
 	}
 	private renderAttachmentHref(href: string, text: string) {
-		return `<a title="${this.linkHrefTitle(
+		return `<a title="${this.linkAttachmentHrefTitle(href)}" href="${this.renderAttachmentHrefLinkValue(
 			href
-		)}" href="${this.renderAttachmentHrefLinkValue(href)}">${text}</a>`;
+		)}">${text}</a>`;
 	}
 	private linkHrefClass(href: string): string {
 		if (!this.isInternal) return externalCssClass;
-		if (this.existingPageNames.length == 0) return '';
+		if (this.existingPageNames.length == 0) return internalNewCssClass;
 		if (this.existingPageNames.includes(href)) return internalExistingCssClass;
 		return internalNewCssClass;
 	}
 	private linkHrefTitle(href: string): string {
-		return this.isInternal ? 'create new page' : href;
+		const isInternalNew = this.linkHrefClass(href) == internalNewCssClass;
+		return isInternalNew ? 'create new page' : href;
+	}
+	private linkAttachmentHrefTitle(href: string): string {
+		return href;
 	}
 
 	private renderHrefLinkValue(href: string) {

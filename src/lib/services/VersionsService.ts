@@ -13,7 +13,7 @@ class VersionsService extends BaseApiService {
 
 	public async getLastVersionNumber(): Promise<number> {
 		const url = `${this.targetUrl('version')}&field=lastVersionNumber`;
-		const resp = await this.apiAccessor.get(url).catch((e) => {
+		const resp = await this.apiAccessor.get(url).catch(() => {
 			return 0;
 		});
 		return resp as number;
@@ -21,7 +21,7 @@ class VersionsService extends BaseApiService {
 
 	public async getVersions(from = 1, size = 1): Promise<PageContent[]> {
 		const url = `${this.targetUrl('versions')}&from=${from}&size=${size}`;
-		const resp = await this.apiAccessor.get(url).catch((e) => {
+		const resp = await this.apiAccessor.get(url).catch(() => {
 			return [];
 		});
 		return resp as PageContent[];
