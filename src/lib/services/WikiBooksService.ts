@@ -3,7 +3,7 @@ import type { WikiBook } from '$lib/models/WikiBook';
 
 class WikiBooksService extends BaseApiService {
 	public async listBooks(): Promise<WikiBook[]> {
-		const resp = await this.apiAccessor.get(this.serviceName).catch((e) => {
+		const resp = await this.apiAccessor.get(this.serviceName).catch(() => {
 			return [];
 		});
 		const books = resp as WikiBook[];

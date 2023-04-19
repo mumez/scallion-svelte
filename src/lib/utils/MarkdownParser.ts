@@ -20,10 +20,12 @@ const renderLink = (
 	wikiName: string,
 	existingPageNames: string[],
 	baseAttachmentUrl = '',
-	isAttachmentOnly = false,
+	isAttachmentOnly = false
 ): string => {
 	const linkRenderer = new LinkRenderer(wikiName, existingPageNames, baseAttachmentUrl);
-	return isAttachmentOnly ? linkRenderer.renderForAttachment(href, text) : linkRenderer.render(href, text);
+	return isAttachmentOnly
+		? linkRenderer.renderForAttachment(href, text)
+		: linkRenderer.render(href, text);
 };
 
 export const htmlFrom = (markdown: string): string => {

@@ -21,7 +21,9 @@ export class LinkRenderer {
 	}
 	public renderForAttachment(href: string, text: string): string {
 		this.isInternal = isInternalLink(href);
-		return isImageFileLink(href) ? this.renderImage(href, text) : this.renderAttachmentHref(href, text);
+		return isImageFileLink(href)
+			? this.renderImage(href, text)
+			: this.renderAttachmentHref(href, text);
 	}
 
 	private renderPageHref(href: string, text: string) {
@@ -30,9 +32,9 @@ export class LinkRenderer {
 		)}" href="${this.renderHrefLinkValue(href)}">${text}</a>`;
 	}
 	private renderAttachmentHref(href: string, text: string) {
-		return `<a title="${this.linkHrefTitle(
+		return `<a title="${this.linkHrefTitle(href)}" href="${this.renderAttachmentHrefLinkValue(
 			href
-		)}" href="${this.renderAttachmentHrefLinkValue(href)}">${text}</a>`;
+		)}">${text}</a>`;
 	}
 	private linkHrefClass(href: string): string {
 		if (!this.isInternal) return externalCssClass;

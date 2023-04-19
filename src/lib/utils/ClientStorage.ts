@@ -5,7 +5,7 @@ class ClientStorage {
 		this.storage = storageImpl;
 	}
 
-	public put(key: string, value: any) {
+	public put(key: string, value: unknown) {
 		this.storage?.setItem(key, JSON.stringify(value));
 	}
 	public get(key: string) {
