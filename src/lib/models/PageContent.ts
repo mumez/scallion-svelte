@@ -13,12 +13,14 @@ export interface PageContent {
 export const updatingPageContent = (
 	originalContent: PageContent,
 	contentText: string,
-	updater: string
+	updater: string,
+	isLocked = false
 ): PageContent => {
 	return {
 		...originalContent,
 		content: contentText,
-		updatedBy: updater
+		updatedBy: updater,
+		isLocked
 	};
 };
 

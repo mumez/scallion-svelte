@@ -11,12 +11,13 @@
 	import WikiBookService from '$lib/services/WikiBookService';
 	import { updatingPageContent } from '$lib/models/PageContent';
 
-	import { email } from '$lib/services/UserService';
+	import { email, uid } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
 	import { extractInternalPageLinks } from '$lib/utils/MarkdownParser';
 
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
+	import type { WikiBook } from '$lib/models/WikiBook';
 	export let data: PageData;
 
 	const loadedPageContent = data.page ?? {};
@@ -29,6 +30,7 @@
 	const baseAttachmentUrl = filesService.downloadBaseUrl;
 
 	let attachmentFiles: WebDavEntry[] = [];
+	let wikiDescription: WikiBook;
 
 	$parentLink = wikiName;
 	$headerTitle = pageName;
@@ -37,9 +39,12 @@
 	let existingPageNames: string[] = [];
 	wikiPage.setPageContent(loadedPageContent);
 
+	let shouldLockOnSave = loadedPageContent.isLocked ?? false;
+
 	onMount(() => {
 		updateExistingPageNames();
 		retrieveAttachmentFiles();
+		retrieveWikiDescription();
 	});
 
 	const initialEditingPageContent = $wikiPage.revertingPageContent
@@ -47,6 +52,7 @@
 		: loadedPageContent;
 	let editingContent = initialEditingPageContent.content;
 
+	// content editing
 	async function saveContent() {
 		if (isNewPage) {
 			createContent();
@@ -56,7 +62,7 @@
 	}
 	async function createContent() {
 		const originalPageContent = initialEditingPageContent;
-		const updatingContent = updatingPageContent(originalPageContent, editingContent, email());
+		const updatingContent = updatingPageContent(originalPageContent, editingContent, email(), shouldLockOnSave);
 		const updatedContent = await pageService.postContent(updatingContent, jwt());
 		if (updatedContent.id) {
 			wikiPage.setPageContent(updatedContent);
@@ -70,7 +76,7 @@
 	async function updateContent() {
 		const originalPageContent = $wikiPage.pageContent;
 		if (originalPageContent && editingContent !== $wikiPage.pageContent?.content) {
-			const updatingContent = updatingPageContent(originalPageContent, editingContent, email());
+			const updatingContent = updatingPageContent(originalPageContent, editingContent, email(), shouldLockOnSave);
 			const updatedContent = await pageService.putContent(updatingContent, jwt());
 			if (updatedContent.id) {
 				wikiPage.setPageContent(updatedContent);
@@ -98,11 +104,18 @@
 		return internalPageLinks.filter((_, idx) => hasPages[idx]);
 	}
 
+	// retrieving
 	async function retrieveAttachmentFiles() {
 		attachmentFiles = await filesService.files();
 	}
+	async function retrieveWikiDescription() {
+		wikiDescription = await wikiBookService.getDescription();
+		console.log('wikiDesc:', wikiDescription);
+	}
 
+	// computed properties
 	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt : 0;
+	$: canLockOnSave = wikiDescription != null && wikiDescription.ownedBy === uid();
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
@@ -130,7 +143,14 @@
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
 			<button class="btn variant-filled-warning" on:click={cancelContent}>Cancel</button>
-			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
+			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button
+			>
+			{#if canLockOnSave}
+				<label class="flex items-center space-x-2">
+					<input class="checkbox" type="checkbox" bind:checked={shouldLockOnSave} />
+					<p>Lock</p>
+				</label>
+			{/if}
 		{/if}
 	</section>
 	{#if updatedAt}

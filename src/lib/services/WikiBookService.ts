@@ -1,3 +1,4 @@
+import type { WikiBook } from '$lib/models/WikiBook';
 import BaseApiService from './BaseApiService';
 
 class WikiBookService extends BaseApiService {
@@ -15,6 +16,14 @@ class WikiBookService extends BaseApiService {
 			return [];
 		});
 		return resp as boolean[];
+	}
+
+	public async getDescription(): Promise<WikiBook> {
+		const url = this.targetUrl();
+		const resp = await this.apiAccessor.get(url).catch(() => {
+			return {};
+		});
+		return resp as WikiBook;
 	}
 
 	override get serviceName() {
