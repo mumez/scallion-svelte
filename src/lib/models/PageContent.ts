@@ -38,3 +38,11 @@ export const newPageContent = (wiki: string, name: string, updater: string): Pag
 		isLocked: false
 	};
 };
+
+export const isLockedByOtherUser = (
+	pageContent?: PageContent,
+	uid?: string
+): boolean => {
+	if (!pageContent) return false;
+	return pageContent.isLocked && pageContent.ownedBy !== uid;
+};

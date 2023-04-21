@@ -5,23 +5,32 @@
 	import FileDownloader from '$lib/components/FileDownloader.svelte';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
+	import wikiPage from '$lib/stores/wikiPage';
 	import type WebDavEntry from '$lib/utils/WebDavEntry';
 	import { jwt } from '$lib/utils/ClientStorage';
 	import { openModal } from '$lib/utils/ModalOpener';
-
+	import { isLockedByOtherUser } from '$lib/models/PageContent';
+	import { uid } from '$lib/services/UserService';
+	import PageService from '$lib/services/PageService';
 	import FilesService from '$lib/services/FilesService';
 
 	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
 	export let data: PageData;
 
 	const wikiName = $page.params['wiki'] ?? '';
 	const pageName = $page.params['page'] ?? 'index';
 	$parentLink = wikiName;
 	$headerTitle = pageName;
-
+	const pageService = new PageService(wikiName, pageName);
 	const filesService = new FilesService(wikiName, pageName);
 	let files = data.files;
 	const filesTableHeaders: string[] = ['Name', 'Size', 'Date'];
+
+	// lifecycle callbacks
+	onMount(() => {
+		retrievePageDescription();
+	});
 
 	function onRowSelected(ev: CustomEvent) {
 		const fileName = ev.detail[0];
@@ -52,11 +61,19 @@
 		files = await filesService.files();
 	}
 
+	// retrieving
+	async function retrievePageDescription() {
+		wikiPage.setPageContent(await pageService.getContent());
+	}
+
+	$: isPageLockedByOtherUser = isLockedByOtherUser($wikiPage?.pageContent, uid());
 	$: filesTableBody = processRowsForTable(files);
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
-	<FilesUploadPanel uploader={uploadFile} on:upload-end={onUploadEnd} />
+	{#if !isPageLockedByOtherUser}
+		<FilesUploadPanel uploader={uploadFile} on:upload-end={onUploadEnd} />
+	{/if}
 	<Table
 		source={{
 			head: filesTableHeaders,

@@ -39,15 +39,16 @@
 
 	let shouldLockOnSave = loadedPageContent.isLocked ?? false;
 
-	onMount(() => {
-		updateExistingPageNames();
-		retrieveAttachmentFiles();
-	});
-
 	const initialEditingPageContent = $wikiPage.revertingPageContent
 		? $wikiPage.revertingPageContent
 		: loadedPageContent;
 	let editingContent = initialEditingPageContent.content;
+
+	// lifecycle callbacks
+	onMount(() => {
+		updateExistingPageNames();
+		retrieveAttachmentFiles();
+	});
 
 	// content editing
 	async function saveContent() {

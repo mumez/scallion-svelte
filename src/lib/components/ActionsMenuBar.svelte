@@ -3,13 +3,13 @@
 	import { uid } from '$lib/services/UserService';
 	import isAuthenticated from '$lib/stores/isAuthenticated';
 	import wikiPage from '$lib/stores/wikiPage';
+	import { isLockedByOtherUser } from '$lib/models/PageContent';
+
 	let wikiName = $page.params['wiki'] ?? '';
 	let pageName = $page.params['page'] ?? 'index';
-
+	
 	$: routeFirstPart = ($page.route.id ?? '').split('/')[1];
-	$: isPageLocked = $wikiPage?.pageContent?.isLocked;
-	$: isPageOwned = $wikiPage?.pageContent?.ownedBy == uid();
-	$: isPageLockedByOtherUser = isPageLocked && !isPageOwned;
+	$: isPageLockedByOtherUser = isLockedByOtherUser($wikiPage?.pageContent, uid());
 	$: isAttachmentsButtonDisabled = routeFirstPart == 'attachments' || !$isAuthenticated || isPageLockedByOtherUser;
 	$: isVersionsButtonDisabled = routeFirstPart == 'versions';
 </script>
