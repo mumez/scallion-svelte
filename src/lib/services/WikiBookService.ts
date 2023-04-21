@@ -10,9 +10,9 @@ class WikiBookService extends BaseApiService {
 	}
 
 	public async hasPages(pageNames: string[]): Promise<boolean[]> {
-		const url = this.targetUrl();
+		const url = this.pagesUrl();
 		const names = pageNames.join();
-		const resp = await this.apiAccessor.get(`${url}&exist-pages=${names}`).catch(() => {
+		const resp = await this.apiAccessor.get(`${url}&exist=${names}`).catch(() => {
 			return [];
 		});
 		return resp as boolean[];
@@ -33,6 +33,10 @@ class WikiBookService extends BaseApiService {
 	// accessing
 	targetUrl() {
 		return `${this.serviceName}?name=${this.name}`;
+	}
+
+	pagesUrl() {
+		return `pages?wiki=${this.name}`;
 	}
 }
 

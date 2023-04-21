@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { uid } from '$lib/services/UserService';
 	import isAuthenticated from '$lib/stores/isAuthenticated';
 	import wikiPage from '$lib/stores/wikiPage';
 	let wikiName = $page.params['wiki'] ?? '';
 	let pageName = $page.params['page'] ?? 'index';
 
 	$: routeFirstPart = ($page.route.id ?? '').split('/')[1];
-	$: isAttachmentsButtonDisabled = routeFirstPart == 'attachments' || !$isAuthenticated;
+	$: isPageLocked = $wikiPage?.pageContent?.isLocked;
+	$: isPageOwned = $wikiPage?.pageContent?.ownedBy == uid();
+	$: isPageLockedByOtherUser = isPageLocked && !isPageOwned;
+	$: isAttachmentsButtonDisabled = routeFirstPart == 'attachments' || !$isAuthenticated || isPageLockedByOtherUser;
 	$: isVersionsButtonDisabled = routeFirstPart == 'versions';
 </script>
 
@@ -14,7 +18,7 @@
 	{#if routeFirstPart == 'wikis'}
 		<button
 			class="btn-icon"
-			disabled={$wikiPage.isEditing || !$isAuthenticated}
+			disabled={$wikiPage.isEditing || !$isAuthenticated || isPageLockedByOtherUser}
 			on:click={wikiPage.startEditing}><i class="fa-solid fa-pen" /></button
 		>
 	{:else}

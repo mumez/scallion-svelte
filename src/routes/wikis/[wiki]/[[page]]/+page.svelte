@@ -17,7 +17,6 @@
 
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
-	import type { WikiBook } from '$lib/models/WikiBook';
 	export let data: PageData;
 
 	const loadedPageContent = data.page ?? {};
@@ -30,7 +29,6 @@
 	const baseAttachmentUrl = filesService.downloadBaseUrl;
 
 	let attachmentFiles: WebDavEntry[] = [];
-	let wikiDescription: WikiBook;
 
 	$parentLink = wikiName;
 	$headerTitle = pageName;
@@ -44,7 +42,6 @@
 	onMount(() => {
 		updateExistingPageNames();
 		retrieveAttachmentFiles();
-		retrieveWikiDescription();
 	});
 
 	const initialEditingPageContent = $wikiPage.revertingPageContent
@@ -108,14 +105,10 @@
 	async function retrieveAttachmentFiles() {
 		attachmentFiles = await filesService.files();
 	}
-	async function retrieveWikiDescription() {
-		wikiDescription = await wikiBookService.getDescription();
-		console.log('wikiDesc:', wikiDescription);
-	}
 
 	// computed properties
-	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt : 0;
-	$: canLockOnSave = wikiDescription != null && wikiDescription.ownedBy === uid();
+	$: updatedAt = $wikiPage?.pageContent.updatedAt ?? 0;
+	$: canLockOnSave = $wikiPage?.pageContent.ownedBy === uid();
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
