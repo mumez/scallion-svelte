@@ -41,12 +41,12 @@
 </script>
 
 <div class="relative">
-	<FileDropzone multiple name="uploadingFiles" padding="py-1" on:change={onFilesChange}>
+	<FileDropzone multiple name="uploadingFiles" padding="py-3" on:change={onFilesChange}>
 		<svelte:fragment slot="lead">
 			{#if isUploading}
 				<i class="animate-spin text-3xl fa-solid fa-spinner" />
 			{:else}
-				<span>Click to start uploading files</span>
+				<span>Drop or click to start uploading files</span>
 			{/if}
 		</svelte:fragment>
 		<svelte:fragment slot="message">
@@ -60,12 +60,12 @@
 	<div class="absolute z-30 bottom-0 right-0">
 		<button
 			disabled={!shouldEnableActionButtons}
-			class="border-current border-2 variant-filled-warning"
+			class="border-current px-2 border-2 variant-filled-warning"
 			on:click={clear}>Clear</button
 		>
 		<button
 			disabled={!shouldEnableActionButtons}
-			class="border-current border-2 variant-filled-primary"
+			class="border-current px-2 border-2 variant-filled-primary"
 			on:click={upload}>Upload</button
 		>
 	</div>

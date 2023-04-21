@@ -1,3 +1,4 @@
+import type { WikiBook } from '$lib/models/WikiBook';
 import BaseApiService from './BaseApiService';
 
 class WikiBookService extends BaseApiService {
@@ -9,12 +10,20 @@ class WikiBookService extends BaseApiService {
 	}
 
 	public async hasPages(pageNames: string[]): Promise<boolean[]> {
-		const url = this.targetUrl();
+		const url = this.pagesUrl();
 		const names = pageNames.join();
-		const resp = await this.apiAccessor.get(`${url}&exist-pages=${names}`).catch(() => {
+		const resp = await this.apiAccessor.get(`${url}&exist=${names}`).catch(() => {
 			return [];
 		});
 		return resp as boolean[];
+	}
+
+	public async getDescription(): Promise<WikiBook> {
+		const url = this.targetUrl();
+		const resp = await this.apiAccessor.get(url).catch(() => {
+			return {};
+		});
+		return resp as WikiBook;
 	}
 
 	override get serviceName() {
@@ -24,6 +33,10 @@ class WikiBookService extends BaseApiService {
 	// accessing
 	targetUrl() {
 		return `${this.serviceName}?name=${this.name}`;
+	}
+
+	pagesUrl() {
+		return `pages?wiki=${this.name}`;
 	}
 }
 

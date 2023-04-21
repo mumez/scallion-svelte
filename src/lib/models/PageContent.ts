@@ -3,6 +3,7 @@ export interface PageContent {
 	bookId: string;
 	wiki: string;
 	name: string;
+	ownedBy?: string;
 	updatedAt: number;
 	updatedBy: string;
 	number: number;
@@ -13,12 +14,14 @@ export interface PageContent {
 export const updatingPageContent = (
 	originalContent: PageContent,
 	contentText: string,
-	updater: string
+	updater: string,
+	isLocked = false
 ): PageContent => {
 	return {
 		...originalContent,
 		content: contentText,
-		updatedBy: updater
+		updatedBy: updater,
+		isLocked
 	};
 };
 
@@ -34,4 +37,12 @@ export const newPageContent = (wiki: string, name: string, updater: string): Pag
 		number: 0,
 		isLocked: false
 	};
+};
+
+export const isLockedByOtherUser = (
+	pageContent?: PageContent,
+	uid?: string
+): boolean => {
+	if (!pageContent) return false;
+	return pageContent.isLocked && pageContent.ownedBy !== uid;
 };

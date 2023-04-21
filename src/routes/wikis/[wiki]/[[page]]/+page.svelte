@@ -11,7 +11,7 @@
 	import WikiBookService from '$lib/services/WikiBookService';
 	import { updatingPageContent } from '$lib/models/PageContent';
 
-	import { email } from '$lib/services/UserService';
+	import { email, uid } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
 	import { extractInternalPageLinks } from '$lib/utils/MarkdownParser';
 
@@ -37,16 +37,20 @@
 	let existingPageNames: string[] = [];
 	wikiPage.setPageContent(loadedPageContent);
 
-	onMount(() => {
-		updateExistingPageNames();
-		retrieveAttachmentFiles();
-	});
+	let shouldLockOnSave = loadedPageContent.isLocked ?? false;
 
 	const initialEditingPageContent = $wikiPage.revertingPageContent
 		? $wikiPage.revertingPageContent
 		: loadedPageContent;
 	let editingContent = initialEditingPageContent.content;
 
+	// lifecycle callbacks
+	onMount(() => {
+		updateExistingPageNames();
+		retrieveAttachmentFiles();
+	});
+
+	// content editing
 	async function saveContent() {
 		if (isNewPage) {
 			createContent();
@@ -56,7 +60,7 @@
 	}
 	async function createContent() {
 		const originalPageContent = initialEditingPageContent;
-		const updatingContent = updatingPageContent(originalPageContent, editingContent, email());
+		const updatingContent = updatingPageContent(originalPageContent, editingContent, email(), shouldLockOnSave);
 		const updatedContent = await pageService.postContent(updatingContent, jwt());
 		if (updatedContent.id) {
 			wikiPage.setPageContent(updatedContent);
@@ -70,7 +74,7 @@
 	async function updateContent() {
 		const originalPageContent = $wikiPage.pageContent;
 		if (originalPageContent && editingContent !== $wikiPage.pageContent?.content) {
-			const updatingContent = updatingPageContent(originalPageContent, editingContent, email());
+			const updatingContent = updatingPageContent(originalPageContent, editingContent, email(), shouldLockOnSave);
 			const updatedContent = await pageService.putContent(updatingContent, jwt());
 			if (updatedContent.id) {
 				wikiPage.setPageContent(updatedContent);
@@ -98,11 +102,14 @@
 		return internalPageLinks.filter((_, idx) => hasPages[idx]);
 	}
 
+	// retrieving
 	async function retrieveAttachmentFiles() {
 		attachmentFiles = await filesService.files();
 	}
 
-	$: updatedAt = $wikiPage.pageContent ? $wikiPage.pageContent.updatedAt : 0;
+	// computed properties
+	$: updatedAt = $wikiPage?.pageContent.updatedAt ?? 0;
+	$: canLockOnSave = $wikiPage?.pageContent.ownedBy === uid();
 </script>
 
 <div class="container mx-auto p-4 space-y-4">
@@ -130,7 +137,14 @@
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
 			<button class="btn variant-filled-warning" on:click={cancelContent}>Cancel</button>
-			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
+			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button
+			>
+			{#if canLockOnSave}
+				<label class="flex items-center space-x-2">
+					<input class="checkbox" type="checkbox" bind:checked={shouldLockOnSave} />
+					<p>Lock</p>
+				</label>
+			{/if}
 		{/if}
 	</section>
 	{#if updatedAt}
