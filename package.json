@@ -43,6 +43,7 @@
 		"@types/marked": "^4.0.8",
 		"fast-xml-parser": "^4.2.0",
 		"firebase": "^9.19.1",
+		"highlight.js": "^11.7.0",
 		"lodash": "^4.17.21",
 		"marked": "^4.2.12",
 		"simple-text-diff": "^1.7.0"

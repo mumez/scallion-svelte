@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import { LinkRenderer } from './LinkRenderer';
+import highlighter from '$lib/plugins/highlight';
 
 const isInternalPageLink = (href: string): boolean => {
 	return isInternalLink(href) && !isImageFileLink(href);
@@ -13,6 +14,12 @@ export const isImageFileLink = (href: string): boolean => {
 	const regex = /\.(jpg|jpeg|gif|png|svg)$/i;
 	return regex.test(href);
 };
+
+const renderCodeBlock = (code: string, language: string): string => {
+	const highlightedCode = highlighter.highlight(code, language);
+	return `<pre><code class="hljs ${language}">${highlightedCode}</code></pre>`;
+};
+
 
 const renderLink = (
 	href: string,
@@ -39,6 +46,9 @@ export const enrichedHtmlFrom = (
 	baseAttachmentUrl = ''
 ): string => {
 	const renderer = {
+		code(code: string, language: string) {
+			return renderCodeBlock(code, language);
+		},
 		link(href: string, title: string, text: string) {
 			return renderLink(href, text, wikiName, existingPageNames, baseAttachmentUrl, false);
 		},
