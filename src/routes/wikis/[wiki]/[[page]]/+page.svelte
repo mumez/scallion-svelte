@@ -13,7 +13,7 @@
 
 	import { email, uid } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
-	import { extractInternalPageLinks } from '$lib/utils/MarkdownParser';
+	import { extractInternalPageLinks } from '$lib/utils/MarkdownHandler';
 
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';

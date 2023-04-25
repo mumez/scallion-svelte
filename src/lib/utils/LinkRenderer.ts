@@ -1,4 +1,4 @@
-import { isInternalLink, isImageFileLink } from '$lib/utils/MarkdownParser';
+import { isInternalLink, isImageFileLink } from '$lib/utils/MarkdownHandler';
 
 export const externalCssClass = 'external';
 export const internalNewCssClass = 'internal-new';
