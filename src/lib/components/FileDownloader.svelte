@@ -5,7 +5,7 @@
 
 	export let fileName = '';
 	export let baseUrl = '';
-	
+
 	const fullUrl = concatPath(baseUrl, fileName);
 
 	async function download() {

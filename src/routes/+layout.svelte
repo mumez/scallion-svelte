@@ -36,6 +36,13 @@
 	$: linkToParent = isRoot ? '' : $parentLink;
 </script>
 
+<svelte:head>
+	{#if isRoot}
+		<title>Swikis</title>
+	{:else}
+		<title>{linkToParent} : {title}</title>
+	{/if}
+</svelte:head>
 <Modal />
 <AppShell>
 	<svelte:fragment slot="header">

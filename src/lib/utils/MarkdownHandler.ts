@@ -15,12 +15,6 @@ export const isImageFileLink = (href: string): boolean => {
 	return regex.test(href);
 };
 
-const renderCodeBlock = (code: string, language: string): string => {
-	const highlightedCode = highlighter.highlight(code, language);
-	return `<pre><code class="hljs ${language}">${highlightedCode}</code></pre>`;
-};
-
-
 const renderLink = (
 	href: string,
 	text: string,
@@ -33,6 +27,13 @@ const renderLink = (
 	return isAttachmentOnly
 		? linkRenderer.renderForAttachment(href, text)
 		: linkRenderer.render(href, text);
+};
+
+const renderCodeBlock = (code: string, language: string): string => {
+	const detectedLanguage = highlighter.getLanguage(language);
+	const validLanguage = detectedLanguage?.name ?? 'plaintext';
+	const highlightedCode = highlighter.highlightAuto(code, [validLanguage]).value;
+	return `<pre><code class="hljs ${validLanguage}">${highlightedCode}</code></pre>`;
 };
 
 export const htmlFrom = (markdown: string): string => {
