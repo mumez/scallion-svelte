@@ -1,4 +1,4 @@
-import { isInternalLink, isImageFileLink } from '$lib/utils/MarkdownParser';
+import { isInternalLink, isImageFileLink } from '$lib/utils/MarkdownHandler';
 
 export const externalCssClass = 'external';
 export const internalNewCssClass = 'internal-new';
@@ -32,9 +32,9 @@ export class LinkRenderer {
 		)}" href="${this.renderHrefLinkValue(href)}">${text}</a>`;
 	}
 	private renderAttachmentHref(href: string, text: string) {
-		return `<a title="${this.linkAttachmentHrefTitle(href)}" href="${this.renderAttachmentHrefLinkValue(
+		return `<a title="${this.linkAttachmentHrefTitle(
 			href
-		)}">${text}</a>`;
+		)}" href="${this.renderAttachmentHrefLinkValue(href)}">${text}</a>`;
 	}
 	private linkHrefClass(href: string): string {
 		if (!this.isInternal) return externalCssClass;

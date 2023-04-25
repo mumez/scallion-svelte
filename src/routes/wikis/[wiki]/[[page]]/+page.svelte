@@ -13,7 +13,7 @@
 
 	import { email, uid } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
-	import { extractInternalPageLinks } from '$lib/utils/MarkdownParser';
+	import { extractInternalPageLinks } from '$lib/utils/MarkdownHandler';
 
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
@@ -60,7 +60,12 @@
 	}
 	async function createContent() {
 		const originalPageContent = initialEditingPageContent;
-		const updatingContent = updatingPageContent(originalPageContent, editingContent, email(), shouldLockOnSave);
+		const updatingContent = updatingPageContent(
+			originalPageContent,
+			editingContent,
+			email(),
+			shouldLockOnSave
+		);
 		const updatedContent = await pageService.postContent(updatingContent, jwt());
 		if (updatedContent.id) {
 			wikiPage.setPageContent(updatedContent);
@@ -74,7 +79,12 @@
 	async function updateContent() {
 		const originalPageContent = $wikiPage.pageContent;
 		if (originalPageContent && editingContent !== $wikiPage.pageContent?.content) {
-			const updatingContent = updatingPageContent(originalPageContent, editingContent, email(), shouldLockOnSave);
+			const updatingContent = updatingPageContent(
+				originalPageContent,
+				editingContent,
+				email(),
+				shouldLockOnSave
+			);
 			const updatedContent = await pageService.putContent(updatingContent, jwt());
 			if (updatedContent.id) {
 				wikiPage.setPageContent(updatedContent);
@@ -112,7 +122,7 @@
 	$: canLockOnSave = $wikiPage?.pageContent.ownedBy === uid();
 </script>
 
-<div class="container mx-auto p-4 space-y-4">
+<div class="container mx-auto p-4 space-y-4 swiki-{wikiName.toLowerCase()}">
 	{#if isNewPage}
 		<div>Empty page. Let's start editing.</div>
 	{/if}
@@ -137,8 +147,7 @@
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
 			<button class="btn variant-filled-warning" on:click={cancelContent}>Cancel</button>
-			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button
-			>
+			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
 			{#if canLockOnSave}
 				<label class="flex items-center space-x-2">
 					<input class="checkbox" type="checkbox" bind:checked={shouldLockOnSave} />

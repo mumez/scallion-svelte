@@ -37,7 +37,7 @@ function createWikiPage() {
 				val.revertingPageContent = pageContent;
 				return val;
 			});
-		},
+		}
 	};
 }
 

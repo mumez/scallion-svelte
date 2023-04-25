@@ -7,10 +7,11 @@
 
 	let wikiName = $page.params['wiki'] ?? '';
 	let pageName = $page.params['page'] ?? 'index';
-	
+
 	$: routeFirstPart = ($page.route.id ?? '').split('/')[1];
 	$: isPageLockedByOtherUser = isLockedByOtherUser($wikiPage?.pageContent, uid());
-	$: isAttachmentsButtonDisabled = routeFirstPart == 'attachments' || !$isAuthenticated || isPageLockedByOtherUser;
+	$: isAttachmentsButtonDisabled =
+		routeFirstPart == 'attachments' || !$isAuthenticated || isPageLockedByOtherUser;
 	$: isVersionsButtonDisabled = routeFirstPart == 'versions';
 </script>
 

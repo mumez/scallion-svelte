@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { debounce } from '$lib/utils/CoreUtils';
-	import { enrichedHtmlFrom } from '$lib/utils/MarkdownParser';
+	import { enrichedHtmlFrom } from '$lib/utils/MarkdownHandler';
 
 	export let markdown = '';
 	export let wikiName = '';
