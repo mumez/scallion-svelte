@@ -19,14 +19,12 @@ class AuthService {
 	}
 
 	private onAutoLogin(user: User, token: string) {
-		console.log('user :>> ', user);
 		userService.setIdToken(token);
 		userService.setUser(user);
 		this.isAuthenticated = true;
 	}
 
 	private onLogout() {
-		console.log('logout :>> ');
 		userService.clear();
 		this.isAuthenticated = false;
 	}
