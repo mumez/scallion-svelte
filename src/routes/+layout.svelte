@@ -22,7 +22,6 @@
 	onMount(() => {
 		authService.tryAutoLogin((result) => {
 			$isAuthenticated = result;
-			console.log('auto logged in', $isAuthenticated, $page.params);
 			showLoginButton = !$isAuthenticated;
 		});
 	});
