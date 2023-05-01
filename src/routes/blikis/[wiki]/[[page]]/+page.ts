@@ -11,14 +11,22 @@ export async function load({ params, fetch }) {
 	return await loadUpdates(wikiBookName, fetch);
 }
 
-async function loadUpdates(wikiBookName: string, fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>) {
+async function loadUpdates(
+	wikiBookName: string,
+	fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>
+) {
 	const updatesService = new UpdatesService(wikiBookName);
 	updatesService.fetcher(fetch);
 	const pages = await updatesService.getUpdates();
+	console.log('pages :>> ', pages);
 	return { pages };
 }
 
-async function loadPage(wikiBookName: string, pageName: string, fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>) {
+async function loadPage(
+	wikiBookName: string,
+	pageName: string,
+	fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>
+) {
 	const pageService = new PageService(wikiBookName, pageName);
 	pageService.fetcher(fetch);
 	let page = await pageService.getContent();

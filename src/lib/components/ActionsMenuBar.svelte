@@ -13,10 +13,11 @@
 	$: isAttachmentsButtonDisabled =
 		routeFirstPart == 'attachments' || !$isAuthenticated || isPageLockedByOtherUser;
 	$: isVersionsButtonDisabled = routeFirstPart == 'versions';
+	$: isWikiPageEditableRoute = routeFirstPart == 'wikis' || routeFirstPart == 'blikis';
 </script>
 
 <div class="space-x-0">
-	{#if routeFirstPart == 'wikis'}
+	{#if isWikiPageEditableRoute}
 		<button
 			class="btn-icon"
 			disabled={$wikiPage.isEditing || !$isAuthenticated || isPageLockedByOtherUser}

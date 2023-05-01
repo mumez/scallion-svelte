@@ -16,7 +16,7 @@
 	import { extractInternalPageLinks } from '$lib/utils/MarkdownHandler';
 
 	import { onMount } from 'svelte';
-	
+
 	export let loadedPageContent: PageContent = {} as PageContent;
 	const wikiName = $page.params['wiki'] ?? '';
 	const pageName = $page.params['page'] ?? 'index';
@@ -120,7 +120,7 @@
 	$: canLockOnSave = $wikiPage?.pageContent?.ownedBy === uid();
 </script>
 
-<div class="swiki-{wikiName.toLowerCase()}">
+<div class="container mx-auto p-4 space-y-4 swiki-{wikiName.toLowerCase()}">
 	{#if isNewPage}
 		<div>Empty page. Let's start editing.</div>
 	{/if}

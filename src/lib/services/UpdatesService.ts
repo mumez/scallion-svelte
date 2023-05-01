@@ -25,7 +25,6 @@ class UpdatesService extends BaseApiService {
 	targetUrl() {
 		return `${this.serviceName}?wiki=${this.wikiName}`;
 	}
-
 }
 
 export default UpdatesService;
