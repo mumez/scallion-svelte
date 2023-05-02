@@ -60,30 +60,18 @@ export const enrichedHtmlFrom = (
 			return renderCodeBlock(code, language);
 		},
 		link(href: string, title: string, text: string) {
-			return renderLink(
-				href,
-				text,
-				wikiName,
-				existingPageNames,
-				{
-					wikiBasePart,
-					attachmentsBaseUrl,
-					isAttachmentOnly: false
-				}
-			);
+			return renderLink(href, text, wikiName, existingPageNames, {
+				wikiBasePart,
+				attachmentsBaseUrl,
+				isAttachmentOnly: false
+			});
 		},
 		image(href: string, title: string, text: string) {
-			return renderLink(
-				href,
-				text,
-				wikiName,
-				existingPageNames,
-				{
-					wikiBasePart,
-					attachmentsBaseUrl,
-					isAttachmentOnly: true
-				}
-			);
+			return renderLink(href, text, wikiName, existingPageNames, {
+				wikiBasePart,
+				attachmentsBaseUrl,
+				isAttachmentOnly: true
+			});
 		}
 	};
 	const options = { renderer };

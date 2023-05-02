@@ -17,7 +17,7 @@ async function loadUpdates(
 ) {
 	const updatesService = new UpdatesService(wikiBookName);
 	updatesService.fetcher(fetch);
-	const pages = await updatesService.getUpdates();
+	const pages = await updatesService.getUpdates(Date.now(), 10);
 	console.log('pages :>> ', pages);
 	return { pages };
 }
