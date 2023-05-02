@@ -24,4 +24,3 @@ Designed to work with [scallion-wiki-api](https://github.com/mumez/scallion-wiki
 https://scallion-svelte.vercel.app/
 
 Note: You can only edit the "demo" wiki, and the content of this wiki is reset daily.
-

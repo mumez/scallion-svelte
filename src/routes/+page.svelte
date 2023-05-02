@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { WikiBook } from '$lib/models/WikiBook.ts';
+	import type { WikiBook } from '$lib/models/WikiBook';
 	export let data: PageData;
 
 	function initialPageFor(wiki: WikiBook) {

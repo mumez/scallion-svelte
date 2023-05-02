@@ -1,7 +1,13 @@
-export function debounce<F extends (...args: Parameters<F>) => unknown>(func: F, waitFor: number) {
-	let timeoutId: ReturnType<typeof setTimeout> | undefined;
-	return function (this: unknown, ...args: Parameters<F>) {
-		clearTimeout(timeoutId);
-		timeoutId = setTimeout(() => func.apply(this, args), waitFor);
-	};
+export function getLatestUpdates<T>(items: T[], keyProp: keyof T, compareProp: keyof T): T[] {
+	return Object.values(
+		items.reduce((acc: Record<string, T>, item) => {
+			const key = String(item[keyProp]);
+			const compareValue = item[compareProp];
+			const current = acc[key];
+			if (!current || current[compareProp] < compareValue) {
+				acc[key] = item;
+			}
+			return acc;
+		}, {})
+	);
 }

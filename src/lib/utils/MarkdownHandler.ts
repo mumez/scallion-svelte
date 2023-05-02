@@ -20,11 +20,19 @@ const renderLink = (
 	text: string,
 	wikiName: string,
 	existingPageNames: string[],
-	baseAttachmentUrl = '',
-	isAttachmentOnly = false
+	context = {
+		wikiBasePart: 'wikis',
+		attachmentsBaseUrl: '',
+		isAttachmentOnly: false
+	}
 ): string => {
-	const linkRenderer = new LinkRenderer(wikiName, existingPageNames, baseAttachmentUrl);
-	return isAttachmentOnly
+	const linkRenderer = new LinkRenderer(
+		wikiName,
+		existingPageNames,
+		context.wikiBasePart,
+		context.attachmentsBaseUrl
+	);
+	return context.isAttachmentOnly
 		? linkRenderer.renderForAttachment(href, text)
 		: linkRenderer.render(href, text);
 };
@@ -44,17 +52,26 @@ export const enrichedHtmlFrom = (
 	markdown: string,
 	wikiName: string,
 	existingPageNames: string[] = [],
-	baseAttachmentUrl = ''
+	wikiBasePart = '',
+	attachmentsBaseUrl = ''
 ): string => {
 	const renderer = {
 		code(code: string, language: string) {
 			return renderCodeBlock(code, language);
 		},
 		link(href: string, title: string, text: string) {
-			return renderLink(href, text, wikiName, existingPageNames, baseAttachmentUrl, false);
+			return renderLink(href, text, wikiName, existingPageNames, {
+				wikiBasePart,
+				attachmentsBaseUrl,
+				isAttachmentOnly: false
+			});
 		},
 		image(href: string, title: string, text: string) {
-			return renderLink(href, text, wikiName, existingPageNames, baseAttachmentUrl, true);
+			return renderLink(href, text, wikiName, existingPageNames, {
+				wikiBasePart,
+				attachmentsBaseUrl,
+				isAttachmentOnly: true
+			});
 		}
 	};
 	const options = { renderer };
