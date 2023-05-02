@@ -24,7 +24,9 @@
 			on:click={wikiPage.startEditing}><i class="fa-solid fa-pen" /></button
 		>
 	{:else}
-		<a href="/wikis/{wikiName}/{pageName}" class="btn-icon"><i class="fa-solid fa-pen" /></a>
+		<a href="/{routeFirstPart}/{wikiName}/{pageName}" class="btn-icon"
+			><i class="fa-solid fa-pen" /></a
+		>
 	{/if}
 	<a
 		class:disabled={isAttachmentsButtonDisabled}

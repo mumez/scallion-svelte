@@ -24,7 +24,8 @@
 	const pageService = new PageService(wikiName, pageName);
 	const filesService = new FilesService(wikiName, pageName);
 	const wikiBookService = new WikiBookService(wikiName);
-	const baseAttachmentUrl = filesService.downloadBaseUrl;
+	const wikiBasePart = ($page.route.id ?? '').split('/')[1];
+	const attachmentsBaseUrl = filesService.downloadBaseUrl;
 
 	let attachmentFiles: WebDavEntry[] = [];
 
@@ -131,15 +132,22 @@
 				markdown={editingContent}
 				{wikiName}
 				{existingPageNames}
-				{baseAttachmentUrl}
+				{wikiBasePart}
+				{attachmentsBaseUrl}
 				isEditable={true}
 			/>
 		</div>
 	{:else}
-		<MarkdownViewer markdown={editingContent} {wikiName} {existingPageNames} {baseAttachmentUrl} />
+		<MarkdownViewer
+			markdown={editingContent}
+			{wikiName}
+			{existingPageNames}
+			{wikiBasePart}
+			{attachmentsBaseUrl}
+		/>
 	{/if}
 	{#if $wikiPage.isEditing}
-		<AttachmentsPanel baseUrl={baseAttachmentUrl} files={attachmentFiles} />
+		<AttachmentsPanel baseUrl={attachmentsBaseUrl} files={attachmentFiles} />
 	{/if}
 	<hr />
 	<section class="flex space-x-2">
