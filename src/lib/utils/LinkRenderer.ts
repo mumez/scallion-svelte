@@ -45,7 +45,8 @@ export class LinkRenderer {
 	}
 	private linkHrefClass(href: string): string {
 		if (!this.isInternal) return externalCssClass;
-		if (this.existingPageNames.length == 0) return internalNewCssClass;
+		if (this.existingPageNames.length == 0)
+			return this.shouldHighlightInternalNewLink() ? internalNewCssClass : internalExistingCssClass;
 		if (this.existingPageNames.includes(href)) return internalExistingCssClass;
 		return internalNewCssClass;
 	}
@@ -75,5 +76,9 @@ export class LinkRenderer {
 	private adjustAttachmentPath(path: string) {
 		if (isInternalLink(path)) return `${this.attachmentsBaseUrl}/${path}`;
 		return path;
+	}
+
+	private shouldHighlightInternalNewLink() {
+		return this.wikiBasePart == 'wikis';
 	}
 }
