@@ -1,5 +1,6 @@
+import { getLatestUpdates } from '$lib/utils/CoreUtils.js';
 import PageService from '$lib/services/PageService';
-import { newPageContent } from '$lib/models/PageContent';
+import { newPageContent, type PageContent } from '$lib/models/PageContent';
 import UpdatesService from '$lib/services/UpdatesService';
 
 export async function load({ params, fetch }) {
@@ -17,9 +18,9 @@ async function loadUpdates(
 ) {
 	const updatesService = new UpdatesService(wikiBookName);
 	updatesService.fetcher(fetch);
-	const pages = await updatesService.getUpdates(Date.now(), 10);
-	console.log('pages :>> ', pages);
-	return { pages };
+	const pages = await updatesService.getUpdates(Date.now(), 15);
+	const latestUpdates = getLatestUpdates<PageContent>(pages, 'name', 'updatedAt');
+	return { pages: latestUpdates };
 }
 
 async function loadPage(
