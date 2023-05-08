@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import WikiPagePanel from '$lib/components/WikiPagePanel.svelte';
-	import WikiPageUpdatesPanel from '$lib/components/WikiPageUpdatesPanel.svelte';
+	import WikiRecentUpdatesPanel from '$lib/components/WikiRecentUpdatesPanel.svelte';
 	import type { PageContent } from '$lib/models/PageContent';
 
 	export let data: PageData;
@@ -14,5 +14,5 @@
 {#if pageName}
 	<WikiPagePanel {loadedPageContent} />
 {:else}
-	<WikiPageUpdatesPanel {pages} />
+	<WikiRecentUpdatesPanel {pages} />
 {/if}

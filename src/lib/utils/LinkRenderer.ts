@@ -70,7 +70,7 @@ export class LinkRenderer {
 	}
 	private renderImage(path: string, text: string) {
 		const srcPath = this.adjustAttachmentPath(path);
-		return `<img class="w-full object-contain max-w-2xl" alt="${text}" title="${text}" src="${srcPath}"></img>`;
+		return `<img class="w-full object-contain max-w-2xl" alt="${text}" title="${text}" src="${srcPath}" loading="lazy">`;
 	}
 
 	private adjustAttachmentPath(path: string) {
