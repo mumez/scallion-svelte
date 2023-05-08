@@ -39,9 +39,6 @@
 			allLoaded = true;
 		}
 		pages = pages.concat(morePages);
-		console.log('pages :>> ', pages);
-		console.log('morePages :>> ', morePages);
-		console.log('groupedPages :>> ', groupedPages);
 	}
 
 	function groupedPagesFrom(pages: PageContent[]) {
