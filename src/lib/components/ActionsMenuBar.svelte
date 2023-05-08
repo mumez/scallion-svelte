@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import { uid } from '$lib/services/UserService';
 	import isAuthenticated from '$lib/stores/isAuthenticated';
 	import wikiPage from '$lib/stores/wikiPage';
@@ -7,6 +8,14 @@
 
 	let wikiName = $page.params['wiki'] ?? '';
 	let pageName = $page.params['page'] ?? 'index';
+
+	function startEditing() {
+		wikiPage.startEditing();
+		if(routeFirstPart == 'blikis' && $wikiPage.pageContent == null){
+			const newPageName = new Date().toLocaleDateString();
+			goto(`/blikis/${wikiName}/${encodeURIComponent(newPageName)}`);
+		}
+	}
 
 	$: routeFirstPart = ($page.route.id ?? '').split('/')[1];
 	$: isPageLockedByOtherUser = isLockedByOtherUser($wikiPage?.pageContent, uid());
@@ -21,7 +30,7 @@
 		<button
 			class="btn-icon"
 			disabled={$wikiPage.isEditing || !$isAuthenticated || isPageLockedByOtherUser}
-			on:click={wikiPage.startEditing}><i class="fa-solid fa-pen" /></button
+			on:click={startEditing}><i class="fa-solid fa-pen" /></button
 		>
 	{:else}
 		<a href="/{routeFirstPart}/{wikiName}/{pageName}" class="btn-icon"
