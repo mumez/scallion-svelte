@@ -44,9 +44,11 @@
 		console.log('groupedPages :>> ', groupedPages);
 	}
 
-	function groupedPagesFrom(pages: PageContent[]){
+	function groupedPagesFrom(pages: PageContent[]) {
 		let groups = groupBy(pages, (page) => dateRoundedValueFor(page.updatedAt));
-		groups = mapValues(groups, (group) => getLatestUpdates<PageContent>(group, 'name', 'updatedAt'));
+		groups = mapValues(groups, (group) =>
+			getLatestUpdates<PageContent>(group, 'name', 'updatedAt')
+		);
 		return Object.entries(groups).sort((a, b) => parseInt(b[0]) - parseInt(a[0]));
 	}
 
@@ -55,7 +57,7 @@
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-{wikiName.toLowerCase()}">
-	{#each groupedPages as grouped }
+	{#each groupedPages as grouped}
 		<h2 class="text-4xl">{localeDateStringFor(parseInt(grouped[0]))}</h2>
 		{#each grouped[1] as page}
 			<div class="flex flex-col sm:flex-row justify-between">
