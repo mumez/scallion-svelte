@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { uid } from '$lib/services/UserService';
 	import isAuthenticated from '$lib/stores/isAuthenticated';
+	import wikisBaseDir from '$lib/stores/wikisBaseDir';
 	import wikiPage from '$lib/stores/wikiPage';
 	import { isLockedByOtherUser } from '$lib/models/PageContent';
 
@@ -24,6 +25,9 @@
 		routeFirstPart == 'attachments' || !$isAuthenticated || isPageLockedByOtherUser;
 	$: isVersionsButtonDisabled = routeFirstPart == 'versions';
 	$: isWikiPageEditableRoute = routeFirstPart == 'wikis' || routeFirstPart == 'blikis';
+	$: if (isWikiPageEditableRoute && routeFirstPart) {
+		$wikisBaseDir = routeFirstPart;	
+	}
 </script>
 
 <div class="space-x-0">
@@ -34,7 +38,7 @@
 			on:click={startEditing}><i class="fa-solid fa-pen" /></button
 		>
 	{:else}
-		<a href="/{routeFirstPart}/{wikiName}/{pageNameEncoded}" class="btn-icon"
+		<a href="/{$wikisBaseDir || routeFirstPart}/{wikiName}/{pageNameEncoded}" class="btn-icon"
 			><i class="fa-solid fa-pen" /></a
 		>
 	{/if}

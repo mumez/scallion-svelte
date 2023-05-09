@@ -29,13 +29,13 @@
 
 	let attachmentFiles: WebDavEntry[] = [];
 
-	$parentLink = wikiName;
-	$headerTitle = pageName;
-
 	let isNewPage = !loadedPageContent.id;
 	let hasContentTitle = !!loadedPageContent.title;
 	let existingPageNames: string[] = [];
+
 	wikiPage.setPageContent(loadedPageContent);
+	$parentLink = wikiName;
+	$headerTitle = $wikiPage.pageContent?.title ?? pageName;
 
 	let shouldLockOnSave = loadedPageContent.isLocked ?? false;
 
@@ -141,7 +141,9 @@
 
 <div class="container mx-auto p-4 space-y-4 swiki-{wikiName.toLowerCase()}">
 	{#if hasContentTitle}
-		<input class="input" bind:value={contentTitle} />
+		{#if $wikiPage.isEditing}
+			<input class="input" bind:value={contentTitle} />
+		{/if}
 	{/if}
 	{#if isNewPage}
 		<div>Empty page. Let's start editing.</div>
