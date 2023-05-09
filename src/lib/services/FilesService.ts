@@ -57,7 +57,7 @@ class FilesService extends BaseApiService {
 	}
 
 	public targetUrl() {
-		return `${this.wikiName}/${this.pageName}`;
+		return `${this.wikiName}/${encodeURIComponent(this.pageName)}`;
 	}
 }
 

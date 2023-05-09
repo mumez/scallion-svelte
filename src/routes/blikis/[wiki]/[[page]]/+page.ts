@@ -33,6 +33,9 @@ async function loadPage(
 	let page = await pageService.getContent();
 	if (!page.id) {
 		page = newPageContent(wikiBookName, pageName, '');
+		if (!page.title) {
+			page.title = page.name;
+		}
 	}
 	return { page };
 }

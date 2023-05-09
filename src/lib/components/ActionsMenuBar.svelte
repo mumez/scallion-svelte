@@ -7,16 +7,17 @@
 	import { isLockedByOtherUser } from '$lib/models/PageContent';
 
 	let wikiName = $page.params['wiki'] ?? '';
-	let pageName = $page.params['page'] ?? 'index';
-
+	
 	function startEditing() {
 		wikiPage.startEditing();
-		if(routeFirstPart == 'blikis' && $wikiPage.pageContent == null){
-			const newPageName = new Date().toLocaleDateString();
+		if (routeFirstPart == 'blikis' && $wikiPage.pageContent == null) {
+			const newPageName = new Date().toLocaleString();
 			goto(`/blikis/${wikiName}/${encodeURIComponent(newPageName)}`);
 		}
 	}
 
+	$: pageName = $page.params['page'] ?? 'index';
+	$: pageNameEncoded = encodeURIComponent(pageName);
 	$: routeFirstPart = ($page.route.id ?? '').split('/')[1];
 	$: isPageLockedByOtherUser = isLockedByOtherUser($wikiPage?.pageContent, uid());
 	$: isAttachmentsButtonDisabled =
@@ -33,18 +34,18 @@
 			on:click={startEditing}><i class="fa-solid fa-pen" /></button
 		>
 	{:else}
-		<a href="/{routeFirstPart}/{wikiName}/{pageName}" class="btn-icon"
+		<a href="/{routeFirstPart}/{wikiName}/{pageNameEncoded}" class="btn-icon"
 			><i class="fa-solid fa-pen" /></a
 		>
 	{/if}
 	<a
 		class:disabled={isAttachmentsButtonDisabled}
-		href="/attachments/{wikiName}/{pageName}"
+		href="/attachments/{wikiName}/{pageNameEncoded}"
 		class="btn-icon"><i class="fa-solid fa-arrow-up-from-bracket" /></a
 	>
 	<a
 		class:disabled={isVersionsButtonDisabled}
-		href="/versions/{wikiName}/{pageName}"
+		href="/versions/{wikiName}/{pageNameEncoded}"
 		class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a
 	>
 	<!-- <button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical" /></button> -->

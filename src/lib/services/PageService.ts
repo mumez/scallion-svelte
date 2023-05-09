@@ -44,7 +44,7 @@ class PageService extends BaseApiService {
 
 	// accessing
 	targetUrl() {
-		return `${this.serviceName}?wiki=${this.wikiName}&name=${this.name}`;
+		return `${this.serviceName}?wiki=${this.wikiName}&name=${encodeURIComponent(this.name)}`;
 	}
 }
 

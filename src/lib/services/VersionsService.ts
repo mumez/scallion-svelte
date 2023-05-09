@@ -29,7 +29,7 @@ class VersionsService extends BaseApiService {
 
 	// accessing
 	targetUrl(serviceName: string) {
-		return `${serviceName}?wiki=${this.wikiName}&page=${this.pageName}`;
+		return `${serviceName}?wiki=${this.wikiName}&page=${encodeURIComponent(this.pageName)}`;
 	}
 }
 

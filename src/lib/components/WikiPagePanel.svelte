@@ -9,7 +9,7 @@
 	import FilesService from '$lib/services/FilesService';
 	import type WebDavEntry from '$lib/utils/WebDavEntry';
 	import WikiBookService from '$lib/services/WikiBookService';
-	import { updatingPageContent } from '$lib/models/PageContent';
+	import { updatingPageContent, type PageContent } from '$lib/models/PageContent';
 
 	import { email, uid } from '$lib/services/UserService';
 	import { jwt } from '$lib/utils/ClientStorage';
@@ -33,15 +33,17 @@
 	$headerTitle = pageName;
 
 	let isNewPage = !loadedPageContent.id;
+	let hasContentTitle = !!loadedPageContent.title;
 	let existingPageNames: string[] = [];
 	wikiPage.setPageContent(loadedPageContent);
 
 	let shouldLockOnSave = loadedPageContent.isLocked ?? false;
 
-	const initialEditingPageContent = $wikiPage.revertingPageContent
+	const initialEditingPageContent: PageContent = $wikiPage.revertingPageContent
 		? $wikiPage.revertingPageContent
 		: loadedPageContent;
-	let editingContent = initialEditingPageContent.content;
+	let contentTitle = initialEditingPageContent.title;
+	let textContent = initialEditingPageContent.content;
 
 	// lifecycle callbacks
 	onMount(() => {
@@ -58,44 +60,26 @@
 		}
 	}
 	async function createContent() {
-		const originalPageContent = initialEditingPageContent;
-		const updatingContent = updatingPageContent(
-			originalPageContent,
-			editingContent,
-			email(),
-			shouldLockOnSave
-		);
-		const updatedContent = await pageService.postContent(updatingContent, jwt());
+		const updatedContent = await postContent();
 		if (updatedContent.id) {
-			wikiPage.setPageContent(updatedContent);
-			editingContent = updatedContent.content;
-			updateExistingPageNames();
-			filesService.ensureDirectory(jwt());
+			applyUpdatedContent(updatedContent);
 			isNewPage = false;
 		}
 		wikiPage.stopEditing();
 	}
 	async function updateContent() {
 		const originalPageContent = $wikiPage.pageContent;
-		if (originalPageContent && editingContent !== $wikiPage.pageContent?.content) {
-			const updatingContent = updatingPageContent(
-				originalPageContent,
-				editingContent,
-				email(),
-				shouldLockOnSave
-			);
-			const updatedContent = await pageService.putContent(updatingContent, jwt());
+		if (originalPageContent && contentHasChanges()) {
+			const updatedContent = await putContent(originalPageContent);
 			if (updatedContent.id) {
-				wikiPage.setPageContent(updatedContent);
-				editingContent = updatedContent.content;
-				updateExistingPageNames();
+				applyUpdatedContent(updatedContent);
 			}
 		}
 		wikiPage.stopEditing();
 	}
 
 	function cancelContent() {
-		editingContent = $wikiPage.pageContent?.content ?? '';
+		textContent = $wikiPage.pageContent?.content ?? '';
 		wikiPage.stopEditing();
 	}
 
@@ -116,20 +100,58 @@
 		attachmentFiles = await filesService.files();
 	}
 
+	// private
+	async function postContent() {
+		const updatingContent = prepareUpdatingContent(initialEditingPageContent);
+		return await pageService.postContent(updatingContent, jwt());
+	}async function putContent(basePageContent: PageContent) {
+		const updatingContent = prepareUpdatingContent(basePageContent);
+		return await pageService.putContent(updatingContent, jwt());
+	}
+	function prepareUpdatingContent(basePageContent: PageContent){
+		const updatingContent = updatingPageContent(
+			basePageContent,
+			textContent,
+			email(),
+			shouldLockOnSave
+		);
+		if (hasContentTitle) {
+			updatingContent.title = contentTitle;
+		}
+		return updatingContent;
+	}
+	function contentHasChanges() {
+		return (
+			textContent !== $wikiPage.pageContent?.content ||
+			contentTitle !== $wikiPage.pageContent?.title
+		);
+	}
+	function applyUpdatedContent(updatedContent: PageContent) {
+		wikiPage.setPageContent(updatedContent);
+		textContent = updatedContent.content;
+		contentTitle = updatedContent.title;
+		updateExistingPageNames();
+		filesService.ensureDirectory(jwt());
+	}
+
 	// computed properties
 	$: updatedAt = $wikiPage?.pageContent?.updatedAt ?? 0;
 	$: canLockOnSave = $wikiPage?.pageContent?.ownedBy === uid();
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-{wikiName.toLowerCase()}">
+	{#if hasContentTitle}
+		<input class="input" bind:value={contentTitle} />
+	{/if}
 	{#if isNewPage}
 		<div>Empty page. Let's start editing.</div>
 	{/if}
+
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
-			<textarea class="textarea" rows="10" bind:value={editingContent} />
+			<textarea class="textarea" rows="10" bind:value={textContent} />
 			<MarkdownViewer
-				markdown={editingContent}
+				markdown={textContent}
 				{wikiName}
 				{existingPageNames}
 				{wikiBasePart}
@@ -139,7 +161,7 @@
 		</div>
 	{:else}
 		<MarkdownViewer
-			markdown={editingContent}
+			markdown={textContent}
 			{wikiName}
 			{existingPageNames}
 			{wikiBasePart}
