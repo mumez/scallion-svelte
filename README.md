@@ -12,11 +12,12 @@ Designed to work with [scallion-wiki-api](https://github.com/mumez/scallion-wiki
 - Supports versioning of pages, enabling users to view and restore previous page versions as needed.
 - Permits users to attach files to pages, offering a convenient method for sharing documents and other resources.
 - Accommodates multiple wikis.
+- Supports blog-style pages (bliki)
 
 ## To Do
 
+- [x] Implement a blog-style page view, commonly referred to as a "bliki."
 - Add localizable labels and messages.
-- Implement a blog-style page view, commonly referred to as a "bliki."
 - Develop a search function that enables users to locate wiki pages based on specific keywords.
 
 ## Demo

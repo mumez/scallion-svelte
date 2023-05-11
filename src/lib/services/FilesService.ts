@@ -36,7 +36,7 @@ class FilesService extends BaseApiService {
 	public async createSubDirectory(directoryName: string, jwt = ''): Promise<boolean> {
 		const acc = this.webDavAccessor;
 		acc.setJwt(jwt);
-		return acc.mkcol(`${this.targetUrl()}/${directoryName}`);
+		return acc.mkcol(`${this.targetUrl()}/${safeDirectoryPathComponentFrom(directoryName)}`);
 	}
 
 	public async ensureDirectory(jwt = ''): Promise<boolean> {
@@ -57,8 +57,24 @@ class FilesService extends BaseApiService {
 	}
 
 	public targetUrl() {
-		return `${this.wikiName}/${this.pageName}`;
+		return `${this.wikiName}/${safeDirectoryPathComponentFrom(this.pageName)}`;
 	}
+}
+
+export function safeDirectoryPathComponentFrom(input: string) {
+	const forbiddenChars = ['<', '>', ':', '"', '/', '\\', '|', '?', '*', '\0'];
+	const encoded = input
+		.split('')
+		.map((char) => {
+			return forbiddenChars.includes(char) ? encodeURIComponent(encodeURIComponent(char)) : char;
+		})
+		.join('');
+	return encoded;
+}
+
+export function decodedDirectoryPathComponentFrom(encoded: string) {
+	const decoded = decodeURIComponent(decodeURIComponent(encoded));
+	return decoded;
 }
 
 export default FilesService;

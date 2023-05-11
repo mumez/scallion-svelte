@@ -21,7 +21,7 @@ const renderLink = (
 	wikiName: string,
 	existingPageNames: string[],
 	context = {
-		wikiBasePart: 'wikis',
+		wikisBaseDirectory: 'wikis',
 		attachmentsBaseUrl: '',
 		isAttachmentOnly: false
 	}
@@ -29,7 +29,7 @@ const renderLink = (
 	const linkRenderer = new LinkRenderer(
 		wikiName,
 		existingPageNames,
-		context.wikiBasePart,
+		context.wikisBaseDirectory,
 		context.attachmentsBaseUrl
 	);
 	return context.isAttachmentOnly
@@ -52,7 +52,7 @@ export const enrichedHtmlFrom = (
 	markdown: string,
 	wikiName: string,
 	existingPageNames: string[] = [],
-	wikiBasePart = '',
+	wikisBaseDirectory = '',
 	attachmentsBaseUrl = ''
 ): string => {
 	const renderer = {
@@ -61,14 +61,14 @@ export const enrichedHtmlFrom = (
 		},
 		link(href: string, title: string, text: string) {
 			return renderLink(href, text, wikiName, existingPageNames, {
-				wikiBasePart,
+				wikisBaseDirectory,
 				attachmentsBaseUrl,
 				isAttachmentOnly: false
 			});
 		},
 		image(href: string, title: string, text: string) {
 			return renderLink(href, text, wikiName, existingPageNames, {
-				wikiBasePart,
+				wikisBaseDirectory,
 				attachmentsBaseUrl,
 				isAttachmentOnly: true
 			});

@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { groupBy, mapValues } from 'lodash-es';
 	import { page } from '$app/stores';
+	import parentLink from '$lib/stores/parentLink';
+	import headerTitle from '$lib/stores/headerTitle';
+	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
 	import { getLatestUpdates } from '$lib/utils/CoreUtils.js';
 	import MarkdownViewer from '$lib/components/MarkdownViewer.svelte';
 	import FilesService from '$lib/services/FilesService';
@@ -10,7 +13,8 @@
 	export let pages: PageContent[];
 
 	const wikiName = $page.params['wiki'] ?? '';
-	const wikiBasePart = ($page.route.id ?? '').split('/')[1];
+	$parentLink = wikiName;
+	$headerTitle = 'Bliki';
 	let allLoaded = false;
 
 	const updatesService = new UpdatesService(wikiName);
@@ -49,6 +53,10 @@
 		return Object.entries(groups).sort((a, b) => parseInt(b[0]) - parseInt(a[0]));
 	}
 
+	function urlForPage(page: PageContent) {
+		return `/${$wikisBaseDirectory}/${wikiName}/${encodeURIComponent(page.name)}`;
+	}
+
 	$: oldestUpdatedAt = pages[pages.length - 1]?.updatedAt ?? 0;
 	$: groupedPages = groupedPagesFrom(pages);
 </script>
@@ -58,13 +66,15 @@
 		<h2 class="text-4xl">{localeDateStringFor(parseInt(grouped[0]))}</h2>
 		{#each grouped[1] as page}
 			<div class="flex flex-col sm:flex-row justify-between">
-				<div class="text-3xl sm:text-left mb-4 sm:mb-0">{page.name}</div>
+				<div class="text-3xl sm:text-left mb-4 sm:mb-0">
+					<a href={urlForPage(page)}>{page.title ?? page.name}</a>
+				</div>
 				<div class="sm:text-right">{page.updatedBy}</div>
 			</div>
 			<MarkdownViewer
 				markdown={page.content}
 				{wikiName}
-				{wikiBasePart}
+				wikisBaseDirectory={$wikisBaseDirectory}
 				attachmentsBaseUrl={attachmentsBaseUrlFor(page.name)}
 			/>
 			<div class="text-right">{localeDateTimeStringFor(page.updatedAt)}</div>

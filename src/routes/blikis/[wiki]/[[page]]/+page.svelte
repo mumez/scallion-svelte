@@ -6,9 +6,10 @@
 	import type { PageContent } from '$lib/models/PageContent';
 
 	export let data: PageData;
-	const pageName = $page.params['page'] ?? '';
-	const pages = data.pages ?? [];
-	const loadedPageContent = data.page ?? ({} as PageContent);
+
+	$: pageName = $page.params['page'] ?? '';
+	$: loadedPageContent = data.page ?? ({} as PageContent);
+	$: pages = data.pages ?? [];
 </script>
 
 {#if pageName}

@@ -3,6 +3,7 @@ export interface PageContent {
 	bookId: string;
 	wiki: string;
 	name: string;
+	title?: string;
 	ownedBy?: string;
 	updatedAt: number;
 	updatedBy: string;

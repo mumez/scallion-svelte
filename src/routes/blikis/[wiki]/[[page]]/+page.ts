@@ -18,8 +18,21 @@ async function loadUpdates(
 ) {
 	const updatesService = new UpdatesService(wikiBookName);
 	updatesService.fetcher(fetch);
-	const pages = await updatesService.getUpdates(Date.now(), 15);
-	const latestUpdates = getLatestUpdates<PageContent>(pages, 'name', 'updatedAt');
+	const from = Date.now() + (60 * 1000);
+	const maxUpdates = 10;
+	const chunkSize = 15;
+
+	let pages = await updatesService.getUpdates(from, chunkSize);
+	let latestUpdates = getLatestUpdates<PageContent>(pages, 'name', 'updatedAt');
+
+	while (pages.length > 0 && latestUpdates.length < maxUpdates) {
+		const lastItem = pages[pages.length - 1];
+		const lastUpdatedAt = lastItem?.updatedAt;
+		pages = await updatesService.getUpdates(lastUpdatedAt, chunkSize);
+		const moreLatestUpdates = getLatestUpdates<PageContent>(pages, 'name', 'updatedAt');
+		latestUpdates = latestUpdates.concat(moreLatestUpdates);
+	}
+
 	return { pages: latestUpdates };
 }
 
@@ -33,6 +46,9 @@ async function loadPage(
 	let page = await pageService.getContent();
 	if (!page.id) {
 		page = newPageContent(wikiBookName, pageName, '');
+		if (!page.title) {
+			page.title = page.name;
+		}
 	}
 	return { page };
 }

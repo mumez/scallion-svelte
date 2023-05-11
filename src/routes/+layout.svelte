@@ -15,6 +15,7 @@
 	import isAuthenticated from '$lib/stores/isAuthenticated';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
+	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
 
 	let showLoginButton = false;
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
@@ -47,7 +48,7 @@
 	<svelte:fragment slot="header">
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<WikiBookIndexLink wikiBookName={linkToParent} />
+				<WikiBookIndexLink wikiBookName={linkToParent} wikisBaseDirectory={$wikisBaseDirectory}/>
 				<h1>{title}</h1></svelte:fragment
 			>
 			<svelte:fragment slot="trail">
