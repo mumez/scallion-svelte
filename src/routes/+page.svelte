@@ -3,7 +3,7 @@
 	import type { WikiBook } from '$lib/models/WikiBook';
 	export let data: PageData;
 
-	function initialPageFor(wiki: WikiBook) {
+	function initialPageForWiki(wiki: WikiBook) {
 		return wiki.initialPageName ?? 'index';
 	}
 
@@ -14,8 +14,9 @@
 	<ul class="list-disc">
 		{#each wikiBooks as wiki}
 			<li class="text-xl">
-				<a href="wikis/{wiki.name}/{initialPageFor(wiki)}" title={wiki.title}>{wiki.title}</a><span
-					class="px-1">({wiki.count})</span
+				<a href="wikis/{wiki.name}/{initialPageForWiki(wiki)}" title={wiki.title}>{wiki.title}</a>
+				<a href="blikis/{wiki.name}" title={wiki.title}>bliki</a><span class="px-1"
+					>({wiki.count})</span
 				>
 			</li>
 		{/each}

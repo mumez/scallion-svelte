@@ -63,9 +63,12 @@ class FilesService extends BaseApiService {
 
 export function safeDirectoryPathComponentFrom(input: string) {
 	const forbiddenChars = ['<', '>', ':', '"', '/', '\\', '|', '?', '*', '\0'];
-	const encoded = input.split('').map(char => {
-		return forbiddenChars.includes(char) ? encodeURIComponent(encodeURIComponent(char)) : char;
-	}).join('');
+	const encoded = input
+		.split('')
+		.map((char) => {
+			return forbiddenChars.includes(char) ? encodeURIComponent(encodeURIComponent(char)) : char;
+		})
+		.join('');
 	return encoded;
 }
 

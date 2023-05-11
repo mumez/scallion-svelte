@@ -7,13 +7,16 @@
 	import wikiPage from '$lib/stores/wikiPage';
 	import { isLockedByOtherUser } from '$lib/models/PageContent';
 
+	const _wikisBaseDir = 'wikis';
+	const _blikisBaseDir = 'blikis';
+
 	let wikiName = $page.params['wiki'] ?? '';
-	
+
 	function startEditing() {
 		wikiPage.startEditing();
-		if (routeFirstPart == 'blikis' && $wikiPage.pageContent == null) {
+		if (routeFirstPart == _blikisBaseDir && $wikiPage.pageContent == null) {
 			const newPageName = new Date().toLocaleString();
-			goto(`/blikis/${wikiName}/${encodeURIComponent(newPageName)}`);
+			goto(`/${_blikisBaseDir}/${wikiName}/${encodeURIComponent(newPageName)}`);
 		}
 	}
 
@@ -24,9 +27,13 @@
 	$: isAttachmentsButtonDisabled =
 		routeFirstPart == 'attachments' || !$isAuthenticated || isPageLockedByOtherUser;
 	$: isVersionsButtonDisabled = routeFirstPart == 'versions';
-	$: isWikiPageEditableRoute = routeFirstPart == 'wikis' || routeFirstPart == 'blikis';
+	$: isWikiPageEditableRoute = isWikisRoute || isBlikisRoute;
+	$: isWikisRoute = routeFirstPart == _wikisBaseDir;
+	$: isBlikisRoute = routeFirstPart == _blikisBaseDir;
+	$: hasNoPageParams = $page.params['page'] == undefined; 
+	$: isBlikisTopPage = hasNoPageParams && isBlikisRoute;
 	$: if (isWikiPageEditableRoute && routeFirstPart) {
-		$wikisBaseDir = routeFirstPart;	
+		$wikisBaseDir = routeFirstPart;
 	}
 </script>
 
@@ -42,16 +49,18 @@
 			><i class="fa-solid fa-pen" /></a
 		>
 	{/if}
-	<a
-		class:disabled={isAttachmentsButtonDisabled}
-		href="/attachments/{wikiName}/{pageNameEncoded}"
-		class="btn-icon"><i class="fa-solid fa-arrow-up-from-bracket" /></a
-	>
-	<a
-		class:disabled={isVersionsButtonDisabled}
-		href="/versions/{wikiName}/{pageNameEncoded}"
-		class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a
-	>
+	{#if !isBlikisTopPage}
+		<a
+			class:disabled={isAttachmentsButtonDisabled}
+			href="/attachments/{wikiName}/{pageNameEncoded}"
+			class="btn-icon"><i class="fa-solid fa-arrow-up-from-bracket" /></a
+		>
+		<a
+			class:disabled={isVersionsButtonDisabled}
+			href="/versions/{wikiName}/{pageNameEncoded}"
+			class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a
+		>
+	{/if}
 	<!-- <button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical" /></button> -->
 </div>
 

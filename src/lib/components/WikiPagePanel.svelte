@@ -104,11 +104,12 @@
 	async function postContent() {
 		const updatingContent = prepareUpdatingContent(initialEditingPageContent);
 		return await pageService.postContent(updatingContent, jwt());
-	}async function putContent(basePageContent: PageContent) {
+	}
+	async function putContent(basePageContent: PageContent) {
 		const updatingContent = prepareUpdatingContent(basePageContent);
 		return await pageService.putContent(updatingContent, jwt());
 	}
-	function prepareUpdatingContent(basePageContent: PageContent){
+	function prepareUpdatingContent(basePageContent: PageContent) {
 		const updatingContent = updatingPageContent(
 			basePageContent,
 			textContent,

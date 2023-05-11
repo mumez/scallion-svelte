@@ -15,7 +15,7 @@
 	const wikiBasePart = ($page.route.id ?? '').split('/')[1];
 
 	$parentLink = wikiName;
-	$headerTitle = 'Blog';
+	$headerTitle = 'Bliki';
 	let allLoaded = false;
 
 	const updatesService = new UpdatesService(wikiName);
@@ -68,7 +68,7 @@
 		{#each grouped[1] as page}
 			<div class="flex flex-col sm:flex-row justify-between">
 				<div class="text-3xl sm:text-left mb-4 sm:mb-0">
-					<a href="{urlForPage(page)}">{page.title ?? page.name}</a>	
+					<a href={urlForPage(page)}>{page.title ?? page.name}</a>
 				</div>
 				<div class="sm:text-right">{page.updatedBy}</div>
 			</div>
