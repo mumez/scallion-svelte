@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
+	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
 	import wikiPage from '$lib/stores/wikiPage';
 	import MarkdownViewer from '$lib/components/MarkdownViewer.svelte';
 	import AttachmentsPanel from '$lib/components/AttachmentsPanel.svelte';
@@ -24,7 +25,6 @@
 	const pageService = new PageService(wikiName, pageName);
 	const filesService = new FilesService(wikiName, pageName);
 	const wikiBookService = new WikiBookService(wikiName);
-	const wikiBasePart = ($page.route.id ?? '').split('/')[1];
 	const attachmentsBaseUrl = filesService.downloadBaseUrl;
 
 	let attachmentFiles: WebDavEntry[] = [];
@@ -157,7 +157,7 @@
 				markdown={textContent}
 				{wikiName}
 				{existingPageNames}
-				{wikiBasePart}
+				wikisBaseDirectory={$wikisBaseDirectory}
 				{attachmentsBaseUrl}
 				isEditable={true}
 			/>
@@ -167,7 +167,7 @@
 			markdown={textContent}
 			{wikiName}
 			{existingPageNames}
-			{wikiBasePart}
+			wikisBaseDirectory={$wikisBaseDirectory}
 			{attachmentsBaseUrl}
 		/>
 	{/if}

@@ -5,19 +5,19 @@
 	export let markdown = '';
 	export let wikiName = '';
 	export let existingPageNames: string[] = [];
-	export let wikiBasePart = '';
+	export let wikisBaseDirectory = '';
 	export let attachmentsBaseUrl = '';
 	export let isEditable = false;
 
 	let html = markdown;
 
 	const debouncedHtmlFrom = debounce(
-		(markdown, wikiName, existingPageNames, wikiBasePart, attachmentsBaseUrl) => {
+		(markdown, wikiName, existingPageNames, wikisBaseDirectory, attachmentsBaseUrl) => {
 			html = enrichedHtmlFrom(
 				markdown,
 				wikiName,
 				existingPageNames,
-				wikiBasePart,
+				wikisBaseDirectory,
 				attachmentsBaseUrl
 			);
 		},
@@ -28,23 +28,23 @@
 		markdown: string,
 		wikiName: string,
 		existingPageNames: string[],
-		wikiBasePart: string,
+		wikisBaseDirectory: string,
 		attachmentsBaseUrl: string
 	) {
 		if (isEditable) {
-			debouncedHtmlFrom(markdown, wikiName, existingPageNames, wikiBasePart, attachmentsBaseUrl);
+			debouncedHtmlFrom(markdown, wikiName, existingPageNames, wikisBaseDirectory, attachmentsBaseUrl);
 			return;
 		}
 		html = enrichedHtmlFrom(
 			markdown,
 			wikiName,
 			existingPageNames,
-			wikiBasePart,
+			wikisBaseDirectory,
 			attachmentsBaseUrl
 		);
 	}
 
-	$: renderHtml(markdown, wikiName, existingPageNames, wikiBasePart, attachmentsBaseUrl);
+	$: renderHtml(markdown, wikiName, existingPageNames, wikisBaseDirectory, attachmentsBaseUrl);
 </script>
 
 <div class="html-from-markdown space-x-0">

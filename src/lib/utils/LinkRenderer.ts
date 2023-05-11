@@ -7,18 +7,18 @@ export const internalExistingCssClass = 'internal-existing';
 export class LinkRenderer {
 	wikiName: string;
 	existingPageNames: string[];
-	wikiBasePart = '';
+	wikisBaseDirectory = '';
 	attachmentsBaseUrl = '';
 	isInternal = false;
 	constructor(
 		wikiName: string,
 		existingPageNames: string[],
-		wikiBasePart = '',
+		wikisBaseDirectory = '',
 		attachmentsBaseUrl = ''
 	) {
 		this.wikiName = wikiName;
 		this.existingPageNames = existingPageNames;
-		this.wikiBasePart = wikiBasePart;
+		this.wikisBaseDirectory = wikisBaseDirectory;
 		this.attachmentsBaseUrl = attachmentsBaseUrl;
 	}
 
@@ -63,7 +63,7 @@ export class LinkRenderer {
 		return href;
 	}
 	private renderInternalHrefLinkValue(href: string) {
-		return `/${this.wikiBasePart}/${this.wikiName}/${href}`;
+		return `/${this.wikisBaseDirectory}/${this.wikiName}/${href}`;
 	}
 	private renderAttachmentHrefLinkValue(href: string) {
 		return this.adjustAttachmentPath(href);
@@ -79,6 +79,6 @@ export class LinkRenderer {
 	}
 
 	private shouldHighlightInternalNewLink() {
-		return this.wikiBasePart == 'wikis';
+		return this.wikisBaseDirectory == 'wikis';
 	}
 }

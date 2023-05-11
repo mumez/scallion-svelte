@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { uid } from '$lib/services/UserService';
 	import isAuthenticated from '$lib/stores/isAuthenticated';
-	import wikisBaseDir from '$lib/stores/wikisBaseDir';
+	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
 	import wikiPage from '$lib/stores/wikiPage';
 	import { isLockedByOtherUser } from '$lib/models/PageContent';
 
@@ -33,7 +33,7 @@
 	$: hasNoPageParams = $page.params['page'] == undefined; 
 	$: isBlikisTopPage = hasNoPageParams && isBlikisRoute;
 	$: if (isWikiPageEditableRoute && routeFirstPart) {
-		$wikisBaseDir = routeFirstPart;
+		$wikisBaseDirectory = routeFirstPart;
 	}
 </script>
 
@@ -45,7 +45,7 @@
 			on:click={startEditing}><i class="fa-solid fa-pen" /></button
 		>
 	{:else}
-		<a href="/{$wikisBaseDir || routeFirstPart}/{wikiName}/{pageNameEncoded}" class="btn-icon"
+		<a href="/{$wikisBaseDirectory || routeFirstPart}/{wikiName}/{pageNameEncoded}" class="btn-icon"
 			><i class="fa-solid fa-pen" /></a
 		>
 	{/if}

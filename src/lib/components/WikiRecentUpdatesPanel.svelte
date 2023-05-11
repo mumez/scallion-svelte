@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
+	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
 	import { getLatestUpdates } from '$lib/utils/CoreUtils.js';
 	import MarkdownViewer from '$lib/components/MarkdownViewer.svelte';
 	import FilesService from '$lib/services/FilesService';
@@ -12,8 +13,6 @@
 	export let pages: PageContent[];
 
 	const wikiName = $page.params['wiki'] ?? '';
-	const wikiBasePart = ($page.route.id ?? '').split('/')[1];
-
 	$parentLink = wikiName;
 	$headerTitle = 'Bliki';
 	let allLoaded = false;
@@ -55,7 +54,7 @@
 	}
 
 	function urlForPage(page: PageContent) {
-		return `/${wikiBasePart}/${wikiName}/${encodeURIComponent(page.name)}`;
+		return `/${$wikisBaseDirectory}/${wikiName}/${encodeURIComponent(page.name)}`;
 	}
 
 	$: oldestUpdatedAt = pages[pages.length - 1]?.updatedAt ?? 0;
@@ -75,7 +74,7 @@
 			<MarkdownViewer
 				markdown={page.content}
 				{wikiName}
-				{wikiBasePart}
+				wikisBaseDirectory={$wikisBaseDirectory}
 				attachmentsBaseUrl={attachmentsBaseUrlFor(page.name)}
 			/>
 			<div class="text-right">{localeDateTimeStringFor(page.updatedAt)}</div>
