@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { groupBy, mapValues } from 'lodash-es';
+	import { _ } from 'svelte-i18n';
 	import { page } from '$app/stores';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
@@ -83,7 +84,7 @@
 	<div class="h-4" />
 	<div class="flex justify-end">
 		<button disabled={allLoaded} type="button" class="btn variant-ringed" on:click={loadMore}>
-			<span>More...</span>
+			<span>{$_('more') + '...'}</span>
 			<i class="fa-solid fa-angles-down" />
 		</button>
 	</div>

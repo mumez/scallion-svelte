@@ -1,5 +1,6 @@
 <script lang="ts">
 	import diff from 'simple-text-diff';
+	import { _ } from 'svelte-i18n';
 	import ModalCloseButton from '$lib/components/ModalCloseButton.svelte';
 	import { closeModal } from '$lib/utils/ModalOpener';
 	import type { PageContent } from '$lib/models/PageContent';
@@ -51,9 +52,9 @@
 		</div>
 	</div>
 	<footer class="modal-footer {parent.regionFooter}">
-		<button class="btn variant-filled-warning" on:click={closeModal}>Cancel</button>
+		<button class="btn variant-filled-warning" on:click={closeModal}>{$_('cancel')}</button>
 		<button class="btn variant-filled-primary" on:click={startEditing}
-			>Start editing using this version</button
+			>{$_('start-editing-using-this-version')}</button
 		>
 	</footer>
 	<slot />

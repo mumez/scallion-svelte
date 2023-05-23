@@ -1,4 +1,10 @@
 {
-    "cancel": "キャンセル",
-    "save": "保存"
+"cancel": "キャンセル",
+"save": "保存",
+"copied": "コピーしました",
+"drop-or-click-to-start-uploading-files": "クリックまたはドラッグしてファイルをアップロード",
+"clear": "クリア",
+"upload": "アップロード",
+"start-editing-using-this-version": "このバージョンを使用して編集を開始",
+"more": "次へ"
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { _ } from 'svelte-i18n'
+	import { _ } from 'svelte-i18n';
 	import { page } from '$app/stores';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
