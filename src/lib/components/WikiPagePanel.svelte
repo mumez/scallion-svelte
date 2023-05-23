@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n'
 	import { page } from '$app/stores';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
@@ -177,8 +178,8 @@
 	<hr />
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
-			<button class="btn variant-filled-warning" on:click={cancelContent}>Cancel</button>
-			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
+			<button class="btn variant-filled-warning" on:click={cancelContent}>{$_('cancel')}</button>
+			<button class="btn variant-filled-primary" on:click={saveContent}>{$_('save')}</button>
 			{#if canLockOnSave}
 				<label class="flex items-center space-x-2">
 					<input class="checkbox" type="checkbox" bind:checked={shouldLockOnSave} />

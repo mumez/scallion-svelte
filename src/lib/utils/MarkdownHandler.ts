@@ -2,6 +2,8 @@ import { marked } from 'marked';
 import { LinkRenderer } from './LinkRenderer';
 import highlighter from '$lib/plugins/highlight';
 
+const defaultOptions = {mangle:false, headerIds: false};
+
 const isInternalPageLink = (href: string): boolean => {
 	return isInternalLink(href) && !isImageFileLink(href);
 };
@@ -74,7 +76,7 @@ export const enrichedHtmlFrom = (
 			});
 		}
 	};
-	const options = { renderer };
+	const options = { renderer, ...defaultOptions };
 	marked.use(options);
 	return marked.parse(markdown);
 };
