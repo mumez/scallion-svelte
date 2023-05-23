@@ -85,5 +85,5 @@
 		interactive={true}
 		on:selected={onRowSelected}
 	/>
-	<Paginator bind:settings={pagination} on:page={onPageChange} on:amount={onAmountChange} />
+	<Paginator bind:settings={pagination} on:page={onPageChange} on:amount={onAmountChange} amountText={$_('items')}/>
 </div>
