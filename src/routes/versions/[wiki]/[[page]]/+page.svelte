@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import { page } from '$app/stores';
 	import { Table, Paginator, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
 	import type { PaginationSettings } from '@skeletonlabs/skeleton/components/Paginator/types';
@@ -25,7 +26,9 @@
 	let versionFrom = lastVersionNumber;
 	let rowsPerPage = 5;
 
-	const versionsTableHeaders: string[] = ['Version', 'Content', 'Updater', 'Date'];
+	const versionsTableHeaders: string[] = ['version', 'content', 'updater', 'date'].map((h) =>
+		$_(h)
+	);
 
 	let pagination = {
 		offset: 0,

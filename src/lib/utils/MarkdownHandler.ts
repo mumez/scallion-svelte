@@ -25,14 +25,16 @@ const renderLink = (
 	context = {
 		wikisBaseDirectory: 'wikis',
 		attachmentsBaseUrl: '',
-		isAttachmentOnly: false
+		isAttachmentOnly: false,
+		newPageLinkTitle: ''
 	}
 ): string => {
 	const linkRenderer = new LinkRenderer(
 		wikiName,
 		existingPageNames,
 		context.wikisBaseDirectory,
-		context.attachmentsBaseUrl
+		context.attachmentsBaseUrl,
+		context.newPageLinkTitle
 	);
 	return context.isAttachmentOnly
 		? linkRenderer.renderForAttachment(href, text)
@@ -55,7 +57,8 @@ export const enrichedHtmlFrom = (
 	wikiName: string,
 	existingPageNames: string[] = [],
 	wikisBaseDirectory = '',
-	attachmentsBaseUrl = ''
+	attachmentsBaseUrl = '',
+	newPageLinkTitle = ''
 ): string => {
 	const renderer = {
 		code(code: string, language: string) {
@@ -65,14 +68,16 @@ export const enrichedHtmlFrom = (
 			return renderLink(href, text, wikiName, existingPageNames, {
 				wikisBaseDirectory,
 				attachmentsBaseUrl,
-				isAttachmentOnly: false
+				isAttachmentOnly: false,
+				newPageLinkTitle
 			});
 		},
 		image(href: string, title: string, text: string) {
 			return renderLink(href, text, wikiName, existingPageNames, {
 				wikisBaseDirectory,
 				attachmentsBaseUrl,
-				isAttachmentOnly: true
+				isAttachmentOnly: true,
+				newPageLinkTitle
 			});
 		}
 	};

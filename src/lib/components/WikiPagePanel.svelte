@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { _ } from 'svelte-i18n';
 	import { page } from '$app/stores';
+	import { _ } from 'svelte-i18n';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';

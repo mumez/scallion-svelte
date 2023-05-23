@@ -6,5 +6,12 @@
 "clear": "クリア",
 "upload": "アップロード",
 "start-editing-using-this-version": "このバージョンを使用して編集を開始",
-"more": "次へ"
+"more": "さらに",
+"create-new-page": "新しいページを作成",
+"version": "バージョン",
+"content": "内容",
+"updater": "更新者",
+"date": "日付",
+"name": "名前",
+"size": "サイズ"
 }

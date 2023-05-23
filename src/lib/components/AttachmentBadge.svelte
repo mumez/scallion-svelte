@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { _ } from 'svelte-i18n';
 	import { popup, clipboard } from '@skeletonlabs/skeleton';
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
 	import { Avatar } from '@skeletonlabs/skeleton';
+	import { _ } from 'svelte-i18n';
 	import { isImage, concatPath } from '$lib/utils/FileUtils';
 
 	export let fileName = '';

@@ -6,5 +6,12 @@
 "clear": "Clear",
 "upload": "Upload",
 "start-editing-using-this-version": "Start editing using this version",
-"more": "More"
+"more": "More",
+"create-new-page": "create new page",
+"version": "Version",
+"content": "Content",
+"updater": "Updater",
+"date": "Date",
+"name": "Name",
+"size": "Size"
 }
