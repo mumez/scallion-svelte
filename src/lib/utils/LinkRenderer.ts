@@ -9,17 +9,20 @@ export class LinkRenderer {
 	existingPageNames: string[];
 	wikisBaseDirectory = '';
 	attachmentsBaseUrl = '';
+	newPageLinkTitle = '';
 	isInternal = false;
 	constructor(
 		wikiName: string,
 		existingPageNames: string[],
 		wikisBaseDirectory = '',
-		attachmentsBaseUrl = ''
+		attachmentsBaseUrl = '',
+		newPageLinkTitle = ''
 	) {
 		this.wikiName = wikiName;
 		this.existingPageNames = existingPageNames;
 		this.wikisBaseDirectory = wikisBaseDirectory;
 		this.attachmentsBaseUrl = attachmentsBaseUrl;
+		this.newPageLinkTitle = newPageLinkTitle;
 	}
 
 	public render(href: string, text: string): string {
@@ -52,7 +55,7 @@ export class LinkRenderer {
 	}
 	private linkHrefTitle(href: string): string {
 		const isInternalNew = this.linkHrefClass(href) == internalNewCssClass;
-		return isInternalNew ? 'create new page' : href;
+		return isInternalNew ? this.newPageLinkTitle : href;
 	}
 	private linkAttachmentHrefTitle(href: string): string {
 		return href;

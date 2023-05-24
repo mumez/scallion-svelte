@@ -2,6 +2,7 @@
 	import { popup, clipboard } from '@skeletonlabs/skeleton';
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
 	import { Avatar } from '@skeletonlabs/skeleton';
+	import { _ } from 'svelte-i18n';
 	import { isImage, concatPath } from '$lib/utils/FileUtils';
 
 	export let fileName = '';
@@ -42,6 +43,6 @@
 		use:clipboard={clipboardTextFrom(fileName)}
 		use:popup={imageTooltip}
 		on:click={onClick}
-		disabled={copied}>{copied ? 'Copied ✓ ' : fileName}</button
+		disabled={copied}>{copied ? $_('copied') + ' ✓ ' : fileName}</button
 	>
 </div>

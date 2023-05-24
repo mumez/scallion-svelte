@@ -17,7 +17,7 @@ Designed to work with [scallion-wiki-api](https://github.com/mumez/scallion-wiki
 ## To Do
 
 - [x] Implement a blog-style page view, commonly referred to as a "bliki."
-- Add localizable labels and messages.
+- [x] Add localizable labels and messages.
 - Develop a search function that enables users to locate wiki pages based on specific keywords.
 
 ## Demo

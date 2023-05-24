@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { _ } from 'svelte-i18n';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
@@ -140,7 +141,7 @@
 	$: canLockOnSave = $wikiPage?.pageContent?.ownedBy === uid();
 </script>
 
-<div class="container mx-auto p-4 space-y-4 swiki-{wikiName.toLowerCase()}">
+<div class="container mx-auto p-4 space-y-4 swiki-page-{wikiName.toLowerCase()}">
 	{#if hasContentTitle}
 		{#if $wikiPage.isEditing}
 			<input class="input" bind:value={contentTitle} />
@@ -177,12 +178,12 @@
 	<hr />
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
-			<button class="btn variant-filled-warning" on:click={cancelContent}>Cancel</button>
-			<button class="btn variant-filled-primary" on:click={saveContent}>Save</button>
+			<button class="btn variant-filled-warning" on:click={cancelContent}>{$_('cancel')}</button>
+			<button class="btn variant-filled-primary" on:click={saveContent}>{$_('save')}</button>
 			{#if canLockOnSave}
 				<label class="flex items-center space-x-2">
 					<input class="checkbox" type="checkbox" bind:checked={shouldLockOnSave} />
-					<p>Lock</p>
+					<p>{$_('lock')}</p>
 				</label>
 			{/if}
 		{/if}

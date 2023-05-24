@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { FileDropzone } from '@skeletonlabs/skeleton';
+	import { _ } from 'svelte-i18n';
 
 	export let uploader: (file: File) => Promise<boolean> = (file) => Promise.resolve(true);
 
@@ -46,7 +47,7 @@
 			{#if isUploading}
 				<i class="animate-spin text-3xl fa-solid fa-spinner" />
 			{:else}
-				<span>Drop or click to start uploading files</span>
+				<span>{$_('drop-or-click-to-start-uploading-files')}</span>
 			{/if}
 		</svelte:fragment>
 		<svelte:fragment slot="message">
@@ -61,12 +62,12 @@
 		<button
 			disabled={!shouldEnableActionButtons}
 			class="border-current px-2 border-2 variant-filled-warning"
-			on:click={clear}>Clear</button
+			on:click={clear}>{$_('clear')}</button
 		>
 		<button
 			disabled={!shouldEnableActionButtons}
 			class="border-current px-2 border-2 variant-filled-primary"
-			on:click={upload}>Upload</button
+			on:click={upload}>{$_('upload')}</button
 		>
 	</div>
 </div>

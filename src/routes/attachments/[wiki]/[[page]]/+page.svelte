@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { _ } from 'svelte-i18n';
 	import { Table, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
 	import FilesUploadPanel from '$lib/components/FilesUploadPanel.svelte';
 	import FileDownloader from '$lib/components/FileDownloader.svelte';
@@ -25,7 +26,7 @@
 	const pageService = new PageService(wikiName, pageName);
 	const filesService = new FilesService(wikiName, pageName);
 	let files = data.files;
-	const filesTableHeaders: string[] = ['Name', 'Size', 'Date'];
+	const filesTableHeaders: string[] = ['name', 'size', 'date'].map((h) => $_(h));
 
 	// lifecycle callbacks
 	onMount(() => {
@@ -70,7 +71,7 @@
 	$: filesTableBody = processRowsForTable(files);
 </script>
 
-<div class="container mx-auto p-4 space-y-4">
+<div class="container mx-auto p-4 space-y-4 swiki-attachments">
 	{#if !isPageLockedByOtherUser}
 		<FilesUploadPanel uploader={uploadFile} on:upload-end={onUploadEnd} />
 	{/if}

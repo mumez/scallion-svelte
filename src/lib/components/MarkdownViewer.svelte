@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import { debounce } from 'lodash-es';
 	import { enrichedHtmlFrom } from '$lib/utils/MarkdownHandler';
 
@@ -9,6 +10,8 @@
 	export let attachmentsBaseUrl = '';
 	export let isEditable = false;
 
+	const newPageLinkTitle = $_('create-new-page');
+
 	let html = markdown;
 
 	const debouncedHtmlFrom = debounce(
@@ -18,7 +21,8 @@
 				wikiName,
 				existingPageNames,
 				wikisBaseDirectory,
-				attachmentsBaseUrl
+				attachmentsBaseUrl,
+				newPageLinkTitle
 			);
 		},
 		500
@@ -32,7 +36,13 @@
 		attachmentsBaseUrl: string
 	) {
 		if (isEditable) {
-			debouncedHtmlFrom(markdown, wikiName, existingPageNames, wikisBaseDirectory, attachmentsBaseUrl);
+			debouncedHtmlFrom(
+				markdown,
+				wikiName,
+				existingPageNames,
+				wikisBaseDirectory,
+				attachmentsBaseUrl
+			);
 			return;
 		}
 		html = enrichedHtmlFrom(
@@ -40,7 +50,8 @@
 			wikiName,
 			existingPageNames,
 			wikisBaseDirectory,
-			attachmentsBaseUrl
+			attachmentsBaseUrl,
+			newPageLinkTitle
 		);
 	}
 
