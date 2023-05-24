@@ -183,7 +183,7 @@
 			{#if canLockOnSave}
 				<label class="flex items-center space-x-2">
 					<input class="checkbox" type="checkbox" bind:checked={shouldLockOnSave} />
-					<p>Lock</p>
+					<p>{$_('lock')}</p>
 				</label>
 			{/if}
 		{/if}
