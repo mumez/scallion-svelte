@@ -36,7 +36,13 @@
 		attachmentsBaseUrl: string
 	) {
 		if (isEditable) {
-			debouncedHtmlFrom(markdown, wikiName, existingPageNames, wikisBaseDirectory, attachmentsBaseUrl);
+			debouncedHtmlFrom(
+				markdown,
+				wikiName,
+				existingPageNames,
+				wikisBaseDirectory,
+				attachmentsBaseUrl
+			);
 			return;
 		}
 		html = enrichedHtmlFrom(

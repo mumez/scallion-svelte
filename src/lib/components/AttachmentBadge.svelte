@@ -43,6 +43,6 @@
 		use:clipboard={clipboardTextFrom(fileName)}
 		use:popup={imageTooltip}
 		on:click={onClick}
-		disabled={copied}>{copied ? ($_('copied') + ' ✓ ') : fileName}</button
+		disabled={copied}>{copied ? $_('copied') + ' ✓ ' : fileName}</button
 	>
 </div>

@@ -2,7 +2,7 @@ import { marked } from 'marked';
 import { LinkRenderer } from './LinkRenderer';
 import highlighter from '$lib/plugins/highlight';
 
-const defaultOptions = {mangle:false, headerIds: false};
+const defaultOptions = { mangle: false, headerIds: false };
 
 const isInternalPageLink = (href: string): boolean => {
 	return isInternalLink(href) && !isImageFileLink(href);

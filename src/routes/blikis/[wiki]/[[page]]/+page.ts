@@ -18,7 +18,7 @@ async function loadUpdates(
 ) {
 	const updatesService = new UpdatesService(wikiBookName);
 	updatesService.fetcher(fetch);
-	const from = Date.now() + (60 * 1000);
+	const from = Date.now() + 60 * 1000;
 	const maxUpdates = 10;
 	const chunkSize = 15;
 
