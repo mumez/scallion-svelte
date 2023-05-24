@@ -141,7 +141,7 @@
 	$: canLockOnSave = $wikiPage?.pageContent?.ownedBy === uid();
 </script>
 
-<div class="container mx-auto p-4 space-y-4 swiki-{wikiName.toLowerCase()}">
+<div class="container mx-auto p-4 space-y-4 swiki-page-{wikiName.toLowerCase()}">
 	{#if hasContentTitle}
 		{#if $wikiPage.isEditing}
 			<input class="input" bind:value={contentTitle} />

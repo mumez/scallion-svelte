@@ -47,6 +47,13 @@ body {
 	}
 }
 
+/* For attachments */
+.swiki-attachments {
+	th:nth-child(3)  {
+		@apply w-1/6;
+	}
+}
+
 /* For versions */
 .diff {
 	ins,
@@ -64,5 +71,16 @@ body {
 	ins::before,
 	del::before {
 		content: '' !important;
+	}
+}
+.swiki-versions {
+	th:nth-child(1)  {
+		@apply w-[100px];
+	}
+	th:nth-child(3)  {
+		@apply w-[200px];
+	}
+	th:nth-child(4)  {
+		@apply w-1/6;
 	}
 }
