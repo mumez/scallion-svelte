@@ -15,5 +15,6 @@
 	"date": "日付",
 	"name": "名前",
 	"size": "サイズ",
-	"items": "項目"
+	"items": "項目",
+	"current": "現在"
 }
