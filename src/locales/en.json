@@ -15,5 +15,6 @@
 	"date": "Date",
 	"name": "Name",
 	"size": "Size",
-	"items": "items"
+	"items": "items",
+	"current": "Current"
 }

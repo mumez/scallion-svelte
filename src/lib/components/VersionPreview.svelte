@@ -35,14 +35,14 @@
 	<div class="pt-2 pb-4">
 		<div class="grid gap-2 grid-cols-2">
 			<div>
-				<div>Current</div>
+				<div>{$_('current')}</div>
 				<section class="diff border-solid border-2 py-2 bg-gray-100">
 					{@html diffResult.before}
 				</section>
 				<p class="text-right">{latestPageContent.updatedBy}</p>
 			</div>
 			<div>
-				<div>Version {versionNumber} ({new Date(pageContent.updatedAt)})</div>
+				<div>{$_('version')} {versionNumber} ({new Date(pageContent.updatedAt)})</div>
 				<section class="diff border-solid border-2 py-2 bg-gray-100">
 					{@html diffResult.after}
 				</section>

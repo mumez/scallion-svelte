@@ -32,8 +32,8 @@
 	$: isBlikisRoute = routeFirstPart == _blikisBaseDir;
 	$: hasNoPageParams = $page.params['page'] == undefined;
 	$: isBlikisTopPage = hasNoPageParams && isBlikisRoute;
-	$: if (isWikiPageEditableRoute && routeFirstPart) {
-		$wikisBaseDirectory = routeFirstPart;
+	$: if (routeFirstPart) {
+		$wikisBaseDirectory = isWikiPageEditableRoute ? routeFirstPart : _wikisBaseDir;
 	}
 </script>
 
