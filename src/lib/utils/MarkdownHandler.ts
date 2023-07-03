@@ -1,5 +1,5 @@
 import { marked } from 'marked';
-import { sanitize } from 'isomorphic-dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 import { LinkRenderer } from './LinkRenderer';
 import highlighter from '$lib/plugins/highlight';
@@ -89,7 +89,7 @@ export function enrichedHtmlFrom(
 }
 
 export function sanitizedHtmlFrom(markdown: string): string {
-	return sanitize(marked.parse(markdown));
+	return DOMPurify.sanitize(marked.parse(markdown));
 }
 
 export function extractInternalPageLinks(markdown: string): string[] {
