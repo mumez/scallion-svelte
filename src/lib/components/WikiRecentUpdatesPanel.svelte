@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { groupBy, mapValues } from 'lodash-es';
-	import { _ } from 'svelte-i18n';
+	import { _ } from '$lib/plugins/localization';
 	import { page } from '$app/stores';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';

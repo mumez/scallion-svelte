@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { init, register } from 'svelte-i18n';
+import { init, register, _, locale, waitLocale } from 'svelte-v4-i18n';
 
 const defaultLocale = 'en';
 
@@ -10,3 +10,5 @@ init({
 	fallbackLocale: defaultLocale,
 	initialLocale: browser ? window.navigator.language : defaultLocale
 });
+
+export { _, locale, waitLocale };

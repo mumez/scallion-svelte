@@ -1,6 +1,6 @@
 <script lang="ts">
 	import diff from 'simple-text-diff';
-	import { _ } from 'svelte-i18n';
+	import { _ } from '$lib/plugins/localization';
 	import { beforeNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import ModalCloseButton from '$lib/components/ModalCloseButton.svelte';
