@@ -1,4 +1,6 @@
 import { marked } from 'marked';
+import { sanitize } from 'isomorphic-dompurify';
+
 import { LinkRenderer } from './LinkRenderer';
 import highlighter from '$lib/plugins/highlight';
 
@@ -49,7 +51,7 @@ const renderCodeBlock = (code: string, language: string): string => {
 };
 
 export const htmlFrom = (markdown: string): string => {
-	return marked.parse(markdown);
+	return sanitizedHtmlFrom(markdown);
 };
 
 export const enrichedHtmlFrom = (
@@ -83,7 +85,11 @@ export const enrichedHtmlFrom = (
 	};
 	const options = { renderer, ...defaultOptions };
 	marked.use(options);
-	return marked.parse(markdown);
+	return sanitizedHtmlFrom(markdown);
+};
+
+export const sanitizedHtmlFrom = (markdown: string): string => {
+	return sanitize(marked.parse(markdown));
 };
 
 export const extractInternalPageLinks = (markdown: string): string[] => {

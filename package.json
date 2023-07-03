@@ -45,6 +45,7 @@
 		"fast-xml-parser": "^4.2.5",
 		"firebase": "^9.23.0",
 		"highlight.js": "^11.8.0",
+		"isomorphic-dompurify": "^1.7.0",
 		"lodash-es": "^4.17.21",
 		"marked": "^5.1.0",
 		"simple-text-diff": "^1.7.0",
