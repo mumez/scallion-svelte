@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { _ } from 'svelte-i18n';
+	import { _ } from '$lib/plugins/localization';
 	import { debounce } from 'lodash-es';
 	import { enrichedHtmlFrom } from '$lib/utils/MarkdownHandler';
 
