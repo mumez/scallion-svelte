@@ -48,26 +48,10 @@
 				<input
 					name="search"
 					class="input"
-					type="text"
+					type="search"
 					placeholder="Enter a keyword"
 					bind:value={searchInput}
 				/>
-				<button class="absolute inset-y-0 right-0 pl-2" on:click={clearSearchInput}>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						class="h-5 w-5"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M6 18L18 6M6 6l12 12"
-						/>
-					</svg>
-				</button>
 			</div>
 			<button name="search" type="submit" class="btn variant-filled-primary" on:click={search}
 				>{$_('search')}</button
@@ -81,7 +65,7 @@
 		{:else if searchResults.length > 0}
 			<div class="flex-grow">
 				<div class="flex flex-row space-x-2">
-					<div class="flex-grow">
+					<div class="w-1/6">
 						<div class="font-bold">{$_('Title')}</div>
 					</div>
 					<div class="flex-grow">
@@ -90,7 +74,7 @@
 				</div>
 				{#each searchResults as page}
 					<div class="flex flex-row space-x-2">
-						<div class="flex-grow">
+						<div class="w-1/6">
 							<a href={urlForPage(page)}>{page.title ?? page.name}</a>
 						</div>
 						<div class="flex-grow">
