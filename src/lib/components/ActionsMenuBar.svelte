@@ -7,10 +7,6 @@
 	import wikiPage from '$lib/stores/wikiPage';
 	import { isLockedByOtherUser } from '$lib/models/PageContent';
 
-	import Searcher from '$lib/components/Searcher.svelte';
-	import { openModal } from '$lib/utils/ModalOpener';
-	
-
 	const _wikisBaseDir = 'wikis';
 	const _blikisBaseDir = 'blikis';
 
@@ -22,11 +18,6 @@
 			const newPageName = new Date().toLocaleString();
 			goto(`/${_blikisBaseDir}/${wikiName}/${encodeURIComponent(newPageName)}`);
 		}
-	}
-
-	function openSearchModal() {
-		openModal(Searcher, {
-		});
 	}
 
 	$: pageName = $page.params['page'] ?? 'index';
@@ -70,7 +61,10 @@
 			class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a
 		>
 	{/if}
-	<button class="btn-icon" on:click={openSearchModal}><i class="fa-solid fa-search" /></button>
+	<a class="btn-icon" href="/search/{wikiName}/{pageNameEncoded}"
+		><i class="fa-solid fa-search" /></a
+	>
+	<!-- <button class="btn-icon" on:click={openSearchModal}><i class="fa-solid fa-search" /></button> -->
 	<!-- <button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical" /></button>-->
 </div>
 
