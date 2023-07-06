@@ -1,6 +1,7 @@
 {
 	"cancel": "Cancel",
 	"save": "Save",
+	"search": "Search",
 	"lock": "Lock",
 	"copied": "Copied",
 	"drop-or-click-to-start-uploading-files": "Drop or click to start uploading files",
@@ -16,5 +17,7 @@
 	"name": "Name",
 	"size": "Size",
 	"items": "items",
-	"current": "Current"
+	"current": "Current",
+	"search-in-{wikiName}": "Search in {wikiName}",
+	"enter-a-keyword": "Enter a keyword"
 }

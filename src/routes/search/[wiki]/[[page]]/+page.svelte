@@ -42,7 +42,7 @@
 	<div class="pt-2 pb-4">
 		<form>
 			<label for="search" class="label text-lg"
-				>{$_('Search in {wikiName}', { values: { wikiName: wikiName } })}</label
+				>{$_('search-in-{wikiName}', { values: { wikiName: wikiName } })}</label
 			>
 			<div class="flex flex-row space-x-2">
 				<div class="relative flex-grow">
@@ -50,7 +50,7 @@
 						class="input"
 						type="search"
 						id="search"
-						placeholder="Enter a keyword"
+						placeholder="{$_('enter-a-keyword')}"
 						bind:value={searchInput}
 					/>
 				</div>
@@ -65,7 +65,7 @@
 				<ProgressRadial class="flex justify-center" />
 			</div>
 		{:else if searchResults.length > 0}
-			<div class="flex-grow">
+			<div class="flex-grow pt-4">
 				<div class="flex flex-row space-x-2">
 					<div class="w-1/6">
 						<div class="font-bold">{$_('Title')}</div>

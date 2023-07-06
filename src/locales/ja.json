@@ -1,6 +1,7 @@
 {
 	"cancel": "キャンセル",
 	"save": "保存",
+	"search": "検索",
 	"lock": "ロック",
 	"copied": "コピーしました",
 	"drop-or-click-to-start-uploading-files": "クリックまたはドラッグしてファイルをアップロード",
@@ -16,5 +17,7 @@
 	"name": "名前",
 	"size": "サイズ",
 	"items": "項目",
-	"current": "現在"
+	"current": "現在",
+	"search-in-{wikiName}": "{wikiName}内を検索",
+	"enter-a-keyword": "キーワードを入力"
 }
