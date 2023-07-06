@@ -40,22 +40,24 @@
 
 <div class="container mx-auto p-4 space-y-4 swiki-attachments">
 	<div class="pt-2 pb-4">
-		<label for="search" class="label text-lg"
-			>{$_('Search in {wikiName}', { values: { wikiName: wikiName } })}</label
-		>
-		<form class="flex flex-row space-x-2">
-			<div class="relative flex-grow">
-				<input
-					name="search"
-					class="input"
-					type="search"
-					placeholder="Enter a keyword"
-					bind:value={searchInput}
-				/>
-			</div>
-			<button name="search" type="submit" class="btn variant-filled-primary" on:click={search}
-				>{$_('search')}</button
+		<form>
+			<label for="search" class="label text-lg"
+				>{$_('Search in {wikiName}', { values: { wikiName: wikiName } })}</label
 			>
+			<div class="flex flex-row space-x-2">
+				<div class="relative flex-grow">
+					<input
+						class="input"
+						type="search"
+						id="search"
+						placeholder="Enter a keyword"
+						bind:value={searchInput}
+					/>
+				</div>
+				<button type="submit" class="btn variant-filled-primary" on:click={search}
+					>{$_('search')}</button
+				>
+			</div>
 		</form>
 
 		{#if isSearching}
