@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Mark from 'mark.js';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
 	import { _ } from '$lib/plugins/localization';
@@ -19,12 +20,25 @@
 	let searchInput = '';
 	let searchResults: PageContent[] = [];
 
+	let highlighter: Mark;
+	let resultsArea: string | HTMLElement | readonly HTMLElement[] | NodeList;
+
 	async function search() {
 		console.log(searchInput);
 		isSearching = true;
 		searchResults = await searchService.searchPages(searchInput, wikiName);
 		console.log('search result:', searchResults);
+
+		setTimeout(() => {
+			highlightResults();
+		}, 50);
+
 		isSearching = false;
+	}
+
+	function highlightResults() {
+		highlighter = new Mark(resultsArea);
+		highlighter.mark(searchInput);
 	}
 
 	function clearSearchInput() {
@@ -50,7 +64,7 @@
 						class="input"
 						type="search"
 						id="search"
-						placeholder="{$_('enter-a-keyword')}"
+						placeholder={$_('enter-a-keyword')}
 						bind:value={searchInput}
 					/>
 				</div>
@@ -65,7 +79,7 @@
 				<ProgressRadial class="flex justify-center" />
 			</div>
 		{:else if searchResults.length > 0}
-			<div class="flex-grow pt-4">
+			<div class="flex-grow pt-4" bind:this={resultsArea}>
 				<div class="flex flex-row space-x-2">
 					<div class="w-1/6">
 						<div class="font-bold">{$_('Title')}</div>
