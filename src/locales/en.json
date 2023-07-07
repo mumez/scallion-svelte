@@ -18,6 +18,7 @@
 	"size": "Size",
 	"items": "items",
 	"current": "Current",
+	"title": "Title",
 	"search-in-{wikiName}": "Search in {wikiName}",
 	"enter-a-keyword": "Enter a keyword"
 }

@@ -41,14 +41,16 @@
 		highlighter.mark(searchInput);
 	}
 
-	function clearSearchInput() {
-		searchInput = '';
+	function clearSearchResults() {
 		searchResults = [];
-		console.log('clear', $wikisBaseDirectory);
 	}
 
 	function urlForPage(page: PageContent) {
 		return `/${$wikisBaseDirectory}/${wikiName}/${encodeURIComponent(page.name)}`;
+	}
+
+	$: if (searchInput == '') {
+		clearSearchResults();
 	}
 </script>
 
@@ -73,32 +75,31 @@
 				>
 			</div>
 		</form>
-
-		{#if isSearching}
-			<div class="flex flex-row pt-4 space-x-2 flex justify-center">
-				<ProgressRadial class="flex justify-center" />
-			</div>
-		{:else if searchResults.length > 0}
-			<div class="flex-grow pt-4" bind:this={resultsArea}>
-				<div class="flex flex-row space-x-2">
-					<div class="w-1/6">
-						<div class="font-bold">{$_('Title')}</div>
+		<div class="flex pt-4 space-x-2" class:justify-center={isSearching} bind:this={resultsArea}>
+			{#if isSearching}
+				<ProgressRadial />
+			{:else if searchResults.length > 0}
+				<div class="container space-y-2">
+					<div class="flex flex-row">
+						<div class="basis-1/6">
+							<div class="font-bold">{$_('title')}</div>
+						</div>
+						<div class="basis-5/6">
+							<div class="font-bold">{$_('content')}</div>
+						</div>
 					</div>
-					<div class="flex-grow">
-						<div class="font-bold">{$_('Content')}</div>
-					</div>
+					{#each searchResults as page}
+						<div class="flex flex-row">
+							<div class="basis-1/6">
+								<a href={urlForPage(page)}>{page.title ?? page.name}</a>
+							</div>
+							<div class="basis-5/6">
+								{page.content}
+							</div>
+						</div>
+					{/each}
 				</div>
-				{#each searchResults as page}
-					<div class="flex flex-row space-x-2">
-						<div class="w-1/6">
-							<a href={urlForPage(page)}>{page.title ?? page.name}</a>
-						</div>
-						<div class="flex-grow">
-							{page.content}
-						</div>
-					</div>
-				{/each}
-			</div>
-		{/if}
+			{/if}
+		</div>
 	</div>
 </div>

@@ -18,6 +18,7 @@
 	"size": "サイズ",
 	"items": "項目",
 	"current": "現在",
+	"title": "タイトル",
 	"search-in-{wikiName}": "{wikiName}内を検索",
 	"enter-a-keyword": "キーワードを入力"
 }
