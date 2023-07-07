@@ -61,7 +61,11 @@
 			class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a
 		>
 	{/if}
-	<!-- <button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical" /></button> -->
+	<a class="btn-icon" href="/search/{wikiName}/{pageNameEncoded}"
+		><i class="fa-solid fa-search" /></a
+	>
+	<!-- <button class="btn-icon" on:click={openSearchModal}><i class="fa-solid fa-search" /></button> -->
+	<!-- <button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical" /></button>-->
 </div>
 
 <style>
