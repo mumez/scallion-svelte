@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import Mark from 'mark.js';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
@@ -24,16 +25,12 @@
 	let resultsArea: string | HTMLElement | readonly HTMLElement[] | NodeList;
 
 	async function search() {
-		console.log(searchInput);
+		if (!searchInput) return;
 		isSearching = true;
 		searchResults = await searchService.searchPages(searchInput, wikiName);
-		console.log('search result:', searchResults);
-
-		setTimeout(() => {
-			highlightResults();
-		}, 50);
-
 		isSearching = false;
+		await tick();
+		highlightResults();
 	}
 
 	function highlightResults() {
