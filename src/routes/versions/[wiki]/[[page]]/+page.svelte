@@ -90,5 +90,6 @@
 		on:page={onPageChange}
 		on:amount={onAmountChange}
 		amountText={$_('items')}
+		showNumerals
 	/>
 </div>
