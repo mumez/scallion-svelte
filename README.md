@@ -13,12 +13,14 @@ Designed to work with [scallion-wiki-api](https://github.com/mumez/scallion-wiki
 - Permits users to attach files to pages, offering a convenient method for sharing documents and other resources.
 - Accommodates multiple wikis.
 - Supports blog-style pages (bliki)
+- Localization support
+- Full text search support
 
 ## To Do
 
 - [x] Implement a blog-style page view, commonly referred to as a "bliki."
 - [x] Add localizable labels and messages.
-- Develop a search function that enables users to locate wiki pages based on specific keywords.
+- [x] Develop a search function that enables users to locate wiki pages based on specific keywords.
 
 ## Demo
 
