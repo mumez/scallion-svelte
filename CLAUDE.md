@@ -134,3 +134,8 @@ Configure Firebase and API endpoints in the respective config files before runni
 ### Testing
 
 Tests are configured to run with Vitest and include files matching `src/**/*.{test,spec}.{js,ts}`.
+
+### TODO
+
+- Migrate Skeleton:
+  https://www.skeleton.dev/docs/get-started/migrate-from-v2

@@ -1,9 +1,9 @@
 <script lang="ts">
 	//import '@skeletonlabs/skeleton/themes/theme-crimson.css';
-	import '../theme.postcss';
+	import '../theme.css';
 	import '@skeletonlabs/skeleton/themes/theme-rocket.css';
 	import '@skeletonlabs/skeleton/styles/all.css';
-	import '../app.postcss';
+	import '../app.css';
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
