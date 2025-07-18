@@ -47,6 +47,7 @@
 	},
 	"dependencies": {
 		"@floating-ui/dom": "^1.7.2",
+		"@tailwindcss/vite": "^4.1.11",
 		"fast-xml-parser": "^4.5.3",
 		"firebase": "^10.14.1",
 		"highlight.js": "^11.11.1",
