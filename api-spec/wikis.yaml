@@ -1,0 +1,502 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 3tx0q260z82ve
+info:
+  title: scallion-wiki-api
+  version: '1.0'
+servers:
+  - url: 'https://softumeya.com/scallion/api'
+paths:
+  /wikis:
+    get:
+      summary: List wiki books
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                x-examples:
+                  Example 1:
+                    - ownedBy: 4saYpbYbngfMl6N4YPLWn8kJHAC2
+                      id: 4mmw6ztlrzrrr1nv9hszjk3vy
+                      title: ume wiki
+                      name: ume
+                      count: 6
+                    - ownedBy: 4saYpbYbngfMl6N4YPLWn8kJHAC2
+                      id: a3g5xislem5pgvmqxga6qus18
+                      title: squeak wiki
+                      name: squeak
+                      count: 1
+                items:
+                  $ref: '#/components/schemas/WikiBook'
+              examples:
+                Example 1:
+                  value:
+                    - ownedBy: 4saYpbYbngfMl6N4YPLWn8kJHAC2
+                      id: 4mmw6ztlrzrrr1nv9hszjk3vy
+                      title: ume wiki
+                      name: ume
+                      count: 6
+                    - ownedBy: 4saYpbYbngfMl6N4YPLWn8kJHAC2
+                      id: a3g5xislem5pgvmqxga6qus18
+                      title: squeak wiki
+                      name: squeak
+                      count: 1
+      operationId: get-wikis
+  /pages:
+    get:
+      summary: Get pages existence
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: boolean
+                x-examples:
+                  Example 1:
+                    - false
+                    - true
+                    - false
+      operationId: get-pages
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: wiki
+          description: Wiki book name
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: exist
+          description: Comma separated page names
+          required: true
+    parameters: []
+  /wiki:
+    get:
+      summary: Get page description
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WikiBook'
+              examples:
+                Example 1:
+                  value:
+                    ownedBy: 4saYpbYbngfMl6N4YPLWn8kJHAC2
+                    id: 4wj48qrpnr3r1t6y4h0mjj54p
+                    title: ume wiki
+                    name: ume
+                    count: 4
+      operationId: get-wiki
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: name
+          description: Wiki book name
+          required: true
+      description: ''
+    parameters: []
+  /page:
+    get:
+      summary: Get page cotent
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WikiPage'
+              examples:
+                Example 1:
+                  value:
+                    name: index
+                    updatedAt: 1677728598145
+                    id: 5scwgcisl11lxnqkgfgfycse5
+                    number: 3
+                    isLocked: false
+                    content: index content hello
+                    bookId: 4mmw6ztlrzrrr1nv9hszjk3vy
+                    updatedBy: ume@softumeya.com
+                    wiki: ume
+      operationId: get-page
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: name
+          description: Wiki page name
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: wiki
+          description: Wiki book name
+          required: true
+    put:
+      summary: Update a page
+      operationId: put-page
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  updatedAt:
+                    type: integer
+                  id:
+                    type: string
+                  number:
+                    type: integer
+                  isLocked:
+                    type: boolean
+                  content:
+                    type: string
+                  bookId:
+                    type: string
+                  updatedBy:
+                    type: string
+                  wiki:
+                    type: string
+                x-examples:
+                  Example 1:
+                    name: newPage1
+                    updatedAt: 1678770722431
+                    id: adhl8btzl9bdaxvhypg0eo2qj
+                    number: 4
+                    isLocked: false
+                    content: newPage1 content
+                    bookId: 4mmw6ztlrzrrr1nv9hszjk3vy
+                    updatedBy: updater1
+                    wiki: ume
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WikiPage'
+              x-examples:
+                Example 1:
+                  wiki: ume
+                  name: test1
+                  content: test content update3
+                  updatedBy: updater3
+            examples:
+              Example 1:
+                value:
+                  id: aa1klx7myg7ckpue9geyibifc
+                  number: 12
+                  wiki: ume
+                  name: test1
+                  content: test content update3
+                  updatedBy: updater3
+                  updatedAt: 1683784829490
+                  bookId: aagmqxq44bgc1lc2rqe993gg3
+                  isLocked: false
+    post:
+      summary: Create a new page
+      operationId: post-page
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  updatedAt:
+                    type: integer
+                  id:
+                    type: string
+                  number:
+                    type: integer
+                  isLocked:
+                    type: boolean
+                  content:
+                    type: string
+                  bookId:
+                    type: string
+                  updatedBy:
+                    type: string
+                  wiki:
+                    type: string
+                x-examples:
+                  Example 1:
+                    name: newPage1
+                    updatedAt: 1678770722431
+                    id: adhl8btzl9bdaxvhypg0eo2qj
+                    number: 4
+                    isLocked: false
+                    content: newPage1 content
+                    bookId: 4mmw6ztlrzrrr1nv9hszjk3vy
+                    updatedBy: updater1
+                    wiki: ume
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WikiPage'
+              x-examples:
+                Example 1:
+                  wiki: ume
+                  name: newPage1
+                  content: newPage1 content
+                  updatedBy: updater1
+  /versions:
+    get:
+      summary: Get paginated versions of a page
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                x-examples:
+                  Example 1:
+                    - name: test1
+                      updatedAt: 698051267.295227
+                      id: empblzpb84fmv9hitojxjg6p0
+                      number: 2
+                      isLocked: false
+                      content: test content update
+                      bookId: 4mmw6ztlrzrrr1nv9hszjk3vy
+                      updatedBy: updater2
+                      wiki: ume
+                items:
+                  $ref: '#/components/schemas/WikiPage'
+      operationId: get-versions
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: page
+          description: Page name
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: wiki
+          description: Wiki name
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: from
+          description: From index
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: size
+          description: Size to take
+          required: true
+  /version:
+    get:
+      summary: Get last version number of a page
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 12
+      operationId: get-version
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: page
+          description: Wiki apage name
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: wiki
+          description: Wiki book name
+          required: true
+        - schema:
+            type: string
+            pattern: lastVersionNumber
+          in: query
+          name: field
+          description: 'Field name to take (Currently, only "lastVersionNumber" is supported)'
+          required: true
+  /updates:
+    get:
+      summary: Get the latest updates on a wiki
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                x-examples:
+                  Example 1:
+                    - name: test1
+                      updatedAt: 698051267.295227
+                      id: empblzpb84fmv9hitojxjg6p0
+                      number: 2
+                      isLocked: false
+                      content: test content update
+                      bookId: 4mmw6ztlrzrrr1nv9hszjk3vy
+                      updatedBy: updater2
+                      wiki: ume
+                items:
+                  $ref: '#/components/schemas/WikiPage'
+      operationId: get-updates
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: wiki
+          description: Wiki name
+        - schema:
+            type: integer
+          in: query
+          name: from
+          description: From index
+        - schema:
+            type: integer
+          in: query
+          name: size
+          description: Size to take
+  /search:
+    get:
+      summary: Search pages on a wiki
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                x-examples:
+                  Example 1:
+                    - name: test1
+                      updatedAt: 698051267.295227
+                      id: empblzpb84fmv9hitojxjg6p0
+                      number: 2
+                      isLocked: false
+                      content: test content update
+                      bookId: 4mmw6ztlrzrrr1nv9hszjk3vy
+                      updatedBy: updater2
+                      wiki: ume
+                items:
+                  $ref: '#/components/schemas/WikiPage'
+      operationId: search-pages
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: wiki
+          description: Wiki name
+        - schema:
+            type: string
+          in: query
+          name: q
+          description: Query string
+components:
+  schemas:
+    WikiBook:
+      type: object
+      x-stoplight:
+        id: 3fd9f0rh62yfi
+      x-examples:
+        Example 1:
+          ownedBy: 4saYpbYbngfMl6N4YPLWn8kJHAC2
+          id: 4mmw6ztlrzrrr1nv9hszjk3vy
+          title: ume wiki
+          name: ume
+          count: 3
+      properties:
+        ownedBy:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        name:
+          type: string
+        count:
+          type: integer
+        initialPageName:
+          type: string
+      required:
+        - ownedBy
+        - id
+        - title
+        - name
+        - count
+    WikiPage:
+      type: object
+      x-examples:
+        Example 1:
+          name: index
+          updatedAt: 1677728598145
+          id: 5scwgcisl11lxnqkgfgfycse5
+          number: 3
+          isLocked: false
+          content: index content hello
+          bookId: 4mmw6ztlrzrrr1nv9hszjk3vy
+          updatedBy: ume@softumeya.com
+          wiki: ume
+      properties:
+        name:
+          type: string
+        updatedAt:
+          type: integer
+        id:
+          type: string
+        ownedBy:
+          type: string
+        number:
+          type: integer
+        isLocked:
+          type: boolean
+        content:
+          type: string
+        bookId:
+          type: string
+        updatedBy:
+          type: string
+        wiki:
+          type: string
+        title:
+          type: string
+          x-stoplight:
+            id: q92x13uiz4lud
+      required:
+        - name
+        - updatedAt
+        - id
+        - number
+        - isLocked
+        - content
+        - bookId
+        - updatedBy
+        - wiki

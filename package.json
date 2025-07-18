@@ -54,6 +54,7 @@
 		"lodash-es": "^4.17.21",
 		"mark.js": "^8.11.1",
 		"marked": "^5.1.2",
+		"postcss-import": "^16.1.1",
 		"simple-text-diff": "^1.7.0",
 		"svelte-i18n": "^3.7.4"
 	},

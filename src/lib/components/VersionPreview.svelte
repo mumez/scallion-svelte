@@ -8,7 +8,7 @@
 	import type { PageContent } from '$lib/models/PageContent';
 	import wikiPage from '$lib/stores/wikiPage';
 
-	export let parent: unknown;
+	export let parent: any;
 	export let pageContent: PageContent;
 	export let versionNumber: number;
 	export let latestPageContent: PageContent;

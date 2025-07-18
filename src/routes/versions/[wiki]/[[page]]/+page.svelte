@@ -2,7 +2,7 @@
 	import { _ } from '$lib/plugins/localization';
 	import { page } from '$app/stores';
 	import { Table, Paginator, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
-	import type { PaginationSettings } from '@skeletonlabs/skeleton/components/Paginator/types';
+	import type { PaginationSettings } from '@skeletonlabs/skeleton';
 	import VersionPreview from '$lib/components/VersionPreview.svelte';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
