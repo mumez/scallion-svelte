@@ -5,8 +5,12 @@
 	import { _ } from '$lib/plugins/localization';
 	import { isImage, concatPath } from '$lib/utils/FileUtils';
 
-	export let fileName = '';
-	export let baseUrl = '';
+	interface Props {
+		fileName?: string;
+		baseUrl?: string;
+	}
+
+	let { fileName = '', baseUrl = '' }: Props = $props();
 
 	const fullUrl = concatPath(baseUrl, fileName);
 	const popupTarget = `popup-${fullUrl}`;
@@ -19,7 +23,7 @@
 		target: popupTarget
 	};
 
-	let copied = false;
+	let copied = $state(false);
 	function onClick(): void {
 		copied = true;
 		setTimeout(() => {
@@ -34,7 +38,7 @@
 <div class="tooltip" data-popup={popupTarget}>
 	{#if isImage(fileName)}
 		<Avatar src={fullUrl} rounded="rounded-xl" />
-		<div class="arrow variant-glass-primary bg-opacity-20" />
+		<div class="arrow variant-glass-primary bg-opacity-20"></div>
 	{/if}
 </div>
 <div class="space-x-0">
@@ -42,7 +46,7 @@
 		class="badge variant-ringed-primary"
 		use:clipboard={clipboardTextFrom(fileName)}
 		use:popup={imageTooltip}
-		on:click={onClick}
+		onclick={onClick}
 		disabled={copied}>{copied ? $_('copied') + ' ✓ ' : fileName}</button
 	>
 </div>

@@ -1,10 +1,17 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { Avatar } from '@skeletonlabs/skeleton';
 	import { isImage, concatPath, extensionFrom } from '$lib/utils/FileUtils';
 	import ModalCloseButton from '$lib/components/ModalCloseButton.svelte';
 
-	export let fileName = '';
-	export let baseUrl = '';
+	interface Props {
+		fileName?: string;
+		baseUrl?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { fileName = '', baseUrl = '', children }: Props = $props();
 
 	const fullUrl = concatPath(baseUrl, fileName);
 
@@ -33,8 +40,8 @@
 			</div>
 		{/if}
 		<div class="p-2 truncate">
-			<a href={fullUrl} on:click|preventDefault={download}>{fileName}</a>
+			<a href={fullUrl} onclick={preventDefault(download)}>{fileName}</a>
 		</div>
 	</div>
-	<slot />
+	{@render children?.()}
 </div>

@@ -1,13 +1,19 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { createEventDispatcher } from 'svelte';
 	import { FileDropzone } from '@skeletonlabs/skeleton';
 	import { _ } from '$lib/plugins/localization';
 
-	export let uploader: (file: File) => Promise<boolean> = (file) => Promise.resolve(true);
+	interface Props {
+		uploader?: (file: File) => Promise<boolean>;
+	}
 
-	let uploadingFileList: FileList | null;
-	let uploadingFileArray: File[] = [];
-	let isUploading = false;
+	let { uploader = (file) => Promise.resolve(true) }: Props = $props();
+
+	let uploadingFileList: FileList | null = $state();
+	let uploadingFileArray: File[] = $state([]);
+	let isUploading = $state(false);
 
 	const dispatch = createEventDispatcher();
 
@@ -37,37 +43,43 @@
 		isUploading = false;
 	}
 
-	$: uploadingFileArray = uploadingFileList ? [...uploadingFileList] : [];
-	$: shouldEnableActionButtons = !isUploading && uploadingFileArray.length > 0;
+	run(() => {
+		uploadingFileArray = uploadingFileList ? [...uploadingFileList] : [];
+	});
+	let shouldEnableActionButtons = $derived(!isUploading && uploadingFileArray.length > 0);
 </script>
 
 <div class="relative">
 	<FileDropzone multiple name="uploadingFiles" padding="py-3" on:change={onFilesChange}>
-		<svelte:fragment slot="lead">
-			{#if isUploading}
-				<i class="animate-spin text-3xl fa-solid fa-spinner" />
-			{:else}
-				<span>{$_('drop-or-click-to-start-uploading-files')}</span>
-			{/if}
-		</svelte:fragment>
-		<svelte:fragment slot="message">
-			<ul class="text-left">
-				{#each uploadingFileArray as uploadingFile}
-					<li>{uploadingFile.name}</li>
-				{/each}
-			</ul>
-		</svelte:fragment>
+		{#snippet lead()}
+			
+				{#if isUploading}
+					<i class="animate-spin text-3xl fa-solid fa-spinner"></i>
+				{:else}
+					<span>{$_('drop-or-click-to-start-uploading-files')}</span>
+				{/if}
+			
+			{/snippet}
+		{#snippet message()}
+			
+				<ul class="text-left">
+					{#each uploadingFileArray as uploadingFile}
+						<li>{uploadingFile.name}</li>
+					{/each}
+				</ul>
+			
+			{/snippet}
 	</FileDropzone>
 	<div class="absolute z-30 bottom-0 right-0">
 		<button
 			disabled={!shouldEnableActionButtons}
 			class="border-current px-2 border-2 variant-filled-warning"
-			on:click={clear}>{$_('clear')}</button
+			onclick={clear}>{$_('clear')}</button
 		>
 		<button
 			disabled={!shouldEnableActionButtons}
 			class="border-current px-2 border-2 variant-filled-primary"
-			on:click={upload}>{$_('upload')}</button
+			onclick={upload}>{$_('upload')}</button
 		>
 	</div>
 </div>

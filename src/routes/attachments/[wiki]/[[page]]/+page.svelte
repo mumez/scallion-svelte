@@ -17,7 +17,11 @@
 
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	const wikiName = $page.params['wiki'] ?? '';
 	const pageName = $page.params['page'] ?? 'index';
@@ -25,7 +29,7 @@
 	$headerTitle = pageName;
 	const pageService = new PageService(wikiName, pageName);
 	const filesService = new FilesService(wikiName, pageName);
-	let files = data.files;
+	let files = $state(data.files);
 	const filesTableHeaders: string[] = ['name', 'size', 'date'].map((h) => $_(h));
 
 	// lifecycle callbacks
@@ -67,8 +71,8 @@
 		wikiPage.setPageContent(await pageService.getContent());
 	}
 
-	$: isPageLockedByOtherUser = isLockedByOtherUser($wikiPage?.pageContent, uid());
-	$: filesTableBody = processRowsForTable(files);
+	let isPageLockedByOtherUser = $derived(isLockedByOtherUser($wikiPage?.pageContent, uid()));
+	let filesTableBody = $derived(processRowsForTable(files));
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-attachments">

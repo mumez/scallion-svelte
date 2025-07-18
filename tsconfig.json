@@ -14,7 +14,8 @@
 		"noUncheckedIndexedAccess": true,
 		"noImplicitOverride": true,
 		"noPropertyAccessFromIndexSignature": true,
-		"ignoreDeprecations": "5.0"
+		"ignoreDeprecations": "5.0",
+		"verbatimModuleSyntax": true
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

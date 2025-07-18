@@ -5,11 +5,15 @@
 	import WikiRecentUpdatesPanel from '$lib/components/WikiRecentUpdatesPanel.svelte';
 	import type { PageContent } from '$lib/models/PageContent';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
 
-	$: pageName = $page.params['page'] ?? '';
-	$: loadedPageContent = data.page ?? ({} as PageContent);
-	$: pages = data.pages ?? [];
+	let { data }: Props = $props();
+
+	let pageName = $derived($page.params['page'] ?? '');
+	let loadedPageContent = $derived(data.page ?? ({} as PageContent));
+	let pages = $derived(data.pages ?? []);
 </script>
 
 {#if pageName}

@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	export let wikiBookName = '';
-	export let wikisBaseDirectory = '';
+	interface Props {
+		wikiBookName?: string;
+		wikisBaseDirectory?: string;
+	}
+
+	let { wikiBookName = '', wikisBaseDirectory = '' }: Props = $props();
 </script>
 
 {#if wikiBookName}

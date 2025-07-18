@@ -1,13 +1,17 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import type { WikiBook } from '$lib/models/WikiBook';
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	function initialPageForWiki(wiki: WikiBook) {
 		return wiki.initialPageName ?? 'index';
 	}
 
-	$: wikiBooks = data.books ?? [];
+	let wikiBooks = $derived(data.books ?? []);
 </script>
 
 <div class="container mx-auto p-8 space-y-8">

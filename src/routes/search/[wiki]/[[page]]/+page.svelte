@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { tick } from 'svelte';
 	import Mark from 'mark.js';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
@@ -17,12 +19,12 @@
 
 	const searchService = new SearchService();
 
-	let isSearching = false;
-	let searchInput = '';
-	let searchResults: PageContent[] = [];
+	let isSearching = $state(false);
+	let searchInput = $state('');
+	let searchResults: PageContent[] = $state([]);
 
 	let highlighter: Mark;
-	let resultsArea: string | HTMLElement | readonly HTMLElement[] | NodeList;
+	let resultsArea: string | HTMLElement | readonly HTMLElement[] | NodeList = $state();
 
 	async function search() {
 		if (!searchInput) return;
@@ -46,9 +48,11 @@
 		return `/${$wikisBaseDirectory}/${wikiName}/${encodeURIComponent(page.name)}`;
 	}
 
-	$: if (searchInput == '') {
-		clearSearchResults();
-	}
+	run(() => {
+		if (searchInput == '') {
+			clearSearchResults();
+		}
+	});
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-attachments">
@@ -67,7 +71,7 @@
 						bind:value={searchInput}
 					/>
 				</div>
-				<button type="submit" class="btn variant-filled-primary" on:click={search}
+				<button type="submit" class="btn variant-filled-primary" onclick={search}
 					>{$_('search')}</button
 				>
 			</div>

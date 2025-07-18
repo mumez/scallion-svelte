@@ -2,8 +2,12 @@
 	import AttachmentBadge from '$lib/components/AttachmentBadge.svelte';
 	import type WebDavEntry from '$lib/utils/WebDavEntry';
 
-	export let baseUrl = '';
-	export let files: WebDavEntry[] = [];
+	interface Props {
+		baseUrl?: string;
+		files?: WebDavEntry[];
+	}
+
+	let { baseUrl = '', files = [] }: Props = $props();
 </script>
 
 <div class="space-x-0">

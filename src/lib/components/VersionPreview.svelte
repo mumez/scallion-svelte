@@ -8,10 +8,21 @@
 	import type { PageContent } from '$lib/models/PageContent';
 	import wikiPage from '$lib/stores/wikiPage';
 
-	export let parent: any;
-	export let pageContent: PageContent;
-	export let versionNumber: number;
-	export let latestPageContent: PageContent;
+	interface Props {
+		parent: any;
+		pageContent: PageContent;
+		versionNumber: number;
+		latestPageContent: PageContent;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		parent,
+		pageContent,
+		versionNumber,
+		latestPageContent,
+		children
+	}: Props = $props();
 
 	const diffResult = diff.diffPatch(latestPageContent.content, pageContent.content);
 
@@ -51,10 +62,10 @@
 		</div>
 	</div>
 	<footer class="modal-footer {parent.regionFooter}">
-		<button class="btn variant-filled-warning" on:click={closeModal}>{$_('cancel')}</button>
-		<button class="btn variant-filled-primary" on:click={startEditing}
+		<button class="btn variant-filled-warning" onclick={closeModal}>{$_('cancel')}</button>
+		<button class="btn variant-filled-primary" onclick={startEditing}
 			>{$_('start-editing-using-this-version')}</button
 		>
 	</footer>
-	<slot />
+	{@render children?.()}
 </div>

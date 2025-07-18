@@ -12,7 +12,11 @@
 	import { openModal } from '$lib/utils/ModalOpener';
 
 	import type { PageData } from './$types';
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	const wikiName = $page.params['wiki'] ?? '';
 	const pageName = $page.params['page'] ?? 'index';
@@ -22,7 +26,7 @@
 	const versionsService = new VersionsService(wikiName, pageName);
 	const pageService = new PageService(wikiName, pageName);
 	const lastVersionNumber = data.lastVersionNumber;
-	let versions = data.versions;
+	let versions = $state(data.versions);
 	let versionFrom = lastVersionNumber;
 	let rowsPerPage = 5;
 
@@ -30,12 +34,12 @@
 		$_(h)
 	);
 
-	let pagination = {
+	let pagination = $state({
 		offset: 0,
 		limit: rowsPerPage,
 		size: versionFrom,
 		amounts: [5, 10]
-	} as PaginationSettings;
+	} as PaginationSettings);
 
 	function onPageChange(e: CustomEvent) {
 		const pageNum = e.detail;
@@ -73,7 +77,7 @@
 		return tableSourceValues(mappedVersions);
 	}
 
-	$: versionsTableBody = processRowsForTable(versions);
+	let versionsTableBody = $derived(processRowsForTable(versions));
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-versions">

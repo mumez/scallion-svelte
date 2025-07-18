@@ -16,8 +16,13 @@
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	let showLoginButton = false;
+	let { children }: Props = $props();
+
+	let showLoginButton = $state(false);
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	onMount(() => {
@@ -31,9 +36,9 @@
 		authService.authByPopup();
 	}
 
-	$: isRoot = $page.route.id == '/';
-	$: title = isRoot ? 'Swikis on this Site' : $headerTitle;
-	$: linkToParent = isRoot ? '' : $parentLink;
+	let isRoot = $derived($page.route.id == '/');
+	let title = $derived(isRoot ? 'Swikis on this Site' : $headerTitle);
+	let linkToParent = $derived(isRoot ? '' : $parentLink);
 </script>
 
 <svelte:head>
@@ -45,24 +50,31 @@
 </svelte:head>
 <Modal />
 <AppShell>
-	<svelte:fragment slot="header">
-		<AppBar>
-			<svelte:fragment slot="lead">
-				<WikiBookIndexLink wikiBookName={linkToParent} wikisBaseDirectory={$wikisBaseDirectory} />
-				<h1>{title}</h1></svelte:fragment
-			>
-			<svelte:fragment slot="trail">
-				{#if showLoginButton}
-					<button class="btn btn-sm variant-filled-primary" on:click={tryLogin}
-						><i class="fa-solid fa-door-open" /><span>Login</span></button
-					>
-				{/if}
-				{#if !isRoot}
-					<ActionsMenuBar />
-				{/if}
-			</svelte:fragment>
-		</AppBar>
-	</svelte:fragment>
-	<slot />
-	<svelte:fragment slot="footer"><span class="px-2">Scallion Wiki</span></svelte:fragment>
+	{#snippet header()}
+	
+			<AppBar>
+				{#snippet lead()}
+					
+						<WikiBookIndexLink wikiBookName={linkToParent} wikisBaseDirectory={$wikisBaseDirectory} />
+						<h1>{title}</h1>
+					{/snippet}
+				{#snippet trail()}
+					
+						{#if showLoginButton}
+							<button class="btn btn-sm variant-filled-primary" onclick={tryLogin}
+								><i class="fa-solid fa-door-open"></i><span>Login</span></button
+							>
+						{/if}
+						{#if !isRoot}
+							<ActionsMenuBar />
+						{/if}
+					
+					{/snippet}
+			</AppBar>
+		
+	{/snippet}
+	{@render children?.()}
+	{#snippet footer()}
+		<span class="px-2">Scallion Wiki</span>
+	{/snippet}
 </AppShell>
