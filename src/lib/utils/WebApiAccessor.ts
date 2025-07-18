@@ -49,7 +49,7 @@ export class WebApiAccessor {
 		return resp;
 	}
 
-	protected buildUrl(urlPart) {
+	protected buildUrl(urlPart: string): string {
 		return concatPath(this.baseUrl, urlPart);
 	}
 }

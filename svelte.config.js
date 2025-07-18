@@ -12,7 +12,7 @@ const config = {
 		preprocess({
 			postcss: true,
 			typescript: {
-				tsconfigFile: false
+				tsconfigFile: './tsconfig.json'
 			}
 		})
 	],

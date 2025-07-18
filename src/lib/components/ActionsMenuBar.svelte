@@ -3,6 +3,7 @@
 
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import type { Page } from '@sveltejs/kit';
 	import { uid } from '$lib/services/UserService';
 	import isAuthenticated from '$lib/stores/isAuthenticated';
 	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
@@ -12,7 +13,8 @@
 	const _wikisBaseDir = 'wikis';
 	const _blikisBaseDir = 'blikis';
 
-	let wikiName = $page.params['wiki'] ?? '';
+	// Properly type the page store
+	let wikiName = $derived($page?.params?.['wiki'] ?? '');
 
 	function startEditing() {
 		wikiPage.startEditing();
@@ -46,26 +48,31 @@
 		<button
 			class="btn-icon"
 			disabled={$wikiPage.isEditing || !$isAuthenticated || isPageLockedByOtherUser}
-			onclick={startEditing}><i class="fa-solid fa-pen"></i></button
+			onclick={startEditing}
+			aria-label="Edit"><i class="fa-solid fa-pen"></i></button
 		>
 	{:else}
-		<a href="/{$wikisBaseDirectory || routeFirstPart}/{wikiName}/{pageNameEncoded}" class="btn-icon"
-			><i class="fa-solid fa-pen"></i></a
+		<a
+			href="/{$wikisBaseDirectory || routeFirstPart}/{wikiName}/{pageNameEncoded}"
+			class="btn-icon"
+			aria-label="Edit"><i class="fa-solid fa-pen"></i></a
 		>
 	{/if}
 	{#if !isBlikisTopPage}
 		<a
 			class:disabled={isAttachmentsButtonDisabled}
 			href="/attachments/{wikiName}/{pageNameEncoded}"
-			class="btn-icon"><i class="fa-solid fa-arrow-up-from-bracket"></i></a
+			class="btn-icon"
+			aria-label="Attachments"><i class="fa-solid fa-arrow-up-from-bracket"></i></a
 		>
 		<a
 			class:disabled={isVersionsButtonDisabled}
 			href="/versions/{wikiName}/{pageNameEncoded}"
-			class="btn-icon"><i class="fa-solid fa-clock-rotate-left"></i></a
+			class="btn-icon"
+			aria-label="Versions"><i class="fa-solid fa-clock-rotate-left"></i></a
 		>
 	{/if}
-	<a class="btn-icon" href="/search/{wikiName}/{pageNameEncoded}"
+	<a class="btn-icon" href="/search/{wikiName}/{pageNameEncoded}" aria-label="Search"
 		><i class="fa-solid fa-search"></i></a
 	>
 	<!-- <button class="btn-icon" on:click={openSearchModal}><i class="fa-solid fa-search" /></button> -->

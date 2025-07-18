@@ -15,7 +15,8 @@
 		"noImplicitOverride": true,
 		"noPropertyAccessFromIndexSignature": true,
 		"ignoreDeprecations": "5.0",
-		"verbatimModuleSyntax": true
+		"verbatimModuleSyntax": true,
+		"moduleResolution": "bundler"
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

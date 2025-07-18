@@ -1,5 +1,4 @@
-import { modalStore } from '@skeletonlabs/skeleton';
-import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton/utilities/Modal/types';
+import { modalStore, type ModalSettings, type ModalComponent } from '@skeletonlabs/skeleton';
 
 export const asModalComponent = (component: unknown, props = {}): ModalComponent => {
 	return {

@@ -11,7 +11,7 @@
 
 	let { uploader = (file) => Promise.resolve(true) }: Props = $props();
 
-	let uploadingFileList: FileList | null = $state();
+	let uploadingFileList: FileList | null = $state(null);
 	let uploadingFileArray: File[] = $state([]);
 	let isUploading = $state(false);
 

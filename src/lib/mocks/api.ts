@@ -117,14 +117,16 @@ export const handlers = [
 		const body = await request.json() as PageContent;
 		const pageIndex = mockWikiPages.findIndex(p => p.id === body.id);
 		
-		if (pageIndex >= 0) {
-			mockWikiPages[pageIndex] = {
-				...mockWikiPages[pageIndex],
+		if (pageIndex >= 0 && mockWikiPages[pageIndex]) {
+			const currentPage = mockWikiPages[pageIndex];
+			const updatedPage = {
+				...currentPage,
 				...body,
 				updatedAt: Date.now(),
-				number: mockWikiPages[pageIndex].number + 1
+				number: currentPage.number + 1
 			};
-			return HttpResponse.json(mockWikiPages[pageIndex]);
+			mockWikiPages[pageIndex] = updatedPage;
+			return HttpResponse.json(updatedPage);
 		}
 		return HttpResponse.json({}, { status: 404 });
 	}),

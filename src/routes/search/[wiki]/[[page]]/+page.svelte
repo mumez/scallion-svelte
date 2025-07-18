@@ -12,10 +12,13 @@
 	import SearchService from '$lib/services/SearchService';
 	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
 
-	const wikiName = $page.params['wiki'] ?? '';
-	const pageName = $page.params['page'] ?? 'index';
-	$parentLink = wikiName;
-	$headerTitle = pageName;
+	const wikiName = $derived($page.params['wiki'] ?? '');
+	const pageName = $derived($page.params['page'] ?? 'index');
+	
+	$effect(() => {
+		parentLink.set(wikiName);
+		headerTitle.set(pageName);
+	});
 
 	const searchService = new SearchService();
 
@@ -24,7 +27,7 @@
 	let searchResults: PageContent[] = $state([]);
 
 	let highlighter: Mark;
-	let resultsArea: string | HTMLElement | readonly HTMLElement[] | NodeList = $state();
+	let resultsArea: string | HTMLElement | readonly HTMLElement[] | NodeList | undefined = $state();
 
 	async function search() {
 		if (!searchInput) return;
@@ -36,8 +39,10 @@
 	}
 
 	function highlightResults() {
-		highlighter = new Mark(resultsArea);
-		highlighter.mark(searchInput);
+		if (resultsArea) {
+			highlighter = new Mark(resultsArea);
+			highlighter.mark(searchInput);
+		}
 	}
 
 	function clearSearchResults() {

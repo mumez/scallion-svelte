@@ -9,11 +9,13 @@ This is a SvelteKit-based wiki frontend application that works with the [scallio
 ## Development Commands
 
 ### Core Commands
+
 - `npm run dev` - Start development server on port 8081
 - `npm run build` - Build the application for production
 - `npm run preview` - Preview production build locally
 
 ### Quality Assurance
+
 - `npm run lint` - Run Prettier and ESLint checks
 - `npm run format` - Format code with Prettier
 - `npm run check` - Run Svelte type checking
@@ -23,6 +25,7 @@ This is a SvelteKit-based wiki frontend application that works with the [scallio
 ## Project Architecture
 
 ### Service Layer Architecture
+
 The application follows a layered service architecture:
 
 - **BaseService**: Abstract base class for all services
@@ -34,15 +37,18 @@ All API communication goes through the `WebApiAccessor` utility class, which han
 ### Key Components Structure
 
 #### Configuration (`src/lib/configs/`)
+
 - Central configuration system combining Firebase, Wiki API, and WebDAV settings
 - Environment-specific configurations are managed here
 
 #### Models (`src/lib/models/`)
+
 - `WikiBook`: Represents a wiki with metadata (id, name, title, count, owner)
 - `PageContent`: Represents wiki page content with versioning information
 - `User`: User authentication and profile information
 
 #### Services (`src/lib/services/`)
+
 - **AuthService**: Firebase authentication with JWT token management
 - **WikiBookService**: Wiki metadata and page existence checking
 - **PageService**: CRUD operations for wiki pages
@@ -51,14 +57,18 @@ All API communication goes through the `WebApiAccessor` utility class, which han
 - **VersionsService**: Page versioning and history
 
 #### Stores (`src/lib/stores/`)
+
 Svelte stores for global state management:
+
 - `isAuthenticated`: User authentication state
 - `wikiPage`: Current wiki page data
 - `headerTitle`: Dynamic page titles
 - `parentLink`: Navigation breadcrumb state
 
 ### Route Structure
+
 The app uses SvelteKit's file-based routing with dynamic segments:
+
 - `/wikis/[wiki]/[[page]]` - Main wiki page view
 - `/blikis/[wiki]/[[page]]` - Blog-style wiki pages
 - `/attachments/[wiki]/[[page]]` - File attachments
@@ -66,6 +76,7 @@ The app uses SvelteKit's file-based routing with dynamic segments:
 - `/search/[wiki]/[[page]]` - Search results
 
 ### Authentication Flow
+
 1. Firebase authentication via popup
 2. JWT token extraction and storage
 3. Token passed to API services through `WebApiAccessor`
@@ -84,9 +95,11 @@ The app uses SvelteKit's file-based routing with dynamic segments:
 ## API Integration
 
 ### Backend API
+
 The frontend integrates with the [scallion-wiki-api](https://github.com/mumez/scallion-wiki-api) backend. The API specification is documented in `api-spec/wikis.yaml`.
 
 ### Key API Endpoints
+
 - `GET /wikis` - List all wiki books
 - `GET /wiki?name={name}` - Get wiki book metadata
 - `GET /pages?wiki={wiki}&exist={pageNames}` - Check page existence
@@ -98,21 +111,26 @@ The frontend integrates with the [scallion-wiki-api](https://github.com/mumez/sc
 - `GET /search?wiki={wiki}&q={query}` - Search pages
 
 ### Authentication
+
 - JWT tokens are passed via Authorization header
 - Authentication is required for creating/updating pages
 - Page locking is enforced server-side based on `ownedBy` field
 
 ### Data Models
+
 - **WikiBook**: `{id, name, title, count, ownedBy, initialPageName?}`
 - **WikiPage**: `{id, name, content, wiki, bookId, number, updatedAt, updatedBy, isLocked}`
 
 ## Development Notes
 
 ### API Integration
+
 Configure the backend API endpoint in `src/lib/configs/wikiApi.ts`. The base URL should point to your scallion-wiki-api instance (default: `https://softumeya.com/scallion/api`).
 
 ### Environment Configuration
+
 Configure Firebase and API endpoints in the respective config files before running the application.
 
 ### Testing
+
 Tests are configured to run with Vitest and include files matching `src/**/*.{test,spec}.{js,ts}`.
