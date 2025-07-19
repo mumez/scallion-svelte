@@ -1,16 +1,15 @@
 <script lang="ts">
 	//import '@skeletonlabs/skeleton/themes/theme-crimson.css';
 	import '../theme.css';
-	import '@skeletonlabs/skeleton/themes/theme-rocket.css';
-	import '@skeletonlabs/skeleton/styles/all.css';
+	// import '@skeletonlabs/skeleton/themes/theme-rocket.css';
+	// import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.css';
-	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
+	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
 	import WikiBookIndexLink from '$lib/components/WikiBookIndexLink.svelte';
+	import GlobalModal from '$lib/components/GlobalModal.svelte';
 	import authService from '$lib/services/AuthService';
 	import isAuthenticated from '$lib/stores/isAuthenticated';
 	import parentLink from '$lib/stores/parentLink';
@@ -23,7 +22,6 @@
 	let { children }: Props = $props();
 
 	let showLoginButton = $state(false);
-	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	onMount(() => {
 		authService.tryAutoLogin((result) => {
@@ -48,33 +46,36 @@
 		<title>{linkToParent} : {title}</title>
 	{/if}
 </svelte:head>
-<Modal />
-<AppShell>
-	{#snippet header()}
-	
-			<AppBar>
-				{#snippet lead()}
-					
-						<WikiBookIndexLink wikiBookName={linkToParent} wikisBaseDirectory={$wikisBaseDirectory} />
-						<h1>{title}</h1>
-					{/snippet}
-				{#snippet trail()}
-					
-						{#if showLoginButton}
-							<button class="btn btn-sm variant-filled-primary" onclick={tryLogin}
-								><i class="fa-solid fa-door-open"></i><span>Login</span></button
-							>
-						{/if}
-						{#if !isRoot}
-							<ActionsMenuBar />
-						{/if}
-					
-					{/snippet}
-			</AppBar>
-		
-	{/snippet}
-	{@render children?.()}
-	{#snippet footer()}
+<GlobalModal />
+
+<div class="min-h-screen flex flex-col">
+	<!-- Header -->
+	<header class="shrink-0">
+		<AppBar>
+			{#snippet lead()}
+				<WikiBookIndexLink wikiBookName={linkToParent} wikisBaseDirectory={$wikisBaseDirectory} />
+				<h1>{title}</h1>
+			{/snippet}
+			{#snippet trail()}
+				{#if showLoginButton}
+					<button class="btn btn-sm preset-filled-primary-500" onclick={tryLogin}>
+						<i class="fa-solid fa-door-open"></i><span>Login</span>
+					</button>
+				{/if}
+				{#if !isRoot}
+					<ActionsMenuBar />
+				{/if}
+			{/snippet}
+		</AppBar>
+	</header>
+
+	<!-- Main Content -->
+	<main class="flex-1 overflow-auto">
+		{@render children?.()}
+	</main>
+
+	<!-- Footer -->
+	<footer class="shrink-0 p-2 border-t border-surface-300-600">
 		<span class="px-2">Scallion Wiki</span>
-	{/snippet}
-</AppShell>
+	</footer>
+</div>

@@ -2,7 +2,7 @@
 	import { run } from 'svelte/legacy';
 
 	import { createEventDispatcher } from 'svelte';
-	import { FileDropzone } from '@skeletonlabs/skeleton';
+	import { FileUpload } from '@skeletonlabs/skeleton-svelte';
 	import { _ } from '$lib/plugins/localization';
 
 	interface Props {
@@ -50,7 +50,7 @@
 </script>
 
 <div class="relative">
-	<FileDropzone multiple name="uploadingFiles" padding="py-3" on:change={onFilesChange}>
+	<FileUpload multiple name="uploadingFiles" padding="py-3" on:change={onFilesChange}>
 		{#snippet lead()}
 			
 				{#if isUploading}
@@ -69,16 +69,16 @@
 				</ul>
 			
 			{/snippet}
-	</FileDropzone>
+	</FileUpload>
 	<div class="absolute z-30 bottom-0 right-0">
 		<button
 			disabled={!shouldEnableActionButtons}
-			class="border-current px-2 border-2 variant-filled-warning"
+			class="border-current px-2 border-2 preset-filled-warning-500"
 			onclick={clear}>{$_('clear')}</button
 		>
 		<button
 			disabled={!shouldEnableActionButtons}
-			class="border-current px-2 border-2 variant-filled-primary"
+			class="border-current px-2 border-2 preset-filled-primary-500"
 			onclick={upload}>{$_('upload')}</button
 		>
 	</div>

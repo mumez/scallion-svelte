@@ -182,8 +182,8 @@
 	<hr />
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
-			<button class="btn variant-filled-warning" onclick={cancelContent}>{$_('cancel')}</button>
-			<button class="btn variant-filled-primary" onclick={saveContent}>{$_('save')}</button>
+			<button class="btn preset-filled-warning-500" onclick={cancelContent}>{$_('cancel')}</button>
+			<button class="btn preset-filled-primary-500" onclick={saveContent}>{$_('save')}</button>
 			{#if canLockOnSave}
 				<label class="flex items-center space-x-2">
 					<input class="checkbox" type="checkbox" bind:checked={shouldLockOnSave} />

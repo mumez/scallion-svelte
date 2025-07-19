@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { _ } from '$lib/plugins/localization';
-	import { Table, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
 	import FilesUploadPanel from '$lib/components/FilesUploadPanel.svelte';
 	import FileDownloader from '$lib/components/FileDownloader.svelte';
 	import parentLink from '$lib/stores/parentLink';

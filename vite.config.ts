@@ -1,9 +1,13 @@
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
+	build: {
+		// inline all imported assets
+		assetsInlineLimit: Infinity
+	},
 	server: {
 		host: true,
 		port: 8081

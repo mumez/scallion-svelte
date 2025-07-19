@@ -16,7 +16,8 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@skeletonlabs/skeleton": "^1.12.0",
+		"@skeletonlabs/skeleton": "^3.1.7",
+		"@skeletonlabs/skeleton-svelte": "^1.3.1",
 		"@sveltejs/adapter-auto": "^6.0.1",
 		"@sveltejs/kit": "^2.5.27",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",

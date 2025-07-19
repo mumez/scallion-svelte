@@ -87,7 +87,7 @@
 	{/each}
 	<div class="h-4"></div>
 	<div class="flex justify-end">
-		<button disabled={allLoaded} type="button" class="btn variant-ringed" onclick={loadMore}>
+		<button disabled={allLoaded} type="button" class="btn preset-outlined" onclick={loadMore}>
 			<span>{$_('more') + '...'}</span>
 			<i class="fa-solid fa-angles-down"></i>
 		</button>

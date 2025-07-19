@@ -8,19 +8,21 @@ This is a SvelteKit-based wiki frontend application that works with the [scallio
 
 ## Development Commands
 
+**Note**: This project uses `pnpm` as the package manager. Node.js 22.x is required.
+
 ### Core Commands
 
-- `npm run dev` - Start development server on port 8081
-- `npm run build` - Build the application for production
-- `npm run preview` - Preview production build locally
+- `pnpm dev` - Start development server on port 8081
+- `pnpm build` - Build the application for production ⚠️ Currently failing due to Skeleton migration
+- `pnpm preview` - Preview production build locally
 
 ### Quality Assurance
 
-- `npm run lint` - Run Prettier and ESLint checks
-- `npm run format` - Format code with Prettier
-- `npm run check` - Run Svelte type checking
-- `npm run check:watch` - Run Svelte type checking in watch mode
-- `npm run test:unit` - Run unit tests with Vitest
+- `pnpm lint` - Run Prettier and ESLint checks
+- `pnpm format` - Format code with Prettier
+- `pnpm check` - Run Svelte type checking
+- `pnpm check:watch` - Run Svelte type checking in watch mode
+- `pnpm test:unit` - Run unit tests with Vitest
 
 ## Project Architecture
 
@@ -84,13 +86,14 @@ The app uses SvelteKit's file-based routing with dynamic segments:
 
 ## Technology Stack
 
-- **Frontend**: SvelteKit + TypeScript
-- **UI Framework**: Skeleton UI + Tailwind CSS
+- **Frontend**: SvelteKit 2.x + TypeScript + Svelte 5
+- **UI Framework**: Skeleton UI v3 + Tailwind CSS v4
 - **Authentication**: Firebase Auth (JWT tokens)
-- **Testing**: Vitest
+- **Testing**: Vitest with MSW for API mocking
 - **Markdown**: Marked.js with syntax highlighting (highlight.js)
 - **Internationalization**: svelte-i18n
 - **File Storage**: WebDAV support for attachments
+- **Package Manager**: pnpm (v8.15.4)
 
 ## API Integration
 
@@ -135,7 +138,51 @@ Configure Firebase and API endpoints in the respective config files before runni
 
 Tests are configured to run with Vitest and include files matching `src/**/*.{test,spec}.{js,ts}`.
 
-### TODO
+## Current Status
 
-- Migrate Skeleton:
-  https://www.skeleton.dev/docs/get-started/migrate-from-v2
+### Active Migration Work
+
+The project is currently undergoing major framework migrations:
+
+1. **Skeleton UI Migration**: Migrating from v2 to v3 (see https://www.skeleton.dev/docs/get-started/migrate-from-v2)
+2. **Tailwind CSS**: Upgraded to v4 with new Vite plugin architecture
+3. **Svelte**: Upgraded to v5 with new syntax and features
+
+### Known Issues
+
+- **Build Failure**: `pnpm build` currently fails due to incomplete Skeleton migration:
+- **Component Updates**: Several components need updates for Skeleton v3 API changes
+```
+x Build failed in 1.88s
+error during build:
+src/routes/+layout.svelte (9:18): "AppShell" is not exported by "node_modules/.pnpm/@skeletonlabs+skeleton-svelte@1.3.1_svelte@5.36.7/node_modules/@skeletonlabs/skeleton-svelte/dist/index.js", imported by "src/routes/+layout.svelte".
+file: D:/git/scallion-svelte/src/routes/+layout.svelte:9:18
+
+ 7:   import { onMount } from 'svelte';
+ 8:   import { page } from '$app/stores';
+ 9:   import { AppBar, AppShell } from '@skeletonlabs/skeleton-svelte';
+                       ^
+10:   import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
+11:   import WikiBookIndexLink from '$lib/components/WikiBookIndexLink.svelte';
+
+    at getRollupError (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at error (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/parseAst.js:397:42)     
+    at Module.error (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:16830:16)
+    at Module.traceVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:17279:29)
+    at ModuleScope.findVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:14925:39)
+    at FunctionScope.findVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:5620:38)
+    at FunctionBodyScope.findVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:5620:38)
+    at BlockScope.findVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:5620:38)
+    at Identifier.bind (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:5394:40)
+    at CallExpression.bind (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:2785:23)
+ ELIFECYCLE  Command failed with exit code 1.
+```
+- **Import Statements**: Old Skeleton imports need to be updated throughout the codebase
+
+### Migration Progress
+
+- ✅ Updated dependencies in package.json
+- ✅ Added @tailwindcss/vite plugin
+- ⚠️ **In Progress**: Skeleton UI component migration
+- ⚠️ **In Progress**: CSS import statements update
+- ❌ **Pending**: Full build verification

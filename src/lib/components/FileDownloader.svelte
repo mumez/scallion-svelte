@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { preventDefault } from 'svelte/legacy';
 
-	import { Avatar } from '@skeletonlabs/skeleton';
+	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 	import { isImage, concatPath, extensionFrom } from '$lib/utils/FileUtils';
 	import ModalCloseButton from '$lib/components/ModalCloseButton.svelte';
 

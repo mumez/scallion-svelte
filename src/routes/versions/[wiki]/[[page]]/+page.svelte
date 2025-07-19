@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { _ } from '$lib/plugins/localization';
 	import { page } from '$app/stores';
-	import { Table, Paginator, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
-	import type { PaginationSettings } from '@skeletonlabs/skeleton';
+	import { Pagination } from '@skeletonlabs/skeleton-svelte';
+	import type { PaginationSettings } from '@skeletonlabs/skeleton-svelte';
 	import VersionPreview from '$lib/components/VersionPreview.svelte';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
@@ -89,7 +89,7 @@
 		interactive={true}
 		on:selected={onRowSelected}
 	/>
-	<Paginator
+	<Pagination
 		bind:settings={pagination}
 		on:page={onPageChange}
 		on:amount={onAmountChange}

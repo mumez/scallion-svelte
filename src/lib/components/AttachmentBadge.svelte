@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { popup, clipboard } from '@skeletonlabs/skeleton';
-	import type { PopupSettings } from '@skeletonlabs/skeleton';
-	import { Avatar } from '@skeletonlabs/skeleton';
+		import type { PopupSettings } from '@skeletonlabs/skeleton-svelte';
+	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 	import { _ } from '$lib/plugins/localization';
 	import { isImage, concatPath } from '$lib/utils/FileUtils';
 
@@ -38,12 +37,12 @@
 <div class="tooltip" data-popup={popupTarget}>
 	{#if isImage(fileName)}
 		<Avatar src={fullUrl} rounded="rounded-xl" />
-		<div class="arrow variant-glass-primary bg-opacity-20"></div>
+		<div class="arrow preset-tonal-primary bg-opacity-20"></div>
 	{/if}
 </div>
 <div class="space-x-0">
 	<button
-		class="badge variant-ringed-primary"
+		class="badge preset-outlined-primary-500"
 		use:clipboard={clipboardTextFrom(fileName)}
 		use:popup={imageTooltip}
 		onclick={onClick}

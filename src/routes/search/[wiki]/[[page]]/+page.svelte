@@ -3,7 +3,7 @@
 
 	import { tick } from 'svelte';
 	import Mark from 'mark.js';
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { ProgressRing } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/stores';
 	import { _ } from '$lib/plugins/localization';
 	import parentLink from '$lib/stores/parentLink';
@@ -76,14 +76,14 @@
 						bind:value={searchInput}
 					/>
 				</div>
-				<button type="submit" class="btn variant-filled-primary" onclick={search}
+				<button type="submit" class="btn preset-filled-primary-500" onclick={search}
 					>{$_('search')}</button
 				>
 			</div>
 		</form>
 		<div class="flex pt-4 space-x-2" class:justify-center={isSearching} bind:this={resultsArea}>
 			{#if isSearching}
-				<ProgressRadial />
+				<ProgressRing />
 			{:else if searchResults.length > 0}
 				<div class="container space-y-2">
 					<div class="flex flex-row">
