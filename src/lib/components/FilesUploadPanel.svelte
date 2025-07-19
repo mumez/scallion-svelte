@@ -17,11 +17,13 @@
 
 	const dispatch = createEventDispatcher();
 
-	function onFilesChange(e: Event) {
-		uploadingFileList = e.target ? (e.target as HTMLInputElement).files : null;
+	function onFilesChange(details: { acceptedFiles: File[]; rejectedFiles: any[] }) {
+		uploadingFileArray = details.acceptedFiles;
+		uploadingFileList = null; // Clear the old FileList since we now work with File[]
 	}
 	function clear() {
 		uploadingFileList = null;
+		uploadingFileArray = [];
 	}
 	async function upload() {
 		isUploading = true;
@@ -50,25 +52,33 @@
 </script>
 
 <div class="relative">
-	<FileUpload multiple name="uploadingFiles" padding="py-3" on:change={onFilesChange}>
-		{#snippet lead()}
-			
+	<FileUpload 
+		name="uploadingFiles" 
+		maxFiles={10}
+		onFileChange={onFilesChange}
+	>
+		{#snippet children()}
+			<div class="text-center space-y-2">
 				{#if isUploading}
 					<i class="animate-spin text-3xl fa-solid fa-spinner"></i>
 				{:else}
-					<span>{$_('drop-or-click-to-start-uploading-files')}</span>
+					<div class="space-y-2">
+						<i class="fa-solid fa-cloud-upload-alt text-3xl text-surface-400"></i>
+						<p>{$_('drop-or-click-to-start-uploading-files')}</p>
+					</div>
 				{/if}
-			
-			{/snippet}
-		{#snippet message()}
-			
-				<ul class="text-left">
-					{#each uploadingFileArray as uploadingFile}
-						<li>{uploadingFile.name}</li>
-					{/each}
-				</ul>
-			
-			{/snippet}
+				
+				{#if uploadingFileArray.length > 0}
+					<div class="mt-4">
+						<ul class="text-left space-y-1">
+							{#each uploadingFileArray as uploadingFile}
+								<li class="text-sm">{uploadingFile.name}</li>
+							{/each}
+						</ul>
+					</div>
+				{/if}
+			</div>
+		{/snippet}
 	</FileUpload>
 	<div class="absolute z-30 bottom-0 right-0">
 		<button

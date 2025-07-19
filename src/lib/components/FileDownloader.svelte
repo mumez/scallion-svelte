@@ -33,7 +33,7 @@
 	<ModalCloseButton />
 	<div class="flex items-center">
 		{#if isImage(fileName)}
-			<Avatar src={fullUrl} rounded="rounded-xl" />
+			<Avatar name={fileName} src={fullUrl} rounded="rounded-xl" />
 		{:else}
 			<div class="card w-12 h-12 rounded-xl bg-white text-center truncate">
 				{extensionFrom(fileName)}

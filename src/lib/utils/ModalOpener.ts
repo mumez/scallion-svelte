@@ -1,14 +1,14 @@
 import { writable } from 'svelte/store';
 
 export interface ModalComponent {
-	ref: unknown;
+	ref: any;
 	props: any;
 	slot: string;
 }
 
 export interface ModalState {
 	isOpen: boolean;
-	component?: unknown;
+	component?: any;
 	props?: any;
 	type?: 'component' | 'alert';
 	title?: string;
@@ -20,7 +20,7 @@ export const modalState = writable<ModalState>({
 	isOpen: false
 });
 
-export const asModalComponent = (component: unknown, props = {}): ModalComponent => {
+export const asModalComponent = (component: any, props = {}): ModalComponent => {
 	return {
 		ref: component,
 		props: props,
@@ -28,7 +28,7 @@ export const asModalComponent = (component: unknown, props = {}): ModalComponent
 	};
 };
 
-export const openModal = (component: unknown, props = {}) => {
+export const openModal = (component: any, props = {}) => {
 	modalState.set({
 		isOpen: true,
 		component,

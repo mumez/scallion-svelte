@@ -150,34 +150,7 @@ The project is currently undergoing major framework migrations:
 
 ### Known Issues
 
-- **Build Failure**: `pnpm build` currently fails due to incomplete Skeleton migration:
 - **Component Updates**: Several components need updates for Skeleton v3 API changes
-```
-x Build failed in 1.88s
-error during build:
-src/routes/+layout.svelte (9:18): "AppShell" is not exported by "node_modules/.pnpm/@skeletonlabs+skeleton-svelte@1.3.1_svelte@5.36.7/node_modules/@skeletonlabs/skeleton-svelte/dist/index.js", imported by "src/routes/+layout.svelte".
-file: D:/git/scallion-svelte/src/routes/+layout.svelte:9:18
-
- 7:   import { onMount } from 'svelte';
- 8:   import { page } from '$app/stores';
- 9:   import { AppBar, AppShell } from '@skeletonlabs/skeleton-svelte';
-                       ^
-10:   import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
-11:   import WikiBookIndexLink from '$lib/components/WikiBookIndexLink.svelte';
-
-    at getRollupError (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
-    at error (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/parseAst.js:397:42)     
-    at Module.error (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:16830:16)
-    at Module.traceVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:17279:29)
-    at ModuleScope.findVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:14925:39)
-    at FunctionScope.findVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:5620:38)
-    at FunctionBodyScope.findVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:5620:38)
-    at BlockScope.findVariable (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:5620:38)
-    at Identifier.bind (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:5394:40)
-    at CallExpression.bind (file:///D:/git/scallion-svelte/node_modules/.pnpm/rollup@4.45.1/node_modules/rollup/dist/es/shared/node-entry.js:2785:23)
- ELIFECYCLE  Command failed with exit code 1.
-```
-- **Import Statements**: Old Skeleton imports need to be updated throughout the codebase
 
 ### Migration Progress
 

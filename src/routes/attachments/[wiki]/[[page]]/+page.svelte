@@ -43,14 +43,19 @@
 	}
 
 	function processRowsForTable(files: WebDavEntry[]) {
-		let mappedVersions = tableSourceMapper(files, ['name', 'contentLength', 'lastModified']);
-		mappedVersions = mappedVersions.map((v) => {
-			v.lastModified = new Date(v.lastModified).toString();
-			return {
-				...v
-			};
-		});
-		return tableSourceValues(mappedVersions);
+		return files.map((file) => [
+			file.name,
+			formatFileSize(file.contentLength),
+			new Date(file.lastModified).toLocaleDateString()
+		]);
+	}
+
+	function formatFileSize(bytes: number): string {
+		if (bytes === 0) return '0 B';
+		const k = 1024;
+		const sizes = ['B', 'KB', 'MB', 'GB'];
+		const i = Math.floor(Math.log(bytes) / Math.log(k));
+		return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 	}
 
 	async function uploadFile(file: File) {
@@ -78,12 +83,24 @@
 	{#if !isPageLockedByOtherUser}
 		<FilesUploadPanel uploader={uploadFile} on:upload-end={onUploadEnd} />
 	{/if}
-	<Table
-		source={{
-			head: filesTableHeaders,
-			body: filesTableBody
-		}}
-		interactive={true}
-		on:selected={onRowSelected}
-	/>
+	<div class="table-container">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					{#each filesTableHeaders as header}
+						<th>{header}</th>
+					{/each}
+				</tr>
+			</thead>
+			<tbody>
+				{#each filesTableBody as row, i}
+					<tr class="cursor-pointer hover:bg-surface-100-800" onclick={() => onRowSelected(new CustomEvent('selected', { detail: [row[0]] }))}>
+						{#each row as cell}
+							<td>{cell}</td>
+						{/each}
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </div>
