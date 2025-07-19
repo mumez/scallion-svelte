@@ -1,8 +1,5 @@
 <script lang="ts">
-	//import '@skeletonlabs/skeleton/themes/theme-crimson.css';
 	import '../theme.css';
-	// import '@skeletonlabs/skeleton/themes/theme-rocket.css';
-	// import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
