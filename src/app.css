@@ -5,11 +5,8 @@
 @import "@skeletonlabs/skeleton/themes/mint";
 @source "../../node_modules/@skeletonlabs/skeleton-svelte/dist";
 
-/* Write your global styles here, in PostCSS syntax */
 html,
-body {
-	@apply h-full overflow-hidden;
-}
+body {}
 
 /* For wiki */
 .html-from-markdown {
