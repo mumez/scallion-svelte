@@ -51,7 +51,7 @@
 		<AppBar>
 			{#snippet lead()}
 				<WikiBookIndexLink wikiBookName={linkToParent} wikisBaseDirectory={$wikisBaseDirectory} />
-				<h1>{title}</h1>
+				<h1 class="h1">{title}</h1>
 			{/snippet}
 			{#snippet trail()}
 				{#if showLoginButton}
