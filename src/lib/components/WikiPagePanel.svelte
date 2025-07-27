@@ -143,6 +143,11 @@
 	// computed properties
 	let updatedAt = $derived($wikiPage?.pageContent?.updatedAt ?? 0);
 	let canLockOnSave = $derived($wikiPage?.pageContent?.ownedBy === uid());
+
+	// editor height calculation
+	function getEditorHeight(content: string) {
+		return Math.max(250, content.split('\n').length * 24 + 100);
+	}
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-page-{wikiName.toLowerCase()}">
@@ -157,15 +162,21 @@
 
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
-			<textarea class="textarea" rows="10" bind:value={textContent}></textarea>
-			<MarkdownViewer
-				markdown={textContent}
-				{wikiName}
-				{existingPageNames}
-				wikisBaseDirectory={$wikisBaseDirectory}
-				{attachmentsBaseUrl}
-				isEditable={true}
-			/>
+			<textarea 
+				class="textarea" 
+				bind:value={textContent}
+				style="height: {getEditorHeight(textContent)}px; resize: vertical;"
+			></textarea>
+			<div style="height: {getEditorHeight(textContent)}px;">
+				<MarkdownViewer
+					markdown={textContent}
+					{wikiName}
+					{existingPageNames}
+					wikisBaseDirectory={$wikisBaseDirectory}
+					{attachmentsBaseUrl}
+					isEditable={true}
+				/>
+			</div>
 		</div>
 	{:else}
 		<MarkdownViewer
