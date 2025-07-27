@@ -61,7 +61,7 @@
 			</div>
 		</div>
 	</div>
-	<footer class="modal-footer {parent.regionFooter}">
+	<footer class="modal-footer {parent?.regionFooter || ''}">
 		<button class="btn preset-filled-warning-500" onclick={closeModal}>{$_('cancel')}</button>
 		<button class="btn preset-filled-primary-500" onclick={startEditing}
 			>{$_('start-editing-using-this-version')}</button
