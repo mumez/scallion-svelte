@@ -18,14 +18,21 @@
 		};
 	});
 
-	function handleBackdropClick(event: MouseEvent) {
-		if (event.target === dialogElement) {
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
 			closeModal();
 		}
 	}
 
-	function handleKeydown(event: KeyboardEvent) {
-		if (event.key === 'Escape') {
+	function handleBackdropClick(event: MouseEvent) {
+		if (event.currentTarget === event.target) {
+			closeModal();
+		}
+	}
+
+	function handleBackdropKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
 			closeModal();
 		}
 	}
@@ -34,12 +41,17 @@
 <dialog
 	bind:this={dialogElement}
 	class="backdrop:bg-black/50 backdrop:backdrop-blur-sm bg-transparent p-0 max-w-none max-h-none"
-	onclick={handleBackdropClick}
 	onkeydown={handleKeydown}
 >
 	{#if $modalState.isOpen}
-		<div class="flex items-center justify-center min-h-screen p-4">
-			<div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-h-[90vh] overflow-auto max-w-4xl w-full">
+		<div
+			class="fixed inset-0 flex items-center justify-center p-4"
+			onclick={handleBackdropClick}
+			onkeydown={handleBackdropKeydown}
+			role="button"
+			tabindex={-1}
+		>
+			<div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-h-[90vh] overflow-auto max-w-4xl w-full mx-auto">
 				{#if $modalState.type === 'component' && $modalState.component}
 					<svelte:component this={$modalState.component} {...$modalState.props} />
 				{:else if $modalState.type === 'alert'}
