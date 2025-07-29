@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 	import { _ } from '$lib/plugins/localization';
 	import { isImage, concatPath } from '$lib/utils/FileUtils';
 
@@ -33,8 +32,8 @@
 
 <div class="relative inline-block">
 	{#if isImage(fileName) && showTooltip}
-		<div class="absolute bottom-full left-0 mb-2 p-2 bg-surface-100-800 border border-surface-300-600 rounded shadow-lg z-10">
-			<Avatar name={fileName} src={fullUrl} rounded="rounded-xl" />
+		<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-10 pointer-events-none">
+			<img class="rounded-xl" src={fullUrl} alt={fileName} />
 		</div>
 	{/if}
 	

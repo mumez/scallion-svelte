@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { preventDefault } from 'svelte/legacy';
 
-	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 	import { isImage, concatPath, extensionFrom } from '$lib/utils/FileUtils';
 	import ModalCloseButton from '$lib/components/ModalCloseButton.svelte';
 
@@ -33,7 +32,7 @@
 	<ModalCloseButton />
 	<div class="flex items-center">
 		{#if isImage(fileName)}
-			<Avatar name={fileName} src={fullUrl} rounded="rounded-xl" />
+		<img class="w-60 rounded-xl" src={fullUrl} alt={fileName}/>
 		{:else}
 			<div class="card w-12 h-12 rounded-xl bg-white text-center truncate">
 				{extensionFrom(fileName)}
