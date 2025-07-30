@@ -164,7 +164,7 @@
 		<div class="grid gap-4 grid-cols-2">
 			<div class="space-y-2">
 				<textarea
-					class="textarea w-full"
+					class="textarea w-full border border-surface-400-600-token"
 					bind:value={textContent}
 					style="height: {getEditorHeight(textContent)}px; resize: vertical;"
 				></textarea>
