@@ -162,11 +162,14 @@
 
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
-			<textarea 
-				class="textarea" 
-				bind:value={textContent}
-				style="height: {getEditorHeight(textContent)}px; resize: vertical;"
-			></textarea>
+			<div class="space-y-2">
+				<textarea
+					class="textarea w-full"
+					bind:value={textContent}
+					style="height: {getEditorHeight(textContent)}px; resize: vertical;"
+				></textarea>
+				<AttachmentsPanel baseUrl={attachmentsBaseUrl} files={attachmentFiles} />
+			</div>
 			<div style="height: {getEditorHeight(textContent)}px;">
 				<MarkdownViewer
 					markdown={textContent}
@@ -186,9 +189,6 @@
 			wikisBaseDirectory={$wikisBaseDirectory}
 			{attachmentsBaseUrl}
 		/>
-	{/if}
-	{#if $wikiPage.isEditing}
-		<AttachmentsPanel baseUrl={attachmentsBaseUrl} files={attachmentFiles} />
 	{/if}
 	<hr />
 	<section class="flex space-x-2">
