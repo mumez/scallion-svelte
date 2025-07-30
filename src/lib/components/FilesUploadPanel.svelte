@@ -52,13 +52,14 @@
 </script>
 
 <div class="relative">
-	<FileUpload 
-		name="uploadingFiles" 
+	<FileUpload
+		name="uploadingFiles"
 		maxFiles={10}
 		onFileChange={onFilesChange}
+		classes="w-full"
 	>
 		{#snippet children()}
-			<div class="text-center space-y-2">
+			<div class="w-full h-48 flex flex-col items-center justify-center space-y-2 p-4 border border-dashed border-surface-400-600-token rounded-lg">
 				{#if isUploading}
 					<i class="animate-spin text-3xl fa-solid fa-spinner"></i>
 				{:else}
