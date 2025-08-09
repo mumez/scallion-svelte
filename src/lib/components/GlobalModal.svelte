@@ -51,7 +51,7 @@
 			role="button"
 			tabindex={-1}
 		>
-			<div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-h-[90vh] overflow-auto max-w-4xl w-full mx-auto">
+			<div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-h-[90vh] overflow-y-auto overflow-x-hidden break-words max-w-[calc(100vw-2rem)] sm:max-w-4xl w-full mx-auto">
 				{#if $modalState.type === 'component' && $modalState.component}
 					<svelte:component this={$modalState.component} {...$modalState.props} />
 				{:else if $modalState.type === 'alert'}
@@ -79,3 +79,21 @@
 		</div>
 	{/if}
 </dialog>
+
+<style>
+	/* Ensure any nested content inside the modal cannot force horizontal overflow */
+	:global(.modal-content *) {
+		min-width: 0;
+		word-break: break-word;
+	}
+	:global(.modal-content img) {
+		max-width: 100%;
+		height: auto;
+	}
+	:global(.modal-content table) {
+		width: 100%;
+	}
+	:global(.modal-content pre) {
+		white-space: pre-wrap;
+	}
+</style>
