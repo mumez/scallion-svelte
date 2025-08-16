@@ -69,7 +69,7 @@
 			<div class="flex flex-row space-x-2">
 				<div class="relative flex-grow">
 					<input
-						class="input"
+						class="input border border-surface-400-600-token"
 						type="search"
 						id="search"
 						placeholder={$_('enter-a-keyword')}
