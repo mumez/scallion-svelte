@@ -44,20 +44,23 @@
 <div class="relative card p-4 w-modal-wide shadow-xl">
 	<ModalCloseButton />
 	<div class="pt-2 pb-4">
-		<div class="grid gap-2 grid-cols-2">
-			<div>
+		<div class="grid gap-2 grid-cols-2 h-[70vh]">
+			<div class="flex flex-col h-full">
+				<div class="min-h-[1.5rem] text-transparent">
+					{`${$_('version')} 0 ()`}
+				</div>
 				<div>{$_('current')}</div>
-				<section class="diff border-solid border-2 py-2 bg-gray-100">
+				<section class="diff border-solid border-2 py-2 bg-gray-100 flex-1 min-h-[50vh] overflow-y-auto">
 					{@html diffResult.before}
 				</section>
-				<p class="text-right">{latestPageContent.updatedBy}</p>
+				<p class="text-right mt-2">{latestPageContent.updatedBy}</p>
 			</div>
-			<div>
+			<div class="flex flex-col h-full">
 				<div>{$_('version')} {versionNumber} ({new Date(pageContent.updatedAt)})</div>
-				<section class="diff border-solid border-2 py-2 bg-gray-100">
+				<section class="diff border-solid border-2 py-2 bg-gray-100 flex-1 min-h-[50vh] overflow-y-auto">
 					{@html diffResult.after}
 				</section>
-				<p class="text-right">{pageContent.updatedBy}</p>
+				<p class="text-right mt-2">{pageContent.updatedBy}</p>
 			</div>
 		</div>
 	</div>
