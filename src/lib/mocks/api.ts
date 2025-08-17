@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { rest } from 'msw';
 import type { WikiBook } from '$lib/models/WikiBook';
 import type { PageContent } from '$lib/models/PageContent';
 
@@ -49,54 +49,51 @@ const existingPages = ['index', 'test1'];
 
 export const handlers = [
 	// GET /wikis - List wiki books
-	http.get('*/wikis', () => {
-		return HttpResponse.json(mockWikiBooks);
+	rest.get('*/wikis', (req, res, ctx) => {
+		return res(ctx.json(mockWikiBooks));
 	}),
 
 	// GET /wiki - Get wiki book description
-	http.get('*/wiki', ({ request }) => {
-		const url = new URL(request.url);
-		const name = url.searchParams.get('name');
+	rest.get('*/wiki', (req, res, ctx) => {
+		const name = req.url.searchParams.get('name');
 		
 		const wikiBook = mockWikiBooks.find(wb => wb.name === name);
 		if (wikiBook) {
-			return HttpResponse.json(wikiBook);
+			return res(ctx.json(wikiBook));
 		}
-		return HttpResponse.json({}, { status: 404 });
+		return res(ctx.status(404), ctx.json({}));
 	}),
 
 	// GET /pages - Get pages existence
-	http.get('*/pages', ({ request }) => {
-		const url = new URL(request.url);
-		const wiki = url.searchParams.get('wiki');
-		const exist = url.searchParams.get('exist');
+	rest.get('*/pages', (req, res, ctx) => {
+		const wiki = req.url.searchParams.get('wiki');
+		const exist = req.url.searchParams.get('exist');
 		
 		if (!wiki || !exist) {
-			return HttpResponse.json([], { status: 400 });
+			return res(ctx.status(400), ctx.json([]));
 		}
 		
 		const pageNames = exist.split(',');
 		const existence = pageNames.map(name => existingPages.includes(name.trim()));
 		
-		return HttpResponse.json(existence);
+		return res(ctx.json(existence));
 	}),
 
 	// GET /page - Get page content
-	http.get('*/page', ({ request }) => {
-		const url = new URL(request.url);
-		const name = url.searchParams.get('name');
-		const wiki = url.searchParams.get('wiki');
+	rest.get('*/page', (req, res, ctx) => {
+		const name = req.url.searchParams.get('name');
+		const wiki = req.url.searchParams.get('wiki');
 		
 		const page = mockWikiPages.find(p => p.name === name && p.wiki === wiki);
 		if (page) {
-			return HttpResponse.json(page);
+			return res(ctx.json(page));
 		}
-		return HttpResponse.json({}, { status: 404 });
+		return res(ctx.status(404), ctx.json({}));
 	}),
 
 	// POST /page - Create new page
-	http.post('*/page', async ({ request }) => {
-		const body = await request.json() as PageContent;
+	rest.post('*/page', async (req, res, ctx) => {
+		const body = await req.json() as PageContent;
 		const newPage: PageContent = {
 			...body,
 			id: `new-${Date.now()}`,
@@ -109,12 +106,12 @@ export const handlers = [
 		mockWikiPages.push(newPage);
 		existingPages.push(newPage.name);
 		
-		return HttpResponse.json(newPage);
+		return res(ctx.json(newPage));
 	}),
 
 	// PUT /page - Update page
-	http.put('*/page', async ({ request }) => {
-		const body = await request.json() as PageContent;
+	rest.put('*/page', async (req, res, ctx) => {
+		const body = await req.json() as PageContent;
 		const pageIndex = mockWikiPages.findIndex(p => p.id === body.id);
 		
 		if (pageIndex >= 0 && mockWikiPages[pageIndex]) {
@@ -126,63 +123,59 @@ export const handlers = [
 				number: currentPage.number + 1
 			};
 			mockWikiPages[pageIndex] = updatedPage;
-			return HttpResponse.json(updatedPage);
+			return res(ctx.json(updatedPage));
 		}
-		return HttpResponse.json({}, { status: 404 });
+		return res(ctx.status(404), ctx.json({}));
 	}),
 
 	// GET /versions - Get page versions
-	http.get('*/versions', ({ request }) => {
-		const url = new URL(request.url);
-		const page = url.searchParams.get('page');
-		const wiki = url.searchParams.get('wiki');
-		const from = parseInt(url.searchParams.get('from') || '0');
-		const size = parseInt(url.searchParams.get('size') || '10');
+	rest.get('*/versions', (req, res, ctx) => {
+		const page = req.url.searchParams.get('page');
+		const wiki = req.url.searchParams.get('wiki');
+		const from = parseInt(req.url.searchParams.get('from') || '0');
+		const size = parseInt(req.url.searchParams.get('size') || '10');
 		
 		const versions = mockWikiPages.filter(p => p.name === page && p.wiki === wiki);
 		const paginatedVersions = versions.slice(from, from + size);
 		
-		return HttpResponse.json(paginatedVersions);
+		return res(ctx.json(paginatedVersions));
 	}),
 
 	// GET /version - Get last version number
-	http.get('*/version', ({ request }) => {
-		const url = new URL(request.url);
-		const page = url.searchParams.get('page');
-		const wiki = url.searchParams.get('wiki');
-		const field = url.searchParams.get('field');
+	rest.get('*/version', (req, res, ctx) => {
+		const page = req.url.searchParams.get('page');
+		const wiki = req.url.searchParams.get('wiki');
+		const field = req.url.searchParams.get('field');
 		
 		if (field === 'lastVersionNumber') {
 			const pageVersions = mockWikiPages.filter(p => p.name === page && p.wiki === wiki);
 			const maxVersion = Math.max(...pageVersions.map(p => p.number));
-			return HttpResponse.json(maxVersion || 0);
+			return res(ctx.json(maxVersion || 0));
 		}
 		
-		return HttpResponse.json(0);
+		return res(ctx.json(0));
 	}),
 
 	// GET /updates - Get latest updates
-	http.get('*/updates', ({ request }) => {
-		const url = new URL(request.url);
-		const wiki = url.searchParams.get('wiki');
-		const from = parseInt(url.searchParams.get('from') || '0');
-		const size = parseInt(url.searchParams.get('size') || '10');
+	rest.get('*/updates', (req, res, ctx) => {
+		const wiki = req.url.searchParams.get('wiki');
+		const from = parseInt(req.url.searchParams.get('from') || '0');
+		const size = parseInt(req.url.searchParams.get('size') || '10');
 		
 		const wikiPages = mockWikiPages.filter(p => !wiki || p.wiki === wiki);
 		const sortedPages = wikiPages.sort((a, b) => b.updatedAt - a.updatedAt);
 		const paginatedPages = sortedPages.slice(from, from + size);
 		
-		return HttpResponse.json(paginatedPages);
+		return res(ctx.json(paginatedPages));
 	}),
 
 	// GET /search - Search pages
-	http.get('*/search', ({ request }) => {
-		const url = new URL(request.url);
-		const wiki = url.searchParams.get('wiki');
-		const q = url.searchParams.get('q');
+	rest.get('*/search', (req, res, ctx) => {
+		const wiki = req.url.searchParams.get('wiki');
+		const q = req.url.searchParams.get('q');
 		
 		if (!q) {
-			return HttpResponse.json([]);
+			return res(ctx.json([]));
 		}
 		
 		const searchResults = mockWikiPages.filter(p => 
@@ -191,6 +184,6 @@ export const handlers = [
 			 p.name.toLowerCase().includes(q.toLowerCase()))
 		);
 		
-		return HttpResponse.json(searchResults);
+		return res(ctx.json(searchResults));
 	})
 ];

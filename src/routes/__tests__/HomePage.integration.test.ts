@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/svelte';
 import { load } from '../+page.ts';
@@ -5,7 +6,7 @@ import HomePage from '../+page.svelte';
 
 // This test uses the MSW server to test the full data loading flow
 import { server } from '$lib/mocks/node';
-import { http, HttpResponse } from 'msw';
+import { rest } from 'msw';
 import type { WikiBook } from '$lib/models/WikiBook';
 
 describe('HomePage Integration Tests', () => {
@@ -38,8 +39,8 @@ describe('HomePage Integration Tests', () => {
 		
 		// Ensure the default MSW handler is active
 		server.use(
-			http.get('*/wikis', () => {
-				return HttpResponse.json(mockWikiBooks);
+			rest.get('*/wikis', (req, res, ctx) => {
+				return res(ctx.json(mockWikiBooks));
 			})
 		);
 	});
@@ -102,8 +103,8 @@ describe('HomePage Integration Tests', () => {
 		];
 
 		server.use(
-			http.get('*/wikis', () => {
-				return HttpResponse.json(unsortedWikis);
+			rest.get('*/wikis', (req, res, ctx) => {
+				return res(ctx.json(unsortedWikis));
 			})
 		);
 
@@ -130,8 +131,8 @@ describe('HomePage Integration Tests', () => {
 	it('handles API errors gracefully', async () => {
 		// Mock API failure
 		server.use(
-			http.get('*/wikis', () => {
-				return HttpResponse.json({ error: 'Server error' }, { status: 500 });
+			rest.get('*/wikis', (req, res, ctx) => {
+				return res(ctx.status(500), ctx.json({ error: 'Server error' }));
 			})
 		);
 
@@ -154,8 +155,8 @@ describe('HomePage Integration Tests', () => {
 	it('handles network errors gracefully', async () => {
 		// Mock network failure
 		server.use(
-			http.get('*/wikis', () => {
-				return HttpResponse.error();
+			rest.get('*/wikis', (req, res, ctx) => {
+				return res.networkError('Failed to connect');
 			})
 		);
 
@@ -187,8 +188,8 @@ describe('HomePage Integration Tests', () => {
 		];
 
 		server.use(
-			http.get('*/wikis', () => {
-				return HttpResponse.json(singleWiki);
+			rest.get('*/wikis', (req, res, ctx) => {
+				return res(ctx.json(singleWiki));
 			})
 		);
 
@@ -210,8 +211,8 @@ describe('HomePage Integration Tests', () => {
 
 	it('handles empty API response', async () => {
 		server.use(
-			http.get('*/wikis', () => {
-				return HttpResponse.json([]);
+			rest.get('*/wikis', (req, res, ctx) => {
+				return res(ctx.json([]));
 			})
 		);
 

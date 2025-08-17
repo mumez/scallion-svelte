@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
 import MarkdownViewer from '../MarkdownViewer.svelte';
@@ -19,7 +20,8 @@ vi.mock('isomorphic-dompurify', () => ({
 // Mock marked
 vi.mock('marked', () => ({
 	marked: {
-		parse: vi.fn((markdown: string) => `<p>${markdown}</p>`)
+		parse: vi.fn((markdown: string) => `<p>${markdown}</p>`),
+		use: vi.fn()
 	}
 }));
 
