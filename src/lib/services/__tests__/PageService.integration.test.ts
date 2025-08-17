@@ -32,13 +32,9 @@ describe('PageService Integration Tests', () => {
 		it('handles non-existent pages', async () => {
 			const nonExistentPageService = new PageService('ume', 'nonexistent');
 			
-			try {
-				await nonExistentPageService.getContent();
-				// Should not reach here
-				expect(true).toBe(false);
-			} catch (error: any) {
-				expect(error.status).toBe(404);
-			}
+			const result = await nonExistentPageService.getContent();
+			// Should return empty object for non-existent pages
+			expect(result).toEqual({});
 		});
 
 		it('fetches different pages correctly', async () => {
@@ -54,7 +50,7 @@ describe('PageService Integration Tests', () => {
 		});
 	});
 
-	describe('saveContent', () => {
+	describe('postContent', () => {
 		it('creates new page successfully', async () => {
 			const newPageContent: PageContent = {
 				name: 'newpage',
@@ -70,7 +66,7 @@ describe('PageService Integration Tests', () => {
 				isLocked: false
 			};
 
-			const result = await pageService.saveContent(newPageContent);
+			const result = await pageService.postContent(newPageContent);
 
 			expect(result).toMatchObject({
 				name: 'newpage',
@@ -90,7 +86,7 @@ describe('PageService Integration Tests', () => {
 		});
 	});
 
-	describe('updateContent', () => {
+	describe('putContent', () => {
 		it('updates existing page successfully', async () => {
 			// First get the existing page
 			const existingPage = await pageService.getContent();
@@ -103,7 +99,7 @@ describe('PageService Integration Tests', () => {
 				updatedBy: 'updater@example.com'
 			};
 
-			const result = await pageService.updateContent(updatedContent);
+			const result = await pageService.putContent(updatedContent);
 
 			expect(result).toMatchObject({
 				id: existingPage.id,
@@ -134,13 +130,9 @@ describe('PageService Integration Tests', () => {
 				isLocked: false
 			};
 
-			try {
-				await pageService.updateContent(nonExistentContent);
-				// Should not reach here
-				expect(true).toBe(false);
-			} catch (error: any) {
-				expect(error.status).toBe(404);
-			}
+			const result = await pageService.putContent(nonExistentContent);
+			// Should return empty object for failed updates
+			expect(result).toEqual({});
 		});
 	});
 
@@ -149,14 +141,9 @@ describe('PageService Integration Tests', () => {
 			// Create a service that will hit a non-mocked endpoint
 			const errorService = new PageService('invalid-wiki', 'invalid-page');
 			
-			try {
-				await errorService.getContent();
-				// Should not reach here for unmocked endpoints
-				expect(true).toBe(false);
-			} catch (error) {
-				// Should catch the error gracefully
-				expect(error).toBeTruthy();
-			}
+			const result = await errorService.getContent();
+			// Should return empty object for network errors
+			expect(result).toEqual({});
 		});
 	});
 
@@ -180,7 +167,7 @@ describe('PageService Integration Tests', () => {
 
 			// This should work because MSW mocks don't require actual auth
 			// In a real scenario, you'd mock the JWT token storage
-			const result = await pageService.saveContent(newContent);
+			const result = await pageService.postContent(newContent);
 			expect(result).toBeTruthy();
 		});
 	});
