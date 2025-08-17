@@ -1,11 +1,33 @@
-/* Write your global styles here, in PostCSS syntax */
+@import "tailwindcss";
+
+@import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton/optional/presets";
+@import "@skeletonlabs/skeleton/themes/mint";
+@source "../../node_modules/@skeletonlabs/skeleton-svelte/dist";
+
 html,
-body {
-	@apply h-full overflow-hidden;
-}
+body {}
 
 /* For wiki */
 .html-from-markdown {
+	h1 {
+		font-size: 2em;
+	}
+	h2 {
+		font-size: 1.5em;
+	}
+	h3 {
+		font-size: 1.17em;
+	}
+	h4 {
+		font-size: 1em;
+	}
+	h5 {
+		font-size: 0.83em;
+	}
+	h6 {
+		font-size: 0.67em;
+	}
 	h1,
 	h2,
 	h3,
@@ -43,7 +65,7 @@ body {
 
 	/* For internal page links */
 	.internal-new {
-		background-color: rgb(var(--color-success-100));
+		background-color: mistyrose;
 	}
 }
 
@@ -63,10 +85,10 @@ body {
 		padding-right: 0.1rem !important;
 	}
 	ins {
-		background-color: rgb(var(--color-success-100)) !important;
+		background-color: palegreen !important;
 	}
 	del {
-		background-color: rgb(var(--color-error-400)) !important;
+		background-color: pink !important;
 	}
 	ins::before,
 	del::before {

@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import type { Page } from '@sveltejs/kit';
 	import { uid } from '$lib/services/UserService';
 	import isAuthenticated from '$lib/stores/isAuthenticated';
 	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
@@ -10,7 +13,8 @@
 	const _wikisBaseDir = 'wikis';
 	const _blikisBaseDir = 'blikis';
 
-	let wikiName = $page.params['wiki'] ?? '';
+	// Properly type the page store
+	let wikiName = $derived($page?.params?.['wiki'] ?? '');
 
 	function startEditing() {
 		wikiPage.startEditing();
@@ -20,21 +24,23 @@
 		}
 	}
 
-	$: pageName = $page.params['page'] ?? 'index';
-	$: pageNameEncoded = encodeURIComponent(pageName);
-	$: routeFirstPart = ($page.route.id ?? '').split('/')[1];
-	$: isPageLockedByOtherUser = isLockedByOtherUser($wikiPage?.pageContent, uid());
-	$: isAttachmentsButtonDisabled =
-		routeFirstPart == 'attachments' || !$isAuthenticated || isPageLockedByOtherUser;
-	$: isVersionsButtonDisabled = routeFirstPart == 'versions';
-	$: isWikiPageEditableRoute = isWikisRoute || isBlikisRoute;
-	$: isWikisRoute = routeFirstPart == _wikisBaseDir;
-	$: isBlikisRoute = routeFirstPart == _blikisBaseDir;
-	$: hasNoPageParams = $page.params['page'] == undefined;
-	$: isBlikisTopPage = hasNoPageParams && isBlikisRoute;
-	$: if (routeFirstPart) {
-		$wikisBaseDirectory = isWikiPageEditableRoute ? routeFirstPart : _wikisBaseDir;
-	}
+	let pageName = $derived($page.params['page'] ?? 'index');
+	let pageNameEncoded = $derived(encodeURIComponent(pageName));
+	let routeFirstPart = $derived(($page.route.id ?? '').split('/')[1]);
+	let isPageLockedByOtherUser = $derived(isLockedByOtherUser($wikiPage?.pageContent, uid()));
+	let isAttachmentsButtonDisabled =
+		$derived(routeFirstPart == 'attachments' || !$isAuthenticated || isPageLockedByOtherUser);
+	let isVersionsButtonDisabled = $derived(routeFirstPart == 'versions');
+	let isWikisRoute = $derived(routeFirstPart == _wikisBaseDir);
+	let isBlikisRoute = $derived(routeFirstPart == _blikisBaseDir);
+	let isWikiPageEditableRoute = $derived(isWikisRoute || isBlikisRoute);
+	let hasNoPageParams = $derived($page.params['page'] == undefined);
+	let isBlikisTopPage = $derived(hasNoPageParams && isBlikisRoute);
+	run(() => {
+		if (routeFirstPart) {
+			$wikisBaseDirectory = isWikiPageEditableRoute ? routeFirstPart : _wikisBaseDir;
+		}
+	});
 </script>
 
 <div class="space-x-0">
@@ -42,27 +48,32 @@
 		<button
 			class="btn-icon"
 			disabled={$wikiPage.isEditing || !$isAuthenticated || isPageLockedByOtherUser}
-			on:click={startEditing}><i class="fa-solid fa-pen" /></button
+			onclick={startEditing}
+			aria-label="Edit"><i class="fa-solid fa-pen"></i></button
 		>
 	{:else}
-		<a href="/{$wikisBaseDirectory || routeFirstPart}/{wikiName}/{pageNameEncoded}" class="btn-icon"
-			><i class="fa-solid fa-pen" /></a
+		<a
+			href="/{$wikisBaseDirectory || routeFirstPart}/{wikiName}/{pageNameEncoded}"
+			class="btn-icon"
+			aria-label="Edit"><i class="fa-solid fa-pen"></i></a
 		>
 	{/if}
 	{#if !isBlikisTopPage}
 		<a
 			class:disabled={isAttachmentsButtonDisabled}
 			href="/attachments/{wikiName}/{pageNameEncoded}"
-			class="btn-icon"><i class="fa-solid fa-arrow-up-from-bracket" /></a
+			class="btn-icon"
+			aria-label="Attachments"><i class="fa-solid fa-arrow-up-from-bracket"></i></a
 		>
 		<a
 			class:disabled={isVersionsButtonDisabled}
 			href="/versions/{wikiName}/{pageNameEncoded}"
-			class="btn-icon"><i class="fa-solid fa-clock-rotate-left" /></a
+			class="btn-icon"
+			aria-label="Versions"><i class="fa-solid fa-clock-rotate-left"></i></a
 		>
 	{/if}
-	<a class="btn-icon" href="/search/{wikiName}/{pageNameEncoded}"
-		><i class="fa-solid fa-search" /></a
+	<a class="btn-icon" href="/search/{wikiName}/{pageNameEncoded}" aria-label="Search"
+		><i class="fa-solid fa-search"></i></a
 	>
 	<!-- <button class="btn-icon" on:click={openSearchModal}><i class="fa-solid fa-search" /></button> -->
 	<!-- <button class="btn-icon"><i class="fa-solid fa-ellipsis-vertical" /></button>-->

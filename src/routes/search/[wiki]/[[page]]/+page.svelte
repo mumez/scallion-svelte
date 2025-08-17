@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { tick } from 'svelte';
 	import Mark from 'mark.js';
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { ProgressRing } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/stores';
 	import { _ } from '$lib/plugins/localization';
 	import parentLink from '$lib/stores/parentLink';
@@ -10,19 +12,22 @@
 	import SearchService from '$lib/services/SearchService';
 	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
 
-	const wikiName = $page.params['wiki'] ?? '';
-	const pageName = $page.params['page'] ?? 'index';
-	$parentLink = wikiName;
-	$headerTitle = pageName;
+	const wikiName = $derived($page.params['wiki'] ?? '');
+	const pageName = $derived($page.params['page'] ?? 'index');
+	
+	$effect(() => {
+		parentLink.set(wikiName);
+		headerTitle.set(pageName);
+	});
 
 	const searchService = new SearchService();
 
-	let isSearching = false;
-	let searchInput = '';
-	let searchResults: PageContent[] = [];
+	let isSearching = $state(false);
+	let searchInput = $state('');
+	let searchResults: PageContent[] = $state([]);
 
 	let highlighter: Mark;
-	let resultsArea: string | HTMLElement | readonly HTMLElement[] | NodeList;
+	let resultsArea: string | HTMLElement | readonly HTMLElement[] | NodeList | undefined = $state();
 
 	async function search() {
 		if (!searchInput) return;
@@ -34,8 +39,10 @@
 	}
 
 	function highlightResults() {
-		highlighter = new Mark(resultsArea);
-		highlighter.mark(searchInput);
+		if (resultsArea) {
+			highlighter = new Mark(resultsArea);
+			highlighter.mark(searchInput);
+		}
 	}
 
 	function clearSearchResults() {
@@ -46,9 +53,11 @@
 		return `/${$wikisBaseDirectory}/${wikiName}/${encodeURIComponent(page.name)}`;
 	}
 
-	$: if (searchInput == '') {
-		clearSearchResults();
-	}
+	run(() => {
+		if (searchInput == '') {
+			clearSearchResults();
+		}
+	});
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-attachments">
@@ -60,21 +69,21 @@
 			<div class="flex flex-row space-x-2">
 				<div class="relative flex-grow">
 					<input
-						class="input"
+						class="input border border-surface-400-600-token"
 						type="search"
 						id="search"
 						placeholder={$_('enter-a-keyword')}
 						bind:value={searchInput}
 					/>
 				</div>
-				<button type="submit" class="btn variant-filled-primary" on:click={search}
+				<button type="submit" class="btn preset-filled-primary-500" onclick={search}
 					>{$_('search')}</button
 				>
 			</div>
 		</form>
 		<div class="flex pt-4 space-x-2" class:justify-center={isSearching} bind:this={resultsArea}>
 			{#if isSearching}
-				<ProgressRadial />
+				<ProgressRing />
 			{:else if searchResults.length > 0}
 				<div class="container space-y-2">
 					<div class="flex flex-row">

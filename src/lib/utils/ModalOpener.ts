@@ -1,7 +1,26 @@
-import { modalStore } from '@skeletonlabs/skeleton';
-import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton/utilities/Modal/types';
+import { writable } from 'svelte/store';
 
-export const asModalComponent = (component: unknown, props = {}): ModalComponent => {
+export interface ModalComponent {
+	ref: any;
+	props: any;
+	slot: string;
+}
+
+export interface ModalState {
+	isOpen: boolean;
+	component?: any;
+	props?: any;
+	type?: 'component' | 'alert';
+	title?: string;
+	body?: string;
+	image?: string;
+}
+
+export const modalState = writable<ModalState>({
+	isOpen: false
+});
+
+export const asModalComponent = (component: any, props = {}): ModalComponent => {
 	return {
 		ref: component,
 		props: props,
@@ -9,31 +28,25 @@ export const asModalComponent = (component: unknown, props = {}): ModalComponent
 	};
 };
 
-export const openModal = (component: unknown, props = {}) => {
-	const modalComponent = asModalComponent(component, props);
-	const settings: ModalSettings = {
-		type: 'component',
-		component: modalComponent
-	};
-	modalStore.trigger(settings);
+export const openModal = (component: any, props = {}) => {
+	modalState.set({
+		isOpen: true,
+		component,
+		props,
+		type: 'component'
+	});
 };
 
 export const openAlert = (title = '', body = '', image = '') => {
-	const settings: ModalSettings = {
-		type: 'alert'
-	};
-	if (title) {
-		settings.title = title;
-	}
-	if (body) {
-		settings.body = body;
-	}
-	if (image) {
-		settings.image = image;
-	}
-	modalStore.trigger(settings);
+	modalState.set({
+		isOpen: true,
+		type: 'alert',
+		title,
+		body,
+		image
+	});
 };
 
 export const closeModal = () => {
-	modalStore.close();
+	modalState.update(state => ({ ...state, isOpen: false }));
 };

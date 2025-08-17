@@ -1,21 +1,29 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { createEventDispatcher } from 'svelte';
-	import { FileDropzone } from '@skeletonlabs/skeleton';
+	import { FileUpload } from '@skeletonlabs/skeleton-svelte';
 	import { _ } from '$lib/plugins/localization';
 
-	export let uploader: (file: File) => Promise<boolean> = (file) => Promise.resolve(true);
+	interface Props {
+		uploader?: (file: File) => Promise<boolean>;
+	}
 
-	let uploadingFileList: FileList | null;
-	let uploadingFileArray: File[] = [];
-	let isUploading = false;
+	let { uploader = (file) => Promise.resolve(true) }: Props = $props();
+
+	let uploadingFileList: FileList | null = $state(null);
+	let uploadingFileArray: File[] = $state([]);
+	let isUploading = $state(false);
 
 	const dispatch = createEventDispatcher();
 
-	function onFilesChange(e: Event) {
-		uploadingFileList = e.target ? (e.target as HTMLInputElement).files : null;
+	function onFilesChange(details: { acceptedFiles: File[]; rejectedFiles: any[] }) {
+		uploadingFileArray = details.acceptedFiles;
+		uploadingFileList = null; // Clear the old FileList since we now work with File[]
 	}
 	function clear() {
 		uploadingFileList = null;
+		uploadingFileArray = [];
 	}
 	async function upload() {
 		isUploading = true;
@@ -37,37 +45,52 @@
 		isUploading = false;
 	}
 
-	$: uploadingFileArray = uploadingFileList ? [...uploadingFileList] : [];
-	$: shouldEnableActionButtons = !isUploading && uploadingFileArray.length > 0;
+	run(() => {
+		uploadingFileArray = uploadingFileList ? [...uploadingFileList] : [];
+	});
+	let shouldEnableActionButtons = $derived(!isUploading && uploadingFileArray.length > 0);
 </script>
 
 <div class="relative">
-	<FileDropzone multiple name="uploadingFiles" padding="py-3" on:change={onFilesChange}>
-		<svelte:fragment slot="lead">
-			{#if isUploading}
-				<i class="animate-spin text-3xl fa-solid fa-spinner" />
-			{:else}
-				<span>{$_('drop-or-click-to-start-uploading-files')}</span>
-			{/if}
-		</svelte:fragment>
-		<svelte:fragment slot="message">
-			<ul class="text-left">
-				{#each uploadingFileArray as uploadingFile}
-					<li>{uploadingFile.name}</li>
-				{/each}
-			</ul>
-		</svelte:fragment>
-	</FileDropzone>
+	<FileUpload
+		name="uploadingFiles"
+		maxFiles={10}
+		onFileChange={onFilesChange}
+		classes="w-full"
+	>
+		{#snippet children()}
+			<div class="w-full h-48 flex flex-col items-center justify-center space-y-2 p-4 border border-dashed border-surface-400-600-token rounded-lg">
+				{#if isUploading}
+					<i class="animate-spin text-3xl fa-solid fa-spinner"></i>
+				{:else}
+					<div class="space-y-2">
+						<i class="fa-solid fa-cloud-upload-alt text-3xl text-surface-400"></i>
+						<p>{$_('drop-or-click-to-start-uploading-files')}</p>
+					</div>
+				{/if}
+				
+				{#if uploadingFileArray.length > 0}
+					<div class="mt-4">
+						<ul class="text-left space-y-1">
+							{#each uploadingFileArray as uploadingFile}
+								<li class="text-sm">{uploadingFile.name}</li>
+							{/each}
+						</ul>
+					</div>
+				{/if}
+			</div>
+		{/snippet}
+	</FileUpload>
 	<div class="absolute z-30 bottom-0 right-0">
 		<button
 			disabled={!shouldEnableActionButtons}
-			class="border-current px-2 border-2 variant-filled-warning"
-			on:click={clear}>{$_('clear')}</button
+			class="border-current px-2 border-2 preset-filled-warning-500"
+			onclick={clear}>{$_('clear')}</button
 		>
 		<button
 			disabled={!shouldEnableActionButtons}
-			class="border-current px-2 border-2 variant-filled-primary"
-			on:click={upload}>{$_('upload')}</button
+			class="border-current px-2 border-2 preset-filled-primary-500"
+			onclick={upload}>{$_('upload')}</button
 		>
 	</div>
 </div>

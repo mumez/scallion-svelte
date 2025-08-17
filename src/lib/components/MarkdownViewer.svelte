@@ -1,18 +1,31 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { _ } from '$lib/plugins/localization';
 	import { debounce } from 'lodash-es';
 	import { enrichedHtmlFrom } from '$lib/utils/MarkdownHandler';
 
-	export let markdown = '';
-	export let wikiName = '';
-	export let existingPageNames: string[] = [];
-	export let wikisBaseDirectory = '';
-	export let attachmentsBaseUrl = '';
-	export let isEditable = false;
+	interface Props {
+		markdown?: string;
+		wikiName?: string;
+		existingPageNames?: string[];
+		wikisBaseDirectory?: string;
+		attachmentsBaseUrl?: string;
+		isEditable?: boolean;
+	}
+
+	let {
+		markdown = '',
+		wikiName = '',
+		existingPageNames = [],
+		wikisBaseDirectory = '',
+		attachmentsBaseUrl = '',
+		isEditable = false
+	}: Props = $props();
 
 	const newPageLinkTitle = $_('create-new-page');
 
-	let html = markdown;
+	let html = $state(markdown);
 
 	const debouncedHtmlFrom = debounce(
 		(markdown, wikiName, existingPageNames, wikisBaseDirectory, attachmentsBaseUrl) => {
@@ -55,7 +68,9 @@
 		);
 	}
 
-	$: renderHtml(markdown, wikiName, existingPageNames, wikisBaseDirectory, attachmentsBaseUrl);
+	run(() => {
+		renderHtml(markdown, wikiName, existingPageNames, wikisBaseDirectory, attachmentsBaseUrl);
+	});
 </script>
 
 <div class="html-from-markdown space-x-0">

@@ -19,7 +19,11 @@
 
 	import { onMount } from 'svelte';
 
-	export let loadedPageContent: PageContent = {} as PageContent;
+	interface Props {
+		loadedPageContent?: PageContent;
+	}
+
+	let { loadedPageContent = {} as PageContent }: Props = $props();
 	const wikiName = $page.params['wiki'] ?? '';
 	const pageName = $page.params['page'] ?? 'index';
 
@@ -28,23 +32,23 @@
 	const wikiBookService = new WikiBookService(wikiName);
 	const attachmentsBaseUrl = filesService.downloadBaseUrl;
 
-	let attachmentFiles: WebDavEntry[] = [];
+	let attachmentFiles: WebDavEntry[] = $state([]);
 
-	let isNewPage = !loadedPageContent.id;
+	let isNewPage = $state(!loadedPageContent.id);
 	let hasContentTitle = !!loadedPageContent.title;
-	let existingPageNames: string[] = [];
+	let existingPageNames: string[] = $state([]);
 
 	wikiPage.setPageContent(loadedPageContent);
 	$parentLink = wikiName;
 	$headerTitle = $wikiPage.pageContent?.title ?? pageName;
 
-	let shouldLockOnSave = loadedPageContent.isLocked ?? false;
+	let shouldLockOnSave = $state(loadedPageContent.isLocked ?? false);
 
 	const initialEditingPageContent: PageContent = $wikiPage.revertingPageContent
 		? $wikiPage.revertingPageContent
 		: loadedPageContent;
-	let contentTitle = initialEditingPageContent.title;
-	let textContent = initialEditingPageContent.content;
+	let contentTitle = $state(initialEditingPageContent.title);
+	let textContent = $state(initialEditingPageContent.content);
 
 	// lifecycle callbacks
 	onMount(() => {
@@ -137,8 +141,13 @@
 	}
 
 	// computed properties
-	$: updatedAt = $wikiPage?.pageContent?.updatedAt ?? 0;
-	$: canLockOnSave = $wikiPage?.pageContent?.ownedBy === uid();
+	let updatedAt = $derived($wikiPage?.pageContent?.updatedAt ?? 0);
+	let canLockOnSave = $derived($wikiPage?.pageContent?.ownedBy === uid());
+
+	// editor height calculation
+	function getEditorHeight(content: string) {
+		return Math.max(250, content.split('\n').length * 24 + 100);
+	}
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-page-{wikiName.toLowerCase()}">
@@ -153,15 +162,24 @@
 
 	{#if $wikiPage.isEditing}
 		<div class="grid gap-4 grid-cols-2">
-			<textarea class="textarea" rows="10" bind:value={textContent} />
-			<MarkdownViewer
-				markdown={textContent}
-				{wikiName}
-				{existingPageNames}
-				wikisBaseDirectory={$wikisBaseDirectory}
-				{attachmentsBaseUrl}
-				isEditable={true}
-			/>
+			<div class="space-y-2">
+				<textarea
+					class="textarea w-full border border-surface-400-600-token"
+					bind:value={textContent}
+					style="height: {getEditorHeight(textContent)}px; resize: vertical;"
+				></textarea>
+				<AttachmentsPanel baseUrl={attachmentsBaseUrl} files={attachmentFiles} />
+			</div>
+			<div style="height: {getEditorHeight(textContent)}px;">
+				<MarkdownViewer
+					markdown={textContent}
+					{wikiName}
+					{existingPageNames}
+					wikisBaseDirectory={$wikisBaseDirectory}
+					{attachmentsBaseUrl}
+					isEditable={true}
+				/>
+			</div>
 		</div>
 	{:else}
 		<MarkdownViewer
@@ -172,14 +190,11 @@
 			{attachmentsBaseUrl}
 		/>
 	{/if}
-	{#if $wikiPage.isEditing}
-		<AttachmentsPanel baseUrl={attachmentsBaseUrl} files={attachmentFiles} />
-	{/if}
 	<hr />
 	<section class="flex space-x-2">
 		{#if $wikiPage.isEditing}
-			<button class="btn variant-filled-warning" on:click={cancelContent}>{$_('cancel')}</button>
-			<button class="btn variant-filled-primary" on:click={saveContent}>{$_('save')}</button>
+			<button class="btn preset-filled-warning-500" onclick={cancelContent}>{$_('cancel')}</button>
+			<button class="btn preset-filled-primary-500" onclick={saveContent}>{$_('save')}</button>
 			{#if canLockOnSave}
 				<label class="flex items-center space-x-2">
 					<input class="checkbox" type="checkbox" bind:checked={shouldLockOnSave} />

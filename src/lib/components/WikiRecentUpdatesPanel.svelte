@@ -11,12 +11,16 @@
 	import UpdatesService from '$lib/services/UpdatesService';
 	import type { PageContent } from '$lib/models/PageContent';
 
-	export let pages: PageContent[];
+	interface Props {
+		pages: PageContent[];
+	}
+
+	let { pages = $bindable() }: Props = $props();
 
 	const wikiName = $page.params['wiki'] ?? '';
 	$parentLink = wikiName;
 	$headerTitle = 'Bliki';
-	let allLoaded = false;
+	let allLoaded = $state(false);
 
 	const updatesService = new UpdatesService(wikiName);
 
@@ -58,8 +62,8 @@
 		return `/${$wikisBaseDirectory}/${wikiName}/${encodeURIComponent(page.name)}`;
 	}
 
-	$: oldestUpdatedAt = pages[pages.length - 1]?.updatedAt ?? 0;
-	$: groupedPages = groupedPagesFrom(pages);
+	let oldestUpdatedAt = $derived(pages[pages.length - 1]?.updatedAt ?? 0);
+	let groupedPages = $derived(groupedPagesFrom(pages));
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-{wikiName.toLowerCase()}">
@@ -81,11 +85,11 @@
 			<div class="text-right">{localeDateTimeStringFor(page.updatedAt)}</div>
 		{/each}
 	{/each}
-	<div class="h-4" />
+	<div class="h-4"></div>
 	<div class="flex justify-end">
-		<button disabled={allLoaded} type="button" class="btn variant-ringed" on:click={loadMore}>
+		<button disabled={allLoaded} type="button" class="btn preset-outlined" onclick={loadMore}>
 			<span>{$_('more') + '...'}</span>
-			<i class="fa-solid fa-angles-down" />
+			<i class="fa-solid fa-angles-down"></i>
 		</button>
 	</div>
 </div>

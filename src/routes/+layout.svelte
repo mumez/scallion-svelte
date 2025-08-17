@@ -1,29 +1,29 @@
 <script lang="ts">
-	//import '@skeletonlabs/skeleton/themes/theme-crimson.css';
-	import '../theme.postcss';
-	import '@skeletonlabs/skeleton/themes/theme-rocket.css';
-	import '@skeletonlabs/skeleton/styles/all.css';
-	import '../app.postcss';
-	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
+	import '../theme.css';
+	import '../app.css';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
+	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import ActionsMenuBar from '$lib/components/ActionsMenuBar.svelte';
 	import WikiBookIndexLink from '$lib/components/WikiBookIndexLink.svelte';
+	import GlobalModal from '$lib/components/GlobalModal.svelte';
 	import authService from '$lib/services/AuthService';
 	import isAuthenticated from '$lib/stores/isAuthenticated';
 	import parentLink from '$lib/stores/parentLink';
 	import headerTitle from '$lib/stores/headerTitle';
 	import wikisBaseDirectory from '$lib/stores/wikisBaseDirectory';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	let showLoginButton = false;
-	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+	let { children }: Props = $props();
+
+	let showLoginButton = $state(false);
 
 	onMount(() => {
 		authService.tryAutoLogin((result) => {
-			$isAuthenticated = result;
-			showLoginButton = !$isAuthenticated;
+			isAuthenticated.set(result);
+			showLoginButton = !result;
 		});
 	});
 
@@ -31,9 +31,9 @@
 		authService.authByPopup();
 	}
 
-	$: isRoot = $page.route.id == '/';
-	$: title = isRoot ? 'Swikis on this Site' : $headerTitle;
-	$: linkToParent = isRoot ? '' : $parentLink;
+	let isRoot = $derived($page.route.id == '/');
+	let title = $derived(isRoot ? 'Swikis on this Site' : $headerTitle);
+	let linkToParent = $derived(isRoot ? '' : $parentLink);
 </script>
 
 <svelte:head>
@@ -43,26 +43,36 @@
 		<title>{linkToParent} : {title}</title>
 	{/if}
 </svelte:head>
-<Modal />
-<AppShell>
-	<svelte:fragment slot="header">
+<GlobalModal />
+
+<div class="min-h-screen flex flex-col">
+	<!-- Header -->
+	<header class="shrink-0">
 		<AppBar>
-			<svelte:fragment slot="lead">
+			{#snippet lead()}
 				<WikiBookIndexLink wikiBookName={linkToParent} wikisBaseDirectory={$wikisBaseDirectory} />
-				<h1>{title}</h1></svelte:fragment
-			>
-			<svelte:fragment slot="trail">
+				<h1 class="h1">{title}</h1>
+			{/snippet}
+			{#snippet trail()}
 				{#if showLoginButton}
-					<button class="btn btn-sm variant-filled-primary" on:click={tryLogin}
-						><i class="fa-solid fa-door-open" /><span>Login</span></button
-					>
+					<button class="btn btn-sm preset-filled-primary-500" onclick={tryLogin}>
+						<i class="fa-solid fa-door-open"></i><span>Login</span>
+					</button>
 				{/if}
 				{#if !isRoot}
 					<ActionsMenuBar />
 				{/if}
-			</svelte:fragment>
+			{/snippet}
 		</AppBar>
-	</svelte:fragment>
-	<slot />
-	<svelte:fragment slot="footer"><span class="px-2">Scallion Wiki</span></svelte:fragment>
-</AppShell>
+	</header>
+
+	<!-- Main Content -->
+	<main class="flex-1 overflow-auto">
+		{@render children?.()}
+	</main>
+
+	<!-- Footer -->
+	<footer class="shrink-0 p-2 border-t border-surface-300-600">
+		<span class="px-2">Scallion Wiki</span>
+	</footer>
+</div>

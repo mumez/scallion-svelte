@@ -1,10 +1,16 @@
 <script lang="ts">
-	import { Avatar } from '@skeletonlabs/skeleton';
+	import { preventDefault } from 'svelte/legacy';
+
 	import { isImage, concatPath, extensionFrom } from '$lib/utils/FileUtils';
 	import ModalCloseButton from '$lib/components/ModalCloseButton.svelte';
 
-	export let fileName = '';
-	export let baseUrl = '';
+	interface Props {
+		fileName?: string;
+		baseUrl?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { fileName = '', baseUrl = '', children }: Props = $props();
 
 	const fullUrl = concatPath(baseUrl, fileName);
 
@@ -26,15 +32,15 @@
 	<ModalCloseButton />
 	<div class="flex items-center">
 		{#if isImage(fileName)}
-			<Avatar src={fullUrl} rounded="rounded-xl" />
+		<img class="w-60 rounded-xl" src={fullUrl} alt={fileName}/>
 		{:else}
 			<div class="card w-12 h-12 rounded-xl bg-white text-center truncate">
 				{extensionFrom(fileName)}
 			</div>
 		{/if}
 		<div class="p-2 truncate">
-			<a href={fullUrl} on:click|preventDefault={download}>{fileName}</a>
+			<a href={fullUrl} onclick={preventDefault(download)}>{fileName}</a>
 		</div>
 	</div>
-	<slot />
+	{@render children?.()}
 </div>

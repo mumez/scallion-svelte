@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { _ } from '$lib/plugins/localization';
-	import { Table, tableSourceMapper, tableSourceValues } from '@skeletonlabs/skeleton';
 	import FilesUploadPanel from '$lib/components/FilesUploadPanel.svelte';
 	import FileDownloader from '$lib/components/FileDownloader.svelte';
 	import parentLink from '$lib/stores/parentLink';
@@ -17,7 +16,11 @@
 
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	const wikiName = $page.params['wiki'] ?? '';
 	const pageName = $page.params['page'] ?? 'index';
@@ -25,7 +28,7 @@
 	$headerTitle = pageName;
 	const pageService = new PageService(wikiName, pageName);
 	const filesService = new FilesService(wikiName, pageName);
-	let files = data.files;
+	let files = $state(data.files);
 	const filesTableHeaders: string[] = ['name', 'size', 'date'].map((h) => $_(h));
 
 	// lifecycle callbacks
@@ -40,14 +43,19 @@
 	}
 
 	function processRowsForTable(files: WebDavEntry[]) {
-		let mappedVersions = tableSourceMapper(files, ['name', 'contentLength', 'lastModified']);
-		mappedVersions = mappedVersions.map((v) => {
-			v.lastModified = new Date(v.lastModified).toString();
-			return {
-				...v
-			};
-		});
-		return tableSourceValues(mappedVersions);
+		return files.map((file) => [
+			file.name,
+			formatFileSize(file.contentLength),
+			new Date(file.lastModified).toLocaleDateString()
+		]);
+	}
+
+	function formatFileSize(bytes: number): string {
+		if (bytes === 0) return '0 B';
+		const k = 1024;
+		const sizes = ['B', 'KB', 'MB', 'GB'];
+		const i = Math.floor(Math.log(bytes) / Math.log(k));
+		return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 	}
 
 	async function uploadFile(file: File) {
@@ -67,20 +75,32 @@
 		wikiPage.setPageContent(await pageService.getContent());
 	}
 
-	$: isPageLockedByOtherUser = isLockedByOtherUser($wikiPage?.pageContent, uid());
-	$: filesTableBody = processRowsForTable(files);
+	let isPageLockedByOtherUser = $derived(isLockedByOtherUser($wikiPage?.pageContent, uid()));
+	let filesTableBody = $derived(processRowsForTable(files));
 </script>
 
 <div class="container mx-auto p-4 space-y-4 swiki-attachments">
 	{#if !isPageLockedByOtherUser}
 		<FilesUploadPanel uploader={uploadFile} on:upload-end={onUploadEnd} />
 	{/if}
-	<Table
-		source={{
-			head: filesTableHeaders,
-			body: filesTableBody
-		}}
-		interactive={true}
-		on:selected={onRowSelected}
-	/>
+	<div class="table-container">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					{#each filesTableHeaders as header}
+						<th>{header}</th>
+					{/each}
+				</tr>
+			</thead>
+			<tbody>
+				{#each filesTableBody as row, i}
+					<tr class="cursor-pointer hover:bg-surface-100-800" onclick={() => onRowSelected(new CustomEvent('selected', { detail: [row[0]] }))}>
+						{#each row as cell}
+							<td>{cell}</td>
+						{/each}
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </div>

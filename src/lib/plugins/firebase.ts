@@ -10,7 +10,7 @@ import {
 
 import { browser } from '$app/environment';
 import appConfig from '../configs';
-import type User from '../models/User';
+import type { User } from '../models/User';
 
 //typeof window !== 'undefined'
 
@@ -36,8 +36,8 @@ export const listenAuthStateChanged = (callbackWithUser: (user: User, token?: st
 	return onAuthStateChanged(getAuth(), async (fsUser) => {
 		const user: User = {
 			uid: fsUser?.uid ?? '',
-			email: fsUser?.email,
-			displayName: fsUser?.displayName
+			email: fsUser?.email ?? undefined,
+			displayName: fsUser?.displayName ?? undefined
 		};
 		const token = await fsUser?.getIdToken();
 		callbackWithUser(user, token);
