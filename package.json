@@ -52,7 +52,7 @@
 	"dependencies": {
 		"@floating-ui/dom": "^1.7.2",
 		"@tailwindcss/vite": "^4.1.17",
-		"fast-xml-parser": "^4.5.3",
+		"fast-xml-parser": "^4.5.4",
 		"firebase": "^10.14.1",
 		"highlight.js": "^11.11.1",
 		"isomorphic-dompurify": "^1.13.0",
